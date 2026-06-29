@@ -130,11 +130,51 @@ export default function Home() {
   ];
 
   const partnersList = [
-    { name: 'Local Supplier Network' },
-    { name: 'Tata CSR Network' },
-    { name: 'Razorpay Sandbox' },
-    { name: 'KPMG Auditing' },
-    { name: 'Rishikesh Welfare Network' }
+    { 
+      name: 'Local Supplier Network',
+      icon: (
+        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="1" y="3" width="15" height="13" />
+          <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
+          <circle cx="5.5" cy="18.5" r="2.5" />
+          <circle cx="18.5" cy="18.5" r="2.5" />
+        </svg>
+      )
+    },
+    { 
+      name: 'Tata CSR Network',
+      icon: (
+        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M3 12c0-5 4-9 9-9s9 4 9 9" />
+          <path d="M12 3v18" />
+          <path d="M7 16l5-5 5 5" />
+        </svg>
+      )
+    },
+    { 
+      name: 'Razorpay Sandbox',
+      icon: (
+        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 2L2 14h10l-2 8 12-12H12l2-8z" strokeLinejoin="bevel" />
+        </svg>
+      )
+    },
+    { 
+      name: 'KPMG Auditing',
+      icon: (
+        <span className="font-poppins font-black tracking-widest text-[11px] text-slate-400 group-hover:text-blue-600 transition-colors">KPMG</span>
+      )
+    },
+    { 
+      name: 'Rishikesh Welfare Network',
+      icon: (
+        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M4 22L12 8l8 14" />
+          <path d="M8 22l4-7 4 7" />
+          <path d="M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" />
+        </svg>
+      )
+    }
   ];
 
   const faqList = [
@@ -829,23 +869,37 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 11. PARTNER LOGOS (Grayscale, Color on hover) ================= */}
-        <section className="py-14 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
-            <h3 className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+        {/* ================= 11. PARTNER LOGOS (Infinite Moving Ticker) ================= */}
+        <section className="py-12 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter overflow-hidden">
+          <div className="max-w-7xl mx-auto space-y-6">
+            <h3 className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest px-6">
               Governed & Audited Under Active Alliances
             </h3>
             
-            <div className="flex flex-wrap items-center justify-center gap-4.5 md:gap-8">
-              {partnersList.map((partner, idx) => (
-                <div 
-                  key={idx} 
-                  className="px-5 py-3 border border-[#E5EAF2] rounded-xl bg-white text-[#0A2540]/45 hover:text-[#1E63FF] hover:border-[#1E63FF]/30 font-poppins font-black text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md grayscale hover:grayscale-0 flex items-center gap-1"
-                >
-                  <span className="w-1 h-1 bg-[#1E63FF] rounded-full" />
-                  <span>{partner.name}</span>
-                </div>
-              ))}
+            {/* Infinite Horizontal Marquee Container */}
+            <div className="marquee-container mask-gradient py-2">
+              <div className="marquee-content">
+                {partnersList.map((partner, idx) => (
+                  <div 
+                    key={idx} 
+                    className="px-6 py-3.5 border border-slate-100 rounded-2xl bg-[#F8FAFC] text-[#0A2540]/60 hover:text-blue-600 hover:border-blue-500/20 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
+                  >
+                    {partner.icon}
+                    <span>{partner.name}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="marquee-content" aria-hidden="true">
+                {partnersList.map((partner, idx) => (
+                  <div 
+                    key={`dup-${idx}`} 
+                    className="px-6 py-3.5 border border-slate-100 rounded-2xl bg-[#F8FAFC] text-[#0A2540]/60 hover:text-blue-600 hover:border-blue-500/20 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
+                  >
+                    {partner.icon}
+                    <span>{partner.name}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </section>
