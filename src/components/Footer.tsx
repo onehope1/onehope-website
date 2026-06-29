@@ -1,0 +1,233 @@
+'use client';
+
+import React, { useState } from 'react';
+import Link from 'next/link';
+import { useDatabase } from '@/context/DatabaseContext';
+import { Logo } from './Logo';
+import { motion } from 'framer-motion';
+import { Send, MapPin, Mail, Phone, ChevronRight } from 'lucide-react';
+
+export const Footer: React.FC = () => {
+  const { state, addNewsletterSubscriber } = useDatabase();
+  const [email, setEmail] = useState('');
+  const [subscribed, setSubscribed] = useState(false);
+  const [error, setError] = useState('');
+
+  const handleSubscribe = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    
+    setError('');
+    const success = addNewsletterSubscriber(email);
+    if (success) {
+      setSubscribed(true);
+      setEmail('');
+      setTimeout(() => setSubscribed(false), 5000);
+    } else {
+      setError('This email is already subscribed.');
+    }
+  };
+
+  return (
+    <footer className="bg-[#0A2540] text-[#E2E8F0] pt-20 pb-12 border-t border-white/10 font-inter">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+        
+        {/* Top Highlight: Spotlight Glassmorphic Call to Action Panel */}
+        <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="relative bg-white/[0.03] backdrop-blur-[8px] border border-white/[0.08] p-8 md:p-12 rounded-[24px] shadow-sm mb-16 flex flex-col md:flex-row items-center justify-between gap-6 overflow-hidden group"
+          >
+          {/* Subtle ambient light radial overlay */}
+          <div 
+            className="absolute inset-0 pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-700" 
+            style={{
+              background: 'radial-gradient(circle at center, rgba(255,255,255,0.06) 0%, transparent 70%)'
+            }}
+          />
+
+          <div className="space-y-1.5 text-center md:text-left relative z-10">
+            <motion.h3
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-xl sm:text-2xl font-black font-poppins text-white !text-white !font-extrabold tracking-tight select-none"
+            >
+              Join Us in Creating Lasting Impact
+            </motion.h3>
+            <p className="text-[#CBD5E1] !text-[#CBD5E1] text-xs sm:text-sm font-semibold select-none leading-relaxed">
+              Your contribution delivers immediate, audited nutrition and education on the ground.
+            </p>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto relative z-10">
+            <Link
+              href="/donate"
+              className="px-6 py-3.5 bg-[#0047AB] hover:bg-[#003C91] text-white font-bold rounded-xl text-xs uppercase tracking-wider text-center shadow-md transition-colors block w-full sm:w-auto"
+            >
+              Donate Now
+            </Link>
+            <Link
+              href="/volunteer"
+              className="px-6 py-3.5 border border-white/20 hover:border-white hover:bg-white/5 text-white !text-white font-bold rounded-xl text-xs uppercase tracking-wider text-center transition-all font-semibold block w-full sm:w-auto"
+            >
+              Become a Volunteer
+            </Link>
+          </div>
+        </motion.div>
+
+        {/* Main Columns Grid - Stacked cleanly for mobile */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-16 border-b border-white/10">
+          
+          {/* Brand Column */}
+          <div className="space-y-5">
+            <Link href="/" className="inline-block">
+              {/* Force white variant of logo if rendered in dark layout */}
+              <Logo size={32} light={true} />
+            </Link>
+            <p className="text-[#E2E8F0]/70 text-xs leading-relaxed pr-4 font-semibold">
+              Dedicated to restoring hope, dignity, and a better future for children and families. Verified on a public digital ledger.
+            </p>
+            
+            {/* Social Links - Borderless SVGs with white strokes that translate and scale */}
+            <div className="flex items-center gap-4.5 pt-2">
+              <a
+                href={state.settings.socials.instagram}
+                target="_blank"
+                rel="noreferrer"
+                className="text-white hover:text-[#2ECC71] hover:-translate-y-1 hover:scale-110 block transform transition-all duration-300"
+                aria-label="Instagram"
+              >
+                <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
+                </svg>
+              </a>
+              <a
+                href={state.settings.socials.youtube}
+                target="_blank"
+                rel="noreferrer"
+                className="text-white hover:text-[#2ECC71] hover:-translate-y-1 hover:scale-110 block transform transition-all duration-300"
+                aria-label="YouTube"
+              >
+                <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
+                  <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
+                </svg>
+              </a>
+              <a
+                href={state.settings.socials.facebook}
+                target="_blank"
+                rel="noreferrer"
+                className="text-white hover:text-[#2ECC71] hover:-translate-y-1 hover:scale-110 block transform transition-all duration-300"
+                aria-label="Facebook"
+              >
+                <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* Quick Links Column */}
+          <div className="space-y-4">
+            <h4 className="text-white font-bold text-xs uppercase tracking-widest font-poppins">Explore</h4>
+            <ul className="space-y-2.5 text-xs font-semibold">
+              {[
+                { label: 'Home', href: '/' },
+                { label: 'Campaigns', href: '/campaigns' },
+                { label: 'Stories', href: '/stories' },
+                { label: 'Transparency', href: '/transparency' },
+                { label: 'About', href: '/about' }
+              ].map((item) => (
+                <li key={item.href}>
+                  <Link href={item.href} className="hover:text-[#2ECC71] text-[#E2E8F0]/90 transition-colors flex items-center gap-1">
+                    <ChevronRight size={10} className="text-[#E2E8F0]/40" />
+                    <span>{item.label}</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Contact Info Column */}
+          <div className="space-y-4">
+            <h4 className="text-white font-bold text-xs uppercase tracking-widest font-poppins">Rishikesh Base</h4>
+            <ul className="space-y-3.5 text-xs text-[#E2E8F0]/80 font-medium">
+              <li className="flex gap-2.5">
+                <MapPin size={16} className="text-[#2ECC71] shrink-0 mt-0.5" />
+                <span className="leading-relaxed">Mayakund, near Triveni Ghat, Rishikesh, Uttarakhand, 249201, India</span>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Mail size={16} className="text-[#2ECC71] shrink-0" />
+                <a href={`mailto:${state.settings.supportEmail}`} className="hover:text-[#2ECC71] transition-colors">
+                  {state.settings.supportEmail}
+                </a>
+              </li>
+              <li className="flex items-center gap-2.5">
+                <Phone size={16} className="text-[#2ECC71] shrink-0" />
+                <a href={`tel:${state.settings.supportPhone}`} className="hover:text-[#2ECC71] transition-colors">
+                  +91 {state.settings.supportPhone}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Newsletter Column */}
+          <div className="space-y-4">
+            <h4 className="text-white font-bold text-xs uppercase tracking-widest font-poppins">Stay Updated</h4>
+            <p className="text-[#E2E8F0]/70 text-xs leading-relaxed font-semibold">
+              Receive brief verified impact milestones and audit balance sheet details directly in your inbox.
+            </p>
+            <form onSubmit={handleSubscribe} className="space-y-2">
+              <div className="relative flex items-center">
+                <input
+                  type="email"
+                  placeholder="Your email address"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  className="w-full pl-3.5 pr-10 py-3 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#2ECC71] focus:border-[#2ECC71] rounded-xl text-xs text-white placeholder-slate-400"
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1 px-3 py-2 bg-[#2ECC71] hover:bg-[#27ae60] text-white rounded-lg transition-colors flex items-center justify-center"
+                  aria-label="Subscribe"
+                >
+                  <Send size={12} />
+                </button>
+              </div>
+              {subscribed && (
+                <p className="text-[#2ECC71] font-bold text-[10px]">Successfully subscribed!</p>
+              )}
+              {error && (
+                <p className="text-red-400 text-[10px] font-bold">{error}</p>
+              )}
+            </form>
+          </div>
+
+        </div>
+
+        {/* Bottom copyright & policies */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px] text-[#E2E8F0]/60 font-semibold">
+          <p>© {new Date().getFullYear()} OneHope. All rights reserved.</p>
+          <div className="flex flex-wrap gap-4 justify-center">
+            <Link href="/privacy" className="hover:text-[#2ECC71] transition-colors">Privacy Policy</Link>
+            <span className="text-white/10">|</span>
+            <Link href="/terms" className="hover:text-[#2ECC71] transition-colors">Terms of Service</Link>
+            <span className="text-white/10">|</span>
+            <Link href="/refund" className="hover:text-[#2ECC71] transition-colors">Refund Policy</Link>
+            <span className="text-white/10">|</span>
+            <Link href="/cookies" className="hover:text-[#2ECC71] transition-colors">Cookie Policy</Link>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+  );
+};
+export default Footer;
