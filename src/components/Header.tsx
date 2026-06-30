@@ -98,7 +98,7 @@ export const Header: React.FC = () => {
             {/* Logo Left */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/">
-                <Logo size={isScrolled ? 26 : 30} />
+                <Logo size={isScrolled ? 26 : 30} light={pathname === '/' && !isScrolled} />
               </Link>
             </div>
 
@@ -106,14 +106,15 @@ export const Header: React.FC = () => {
             <nav className="hidden lg:flex space-x-1.5">
               {navLinks.map((item) => {
                 const isActive = pathname === item.href;
+                const isDarkTheme = pathname === '/' && !isScrolled;
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
                     className={`px-3 py-2 rounded-xl text-[11px] font-bold uppercase tracking-wider transition-all duration-200 ${
                       isActive
-                        ? 'bg-blue-50/50 text-[#0047AB]'
-                        : 'text-[#0A2540] hover:text-[#0047AB] hover:bg-slate-50'
+                        ? isDarkTheme ? 'bg-white/15 text-white' : 'bg-blue-50/50 text-[#0047AB]'
+                        : isDarkTheme ? 'text-white/80 hover:text-white hover:bg-white/5' : 'text-[#0A2540] hover:text-[#0047AB] hover:bg-slate-50'
                     }`}
                   >
                     {item.label}
@@ -127,7 +128,11 @@ export const Header: React.FC = () => {
               {/* Search Icon */}
               <Link
                 href="/search"
-                className="p-2.5 text-slate-500 hover:text-[#0047AB] hover:bg-slate-50 rounded-xl transition-all"
+                className={`p-2.5 rounded-xl transition-all ${
+                  pathname === '/' && !isScrolled 
+                    ? 'text-white/80 hover:text-white hover:bg-white/5' 
+                    : 'text-slate-500 hover:text-[#0047AB] hover:bg-slate-50'
+                }`}
                 title="Search Hub"
               >
                 <Search size={18} />
@@ -154,7 +159,11 @@ export const Header: React.FC = () => {
               ) : (
                 <button
                   onClick={() => setShowRoleModal(true)}
-                  className="px-3.5 py-2 text-xs font-semibold uppercase tracking-wider rounded-xl text-[#0A2540] hover:bg-slate-50 transition-colors"
+                  className={`px-3.5 py-2 text-xs font-semibold uppercase tracking-wider rounded-xl transition-colors ${
+                    pathname === '/' && !isScrolled
+                      ? 'text-white hover:bg-white/5'
+                      : 'text-[#0A2540] hover:bg-slate-50'
+                  }`}
                 >
                   Portal
                 </button>
@@ -163,7 +172,11 @@ export const Header: React.FC = () => {
               {/* Support button outline */}
               <Link
                 href="/contact"
-                className="px-4 py-2 text-xs font-bold uppercase tracking-wider text-[#0A2540] hover:text-[#0047AB] border border-[#0A2540]/30 hover:border-[#0047AB] rounded-xl transition-all"
+                className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all border ${
+                  pathname === '/' && !isScrolled
+                    ? 'text-white border-white/20 hover:border-white hover:bg-white/5'
+                    : 'text-[#0A2540] hover:text-[#0047AB] border border-[#0A2540]/30 hover:border-[#0047AB] hover:bg-slate-50'
+                }`}
               >
                 Support
               </Link>
@@ -189,7 +202,11 @@ export const Header: React.FC = () => {
               </Link>
               <button
                 onClick={() => setIsOpen(true)}
-                className="p-2 text-slate-650 hover:bg-slate-50 rounded-xl"
+                className={`p-2 rounded-xl transition-colors ${
+                  pathname === '/' && !isScrolled
+                    ? 'text-white hover:bg-white/5'
+                    : 'text-slate-655 hover:bg-slate-50'
+                }`}
               >
                 <Menu size={22} />
               </button>

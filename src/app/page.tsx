@@ -188,6 +188,7 @@ export default function Home() {
 
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
+  const [activeReelUrl, setActiveReelUrl] = useState<string | null>(null);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -196,12 +197,22 @@ export default function Home() {
     return () => clearInterval(timer);
   }, [activeTestimonials.length]);
 
+  useEffect(() => {
+    if (activeReelUrl) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [activeReelUrl]);
+
   return (
     <PublicLayout>
       <div className="bg-white font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
-        
-        {/* ================= 1. EMOTIONAL HERO SECTION ================= */}
-        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-6 pb-12 md:py-16">
+                {/* ================= 1. EMOTIONAL HERO SECTION ================= */}
+        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-28 pb-16 md:pt-36 md:pb-24 -mt-[82px] lg:-mt-[100px]">
           {/* Background Video Backdrop */}
           <video
             autoPlay
@@ -217,7 +228,7 @@ export default function Home() {
           </video>
           
           {/* Gradients */}
-          <div className="absolute inset-0 bg-gradient-to-tr from-[#0A2540] via-[#0A2540]/85 to-transparent z-10" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0A2540] via-[#0A2540]/80 to-transparent z-10" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-[#1E63FF]/12 rounded-full blur-[130px] pointer-events-none z-10" />
 
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative z-20 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center w-full">
@@ -227,34 +238,32 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="lg:col-span-7 space-y-5 text-center lg:text-left"
+              className="lg:col-span-12 space-y-6 text-center"
             >
-              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[#22C55E] text-[10px] font-bold uppercase tracking-wider">
-                <ShieldCheck size={12} />
-                <span>100% Sourced & Audited Sponsoring</span>
-              </span>
-
-              <h1 className="text-[34px] sm:text-5xl font-black font-poppins leading-tight tracking-tight select-none">
-                <span className="bg-gradient-to-b from-white to-slate-200 bg-clip-text text-transparent block">
-                  Sponsor Food & Education.
-                </span>
-                <span className="bg-gradient-to-r from-[#1E63FF] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                  Trace Every Rupee.
-                </span>
+              <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none">
+                Hope Starts With One
               </h1>
 
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
-                Direct ground delivery in Rishikesh. Trace every transaction down to raw supplier invoices and geo-tagged video updates.
+              <p className="text-slate-350 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins">
+                Feed. Educate. Care. Transparently.
               </p>
 
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full pt-1">
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full pt-2">
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full max-w-[90%] sm:max-w-none sm:w-auto">
                   <Link
                     href="/donate"
-                    className="w-full px-6 py-3 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-[18px] text-[13px] uppercase tracking-wider block text-center shadow-lg shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center"
+                    className="w-full px-8 py-3.5 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center shadow-lg shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center"
                   >
                     Donate Now
                   </Link>
+                </motion.div>
+                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full max-w-[90%] sm:max-w-none sm:w-auto">
+                  <button
+                    onClick={() => setActiveReelUrl('https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139')}
+                    className="w-full px-8 py-3.5 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center transition-all font-semibold h-12 flex items-center justify-center"
+                  >
+                    Watch Our Impact
+                  </button>
                 </motion.div>
               </div>
             </motion.div>
@@ -300,6 +309,24 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ================= LIVE TODAY IMPACT BAR ================= */}
+        <section className="bg-slate-50 border-b border-slate-150 py-3 font-inter select-none">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-wrap justify-between items-center gap-y-3 gap-x-6">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Live Today</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 text-xs font-bold text-slate-700">
+              <span className="flex items-center gap-1.5">🍛 42 Meals Served</span>
+              <span className="flex items-center gap-1.5">📚 5 School Kits Delivered</span>
+              <span className="flex items-center gap-1.5">🐶 18 Animals Fed</span>
+            </div>
+          </div>
+        </section>
+
         {/* ================= 2. WHY ONEHOPE TRUST STRIP ================= */}
         <section className="bg-white border-b border-slate-100 py-5 font-inter select-none">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-wrap justify-between items-center gap-y-4 gap-x-8">
@@ -307,9 +334,9 @@ export default function Home() {
               <span className="text-[#1E63FF] font-poppins">Why OneHope?</span>
             </div>
             <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-semibold text-slate-600">
-              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>100% Verified Deliveries</span></div>
-              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Public Ledger Mapping</span></div>
-              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Weekly Impact Updates</span></div>
+              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Direct Ground Welfare</span></div>
+              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Public Ledger</span></div>
+              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Weekly Reports</span></div>
               <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Serving Rishikesh</span></div>
             </div>
           </div>
@@ -320,24 +347,24 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={livePeople} label="Lives Helped" icon={Heart} />
+                <AnimatedCounter value={124800} suffix="+" label="Meals Served" icon={Heart} />
               </div>
               <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={18000000} suffix="+" label="Aid Delivered" icon={Award} />
+                <AnimatedCounter value={840} suffix="+" label="Children Educated" icon={Award} />
               </div>
               <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={187} label="Communities" icon={Users} />
+                <AnimatedCounter value={180} suffix="+" label="Families Supported" icon={Users} />
               </div>
               <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={99} suffix="%" label="Delivery Success" icon={ShieldCheck} />
+                <AnimatedCounter value={420} suffix="+" label="Animals Fed" icon={ShieldCheck} />
               </div>
             </div>
           </div>
         </section>
 
-        {/* ================= 4. FEATURED EMERGENCY CAMPAIGN (30% Larger) ================= */}
+        {/* ================= 4. FEATURED EMERGENCY CAMPAIGN ================= */}
         {emergencyCampaign && (
-          <section className="py-16 bg-white max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-6">
+          <section className="py-16 bg-white max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
             <div className="text-center max-w-xl mx-auto space-y-2">
               <span className="inline-flex items-center gap-1 bg-[#1E63FF]/8 text-[#1E63FF] text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full">
                 <Flame size={10} className="fill-[#1E63FF]" />
@@ -349,9 +376,9 @@ export default function Home() {
             </div>
 
             <motion.div 
-              whileHover={{ y: -4 }}
+              whileHover={{ y: -2 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-[28px] border border-[#E5EAF2] shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 items-center hover:shadow-[0_20px_50px_rgba(9,37,64,0.05)] cursor-pointer group text-left"
+              className="bg-white rounded-[28px] border border-[#E5EAF2] shadow-[0_15px_40px_rgba(0,0,0,0.04)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 items-center hover:shadow-[0_20px_50px_rgba(9,37,64,0.05)] cursor-pointer group text-left"
             >
               {/* Cover Photo */}
               <div className="lg:col-span-6 relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-50 min-h-[220px]">
@@ -359,7 +386,7 @@ export default function Home() {
                   src={emergencyCampaign.image}
                   alt={emergencyCampaign.title}
                   fill
-                  className="object-cover group-hover:scale-102 transition-transform duration-700"
+                  className="object-cover group-hover:scale-101 transition-transform duration-700"
                 />
                 <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
                   Critical
@@ -400,114 +427,94 @@ export default function Home() {
                     />
                   </div>
 
-                  <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="pt-1">
+                  <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }} className="pt-1">
                     <Link
                       href={{ pathname: '/donate', query: { campaignId: emergencyCampaign.id } }}
-                      className="w-full text-center py-3 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider block shadow-md shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center"
+                      className="w-full text-center py-3 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-xl text-[11px] uppercase tracking-wider block shadow-md shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center font-semibold"
                     >
-                      Donate Now
+                      Sponsor
                     </Link>
                   </motion.div>
                 </div>
               </div>
             </motion.div>
+
+            <div className="flex justify-center pt-2">
+              <Link
+                href="/campaigns"
+                className="px-6 py-3 border border-slate-200 hover:border-slate-350 hover:bg-slate-50 text-[#0A2540] font-bold rounded-xl text-xs uppercase tracking-wider transition-all block font-semibold"
+              >
+                View All Active Campaigns
+              </Link>
+            </div>
           </section>
         )}
 
-        {/* ================= 5. 7 CAUSES (Horizontal scrolling cards) ================= */}
-        <section className="py-16 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-6">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-              <div className="space-y-2 text-left">
-                <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                  Direct Ground Sponsoring
-                </span>
-                <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
-                  Our 7 Permanent Rishikesh Initiatives
-                </h2>
-              </div>
-              <Link
-                href="/campaigns"
-                className="text-xs font-bold text-[#1E63FF] hover:text-[#0047AB] flex items-center gap-1 group self-start sm:self-auto uppercase tracking-wider font-semibold"
-              >
-                <span>Explore All 7 Campaigns</span>
-                <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-              </Link>
+        {/* ================= 5. GROUND REALITY VIDEO REELS ================= */}
+        <section className="py-16 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter" id="our-work-reels">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
+                Ground Verification Reels
+              </span>
+              <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
+                Daily Welfare Updates
+              </h2>
             </div>
 
-            {/* Swipeable overflow track */}
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6 no-scrollbar w-full px-2 sm:px-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {state.campaigns.map((camp, idx) => {
-                const percent = Math.min(100, Math.round((camp.raisedAmount / camp.goalAmount) * 100));
-                const isAlternate = idx % 2 === 0;
-                return (
-                  <motion.div
-                    key={camp.id}
-                    whileHover={{ y: -4 }}
-                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                    className={`w-[290px] shrink-0 snap-center rounded-[24px] overflow-hidden shadow-sm border flex flex-col justify-between h-[430px] cursor-pointer group transition-all duration-300 ${
-                      isAlternate 
-                        ? 'bg-white border-slate-200/60 hover:shadow-md' 
-                        : 'bg-white/80 border-[#E5EAF2] hover:border-blue-500/20 hover:shadow-md'
-                    }`}
-                  >
-                    <div>
-                      <div className="relative aspect-video w-full rounded-t-[23px] overflow-hidden bg-slate-50 h-[160px]">
-                        <Image 
-                          src={camp.image}
-                          alt={camp.title}
-                          fill
-                          className="object-cover group-hover:scale-102 transition-transform duration-500"
-                        />
-                        <div className="absolute top-3 left-3 bg-[#0A2540]/80 backdrop-blur-sm text-white px-2.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider">
-                          {camp.category}
-                        </div>
-                      </div>
-
-                      <div className="p-5 space-y-2 text-left">
-                        <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider">
-                          <span className="flex items-center gap-0.5"><MapPin size={9} /> Rishikesh</span>
-                          <span className="text-[#22C55E]">✔ 100% Direct</span>
-                        </div>
-                        <h3 className="text-base font-bold text-[#0A2540] leading-snug font-poppins line-clamp-1 group-hover:text-[#1E63FF] transition-colors">
-                          {camp.title}
-                        </h3>
-                        <p className="text-[#667085] text-xs leading-relaxed line-clamp-2 font-medium">
-                          {camp.summary}
-                        </p>
-                      </div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+              {[
+                {
+                  id: 'reel-1',
+                  title: 'Daily Kitchen Breakfast Distribution',
+                  desc: 'Freshly cooked nutrition served morning at Mayakund base slum nodes.',
+                  thumb: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=350',
+                  videoUrl: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139'
+                },
+                {
+                  id: 'reel-2',
+                  title: 'Mobile Ghat-School Classrooms',
+                  desc: 'Welfare kits, school notebooks, and bags provided to Ganga kids.',
+                  thumb: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=350',
+                  videoUrl: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139'
+                },
+                {
+                  id: 'reel-3',
+                  title: 'Animal Care & Feed Drive',
+                  desc: 'Nourishing feed served for street dogs across local ghat paths.',
+                  thumb: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=350',
+                  videoUrl: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139'
+                }
+              ].map((reel) => (
+                <motion.div
+                  key={reel.id}
+                  onClick={() => setActiveReelUrl(reel.videoUrl)}
+                  whileHover={{ y: -4 }}
+                  className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 shadow-sm cursor-pointer relative group aspect-[9/16] h-[340px] mx-auto w-[200px] sm:w-[240px]"
+                >
+                  <Image 
+                    src={reel.thumb} 
+                    alt={reel.title} 
+                    fill 
+                    className="object-cover group-hover:scale-102 transition-transform duration-500" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+                  
+                  {/* Play circle */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="w-11 h-11 bg-white/20 group-hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-lg scale-100 group-hover:scale-110 transition-all duration-300">
+                      <svg className="w-4 h-4 text-white fill-white ml-0.5" viewBox="0 0 24 24">
+                        <path d="M8 5v14l11-7z" />
+                      </svg>
                     </div>
+                  </div>
 
-                    {/* Progress and Buttons */}
-                    <div className="p-5 pt-0 space-y-4">
-                      <div className="space-y-1.5 pt-3 border-t border-slate-100/60 text-left">
-                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400">
-                          <span className="text-[#667085]">Raised: <strong className="text-[#0A2540]">₹{camp.raisedAmount.toLocaleString()}</strong></span>
-                          <span className="text-[#2ECC71] font-black">{percent}% Mapped</span>
-                        </div>
-                        <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#2ECC71]" style={{ width: `${percent}%` }} />
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-2">
-                        <Link 
-                          href={`/campaigns/${camp.id}`}
-                          className="text-center py-2.5 text-[10px] font-bold text-[#0A2540] border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors uppercase tracking-wider font-semibold flex items-center justify-center"
-                        >
-                          Audit
-                        </Link>
-                        <Link 
-                          href={{ pathname: '/donate', query: { campaignId: camp.id } }}
-                          className="text-center py-2.5 text-[10px] font-bold text-white bg-[#0047AB] hover:bg-[#003C91] rounded-xl transition-colors shadow-sm uppercase tracking-wider flex items-center justify-center font-semibold"
-                        >
-                          Sponsor
-                        </Link>
-                      </div>
-                    </div>
-                  </motion.div>
-                );
-              })}
+                  <div className="absolute bottom-4 left-4 right-4 text-left space-y-1.5 z-10">
+                    <h4 className="text-[11px] font-black text-white leading-tight font-poppins uppercase tracking-wider">{reel.title}</h4>
+                    <p className="text-[9px] text-slate-350 font-semibold leading-relaxed line-clamp-2">{reel.desc}</p>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
@@ -899,6 +906,41 @@ export default function Home() {
             </Link>
           </motion.div>
         </div>
+
+        {/* Fullscreen Video Modal for Ground Reels */}
+        <AnimatePresence>
+          {activeReelUrl && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/95 z-[999] flex items-center justify-center p-4 backdrop-blur-sm"
+              onClick={() => setActiveReelUrl(null)}
+            >
+              <button 
+                onClick={() => setActiveReelUrl(null)}
+                className="absolute top-4 right-4 text-white hover:text-red-400 p-2.5 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md z-[1000] transition-colors"
+              >
+                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+              
+              <div 
+                className="relative max-w-sm w-full aspect-[9/16] bg-slate-955 rounded-3xl overflow-hidden shadow-[0_25px_60px_rgba(0,0,0,0.8)] border border-white/10"
+                onClick={e => e.stopPropagation()}
+              >
+                <video 
+                  src={activeReelUrl}
+                  autoPlay
+                  controls
+                  playsInline
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
       </div>
     </PublicLayout>
