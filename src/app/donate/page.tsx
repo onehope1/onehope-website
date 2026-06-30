@@ -13,6 +13,14 @@ import {
   TrendingUp, Users, CheckCircle2
 } from 'lucide-react';
 
+const liveTickerDonations = [
+  { id: 1, name: 'Ayesha K.', amount: 2500, time: '8m ago', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80' },
+  { id: 2, name: 'Vikram A.', amount: 1500, time: '12m ago', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80' },
+  { id: 3, name: 'Rohan M.', amount: 5000, time: '24m ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80' },
+  { id: 4, name: 'Neha S.', amount: 1000, time: '35m ago', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80' },
+  { id: 5, name: 'Priya D.', amount: 3000, time: '48m ago', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=80' }
+];
+
 export default function DonatePage() {
   const { state, addDonation } = useDatabase();
   const searchParams = useSearchParams();
@@ -290,6 +298,31 @@ export default function DonatePage() {
               </motion.div>
             </motion.div>
 
+          </div>
+        </section>
+
+        {/* ================= LIVE DONATIONS TICKER BAR ================= */}
+        <section className="bg-slate-50 border-b border-slate-150 py-3 font-inter select-none overflow-hidden relative">
+          <div className="flex whitespace-nowrap animate-marquee gap-8">
+            {liveTickerDonations.map((d, index) => (
+              <div key={index} className="inline-flex items-center gap-2 text-xs text-slate-650 font-semibold shrink-0">
+                <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white shrink-0">
+                  <Image src={d.avatar} alt={d.name} fill className="object-cover" />
+                </div>
+                <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
+                <span className="text-[10px] text-slate-400 font-bold">• {d.time}</span>
+              </div>
+            ))}
+            {/* Repeat list for seamless infinite loop */}
+            {liveTickerDonations.map((d, index) => (
+              <div key={`dup-${index}`} className="inline-flex items-center gap-2 text-xs text-slate-650 font-semibold shrink-0">
+                <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white shrink-0">
+                  <Image src={d.avatar} alt={d.name} fill className="object-cover" />
+                </div>
+                <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
+                <span className="text-[10px] text-slate-400 font-bold">• {d.time}</span>
+              </div>
+            ))}
           </div>
         </section>
 
