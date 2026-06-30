@@ -261,6 +261,45 @@ export default function Home() {
           </div>
         </section>
 
+        {/* ================= LIVE DONATION TICKER MARQUEE ================= */}
+        <section className="bg-[#EEF3FA] py-2.5 border-b border-[#E5EAF2] overflow-hidden relative select-none">
+          <style>{`
+            @keyframes ticker-scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-ticker-scroll {
+              display: flex;
+              width: max-content;
+              animation: ticker-scroll 35s linear infinite;
+            }
+            .animate-ticker-scroll:hover {
+              animation-play-state: paused;
+            }
+            .masked-marquee {
+              mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+              -webkit-mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
+            }
+          `}</style>
+          <div className="relative overflow-hidden w-full masked-marquee text-[11px] font-bold text-[#0A2540]/80">
+            <div className="animate-ticker-scroll gap-12">
+              {[...Array(3)].map((_, outerIdx) => (
+                <div key={outerIdx} className="flex gap-12 items-center shrink-0">
+                  {recentDonationsMock.map(d => (
+                    <div key={d.id} className="flex items-center gap-2">
+                      <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white">
+                        <Image src={d.avatar} alt={d.name} fill className="object-cover" />
+                      </div>
+                      <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
+                      <span className="text-[10px] text-slate-400 font-semibold">• {d.time}</span>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ================= 2. WHY ONEHOPE TRUST STRIP ================= */}
         <section className="bg-white border-b border-slate-100 py-5 font-inter select-none">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-wrap justify-between items-center gap-y-4 gap-x-8">
