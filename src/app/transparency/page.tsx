@@ -189,10 +189,10 @@ export default function TransparencyDashboard() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-16 bg-white font-inter">
         
         {/* Metric Overview Cards with Spring counter and Aceternity Border Trace Effect */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
             { label: 'Total Audited Donations', value: totalRaised, isCurrency: true, icon: DollarSign },
-            { label: 'Direct Program Spending', value: totalSpent, isCurrency: true, icon: CheckCircle2, successBadge: '88% Ratio Deployed' },
+            { label: 'Direct Program Spending', value: totalSpent, isCurrency: true, icon: CheckCircle2, successBadge: '88% Deployed' },
             { label: 'Individuals Assisted', value: totalPeopleHelped, isCurrency: false, suffix: '+', icon: TrendingUp },
             { label: 'Audited Overhead Ratio', value: 12, isCurrency: false, suffix: '%', icon: Activity }
           ].map((item, index) => (
@@ -204,13 +204,13 @@ export default function TransparencyDashboard() {
               <div className="absolute inset-0 bg-gradient-to-r from-[#0047AB] to-[#2ECC71] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-[0.5px]" />
               
               {/* Main Card container */}
-              <div className="relative bg-white p-8 rounded-[15px] shadow-[0_10px_30px_rgba(0,0,0,0.03)] space-y-3 flex flex-col justify-between h-full z-10">
-                <div className="flex justify-between items-center text-slate-400">
-                  <span className="text-[9px] font-bold uppercase tracking-widest text-[#0A2540]/60">{item.label}</span>
-                  <item.icon size={18} className="text-[#0047AB] shrink-0" />
+              <div className="relative bg-white p-4 sm:p-6 rounded-[15px] shadow-[0_10px_30px_rgba(0,0,0,0.03)] space-y-3 flex flex-col justify-between min-h-[110px] sm:min-h-[140px] h-full z-10">
+                <div className="flex justify-between items-center text-slate-400 gap-1">
+                  <span className="text-[8px] sm:text-[9px] font-bold uppercase tracking-widest text-[#0A2540]/60 line-clamp-1">{item.label}</span>
+                  <item.icon size={16} className="text-[#0047AB] shrink-0" />
                 </div>
                 <div className="space-y-1.5">
-                  <p className="text-3xl font-black font-poppins text-[#0A2540] tracking-tight">
+                  <p className="text-xl sm:text-3xl font-black font-poppins text-[#0A2540] tracking-tight">
                     <StatCounter
                       value={item.value}
                       prefix={item.isCurrency ? '₹' : ''}
@@ -218,7 +218,7 @@ export default function TransparencyDashboard() {
                     />
                   </p>
                   {item.successBadge && (
-                    <span className="inline-block text-[9px] font-bold bg-green-50 text-[#2ECC71] border border-green-150 rounded-lg px-2 py-0.5">
+                    <span className="inline-block text-[8px] sm:text-[9px] font-bold bg-green-50 text-[#2ECC71] border border-green-150 rounded-lg px-2 py-0.5">
                       {item.successBadge}
                     </span>
                   )}

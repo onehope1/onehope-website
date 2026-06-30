@@ -651,18 +651,18 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6">
               
               {/* Left Column: Redesigned dashboard cards */}
-              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="lg:col-span-7 grid grid-cols-2 gap-3 sm:gap-4">
                 {trustCards.map((card, idx) => (
-                  <div key={idx} className="relative p-6 bg-[#F8FAFC]/65 border border-slate-200/50 rounded-[20px] flex flex-col justify-between space-y-4 h-[160px] hover:bg-white hover:border-blue-500/20 transition-all duration-300 group overflow-hidden select-none">
+                  <div key={idx} className="relative p-4 sm:p-6 bg-[#F8FAFC]/65 border border-slate-200/50 rounded-[20px] flex flex-col justify-between space-y-3 h-[135px] sm:h-[160px] hover:bg-white hover:border-blue-500/20 transition-all duration-300 group overflow-hidden select-none">
                     {/* Floating geometric index behind text */}
-                    <span className="absolute top-2 right-4 text-[42px] font-black text-slate-100 group-hover:text-blue-55 transition-colors pointer-events-none select-none">0{idx + 1}</span>
+                    <span className="absolute top-2 right-4 text-3xl sm:text-[42px] font-black text-slate-100 group-hover:text-blue-55 transition-colors pointer-events-none select-none">0{idx + 1}</span>
                     
-                    <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200/60 text-[#1E63FF] shrink-0 shadow-sm relative z-10">
-                      <card.icon size={16} />
+                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200/60 text-[#1E63FF] shrink-0 shadow-sm relative z-10">
+                      <card.icon size={15} />
                     </div>
                     <div className="space-y-1 text-left relative z-10">
                       <h4 className="font-bold text-[#0A2540] text-xs sm:text-sm font-poppins leading-tight">{card.title}</h4>
-                      <p className="text-[#667085] text-[11px] leading-relaxed font-semibold">{card.desc}</p>
+                      <p className="text-[#667085] text-[10px] sm:text-[11px] leading-relaxed font-semibold">{card.desc}</p>
                     </div>
                   </div>
                 ))}
@@ -689,7 +689,7 @@ export default function Home() {
                       <span className="text-blue-400">View Supplier Receipt ↗</span>
                     </div>
                   </div>
-                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 h-[110px]">
+                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 h-[110px] hidden sm:block">
                     <Image 
                       src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=400"
                       alt="Ledger distribution ground proof"
