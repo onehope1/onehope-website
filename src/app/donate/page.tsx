@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { 
   Heart, ShieldCheck, Check, CreditCard, Smartphone, Award, 
-  FileText, Lock, Shield, Star, ChevronDown, CheckCircle2,
+  FileText, Lock, Shield, ChevronDown, CheckCircle2,
   TrendingUp, Users, ChevronRight, HelpCircle
 } from 'lucide-react';
 
@@ -60,7 +60,7 @@ export default function DonatePage() {
   // Handle scroll to toggle sticky CTA bar
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 480) {
+      if (window.scrollY > 520) {
         setShowStickyBar(true);
       } else {
         setShowStickyBar(false);
@@ -71,11 +71,10 @@ export default function DonatePage() {
   }, []);
 
   const impactOptions = [
-    { id: 'opt-1', label: 'Feed 1 Child', amount: 100, unit: 'Child', campaignId: 'camp-1' },
-    { id: 'opt-2', label: 'Feed 5 Children', amount: 500, unit: 'Children', campaignId: 'camp-1' },
-    { id: 'opt-3', label: 'Feed 10 Children', amount: 1000, unit: 'Children', campaignId: 'camp-1' },
-    { id: 'opt-4', label: 'Feed 25 Children', amount: 2500, unit: 'Children', campaignId: 'camp-1' },
-    { id: 'opt-5', label: 'Sponsor Family Kit', amount: 5000, unit: 'Family', campaignId: 'camp-3' }
+    { id: 'opt-1', label: '🍛 Feed 1 Child', amount: 100, unit: 'Child', campaignId: 'camp-1' },
+    { id: 'opt-2', label: '🍛 Feed 5 Children', amount: 500, unit: 'Children', campaignId: 'camp-1' },
+    { id: 'opt-3', label: '🍛 Feed 10 Children', amount: 1000, unit: 'Children', campaignId: 'camp-1', tag: 'Most Popular' },
+    { id: 'opt-5', label: '👨‍👩‍👧 Sponsor Family Food Kit', amount: 5000, unit: 'Family', campaignId: 'camp-3' }
   ];
 
   const suggestedCustomAmounts = [100, 500, 1000, 2500];
@@ -100,11 +99,12 @@ export default function DonatePage() {
 
   const getImpactText = () => {
     if (isCustomMode) {
-      return `Custom Donation of ₹${getFinalAmount().toLocaleString()}`;
+      return `Custom Sponsoring of ₹${getFinalAmount().toLocaleString()}`;
     }
     const opt = impactOptions.find(o => o.id === selectedImpactId);
     if (!opt) return '';
-    const totalKids = (opt.id === 'opt-5') ? 1 : (parseInt(opt.label.replace(/\D/g, '')) || 1) * quantity;
+    const cleanLabel = opt.label.replace(/[^\w\s]/g, '').trim();
+    const totalKids = (opt.id === 'opt-5') ? 1 : (parseInt(cleanLabel.replace(/\D/g, '')) || 1) * quantity;
     return `${opt.id === 'opt-5' ? 'Sponsor' : 'Feed'} ${totalKids} ${opt.unit}`;
   };
 
@@ -149,37 +149,47 @@ export default function DonatePage() {
     { q: 'Where does my money go?', a: 'Your donation directly funds ground procurement of grain packages, education kits, or medical aid near Triveni slum points. We post geo-tagged photos and purchase invoices for every batch.' },
     { q: 'Will I receive proof?', a: 'Yes! An automated confirmation report containing volunteer photos, timestamped logs, and digital receipts will be generated and sent directly to your email.' },
     { q: 'Can I donate anonymously?', a: 'Yes, absolutely. Check the "Donate Anonymously" box in the form to hide your name on our public donation ledger and scrolling tickers.' },
-    { q: 'Is payment secure?', a: 'All transactions are processed through 256-bit bank-grade encryption gateways. We do not store any card or UPI credentials on our servers.' }
+    { q: 'Is payment secure?', a: 'All transactions are processed through 255-bit bank-grade encryption gateways. We do not store any card or UPI credentials on our servers.' }
   ];
 
   return (
     <PublicLayout>
-      <div className="bg-[#F7FAFF] min-h-screen font-inter select-none overflow-hidden pb-12">
+      <div className="bg-[#F8FBFF] min-h-screen font-inter select-none overflow-hidden pb-12">
         
-        {/* ================= HERO SECTION (COMPACT 30% HEIGHT) ================= */}
-        <section className="relative bg-[#092C5C] text-white py-10 md:py-14 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] px-6 text-center">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20" />
+        {/* ================= HERO SECTION (STRIPE / APPLE STYLE - 35% SHRUNK) ================= */}
+        <section className="relative bg-[#0A2540] text-white py-12 md:py-16 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] px-6 text-center select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
 
           <div className="max-w-3xl mx-auto space-y-4 pt-28 lg:pt-32 relative z-10">
-            <div className="flex justify-center items-center gap-1 text-amber-400 text-xs font-bold uppercase tracking-wider">
-              <div className="flex text-amber-400">
-                <Star size={11} fill="currentColor" />
-                <Star size={11} fill="currentColor" />
-                <Star size={11} fill="currentColor" />
-                <Star size={11} fill="currentColor" />
-                <Star size={11} fill="currentColor" />
-              </div>
-              <span className="text-white opacity-85 ml-1">Trusted by supporters</span>
-            </div>
-
-            <h1 className="text-2xl sm:text-4xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
+            <h1 className="text-3xl sm:text-4xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
               ₹100 Can Put Food On Someone's Plate Today.
             </h1>
 
-            <p className="text-slate-350 text-xs sm:text-xs leading-relaxed max-w-lg mx-auto font-medium select-none uppercase tracking-widest text-[#22C55E]">
-              Every donation is verified with photos, videos and public updates.
+            <p className="text-slate-350 text-xs sm:text-xs leading-relaxed max-w-lg mx-auto font-medium select-none tracking-wide text-slate-300">
+              100% verified. Every donation is publicly tracked.
             </p>
+
+            <div className="flex justify-center gap-3 pt-2">
+              <button
+                onClick={() => {
+                  const formElem = document.getElementById('main-donation-form');
+                  if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }}
+                className="px-6 h-11 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 shadow-sm font-poppins"
+              >
+                Donate Now
+              </button>
+              <button
+                onClick={() => {
+                  const storyElem = document.getElementById('story-focus-section');
+                  if (storyElem) storyElem.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="px-6 h-11 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 font-poppins"
+              >
+                See Impact
+              </button>
+            </div>
           </div>
         </section>
 
@@ -208,16 +218,16 @@ export default function DonatePage() {
         </section>
 
         {/* ================= MAIN COMPACT FLOW CONTAINER ================= */}
-        <main className="max-w-4xl mx-auto px-4 pt-8 md:pt-12 space-y-12">
+        <main className="max-w-4xl mx-auto px-4 pt-6 md:pt-10 space-y-10">
           
           {/* URGENCY PROGRESS STRIP */}
           <div className="bg-white border border-[#E5EAF2] rounded-[20px] p-5 shadow-sm space-y-3 font-poppins text-left">
             <div className="flex justify-between items-center text-xs font-bold text-slate-600">
-              <span className="flex items-center gap-1.5 text-[#1E63FF]">
-                <TrendingUp size={14} />
-                <span>Today's Sponsoring Goal: Feed 300 Children</span>
+              <span className="flex items-center gap-1.5 text-[#0A2540]">
+                <TrendingUp size={14} className="text-[#1E63FF]" />
+                <span>Today's Goal: Feed 300 Children</span>
               </span>
-              <span className="text-[#22C55E]">186 Fed • 114 Remaining</span>
+              <span className="text-slate-500"><strong className="text-[#22C55E]">186 Fed</strong> • 114 Waiting</span>
             </div>
             
             <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden relative">
@@ -225,12 +235,12 @@ export default function DonatePage() {
             </div>
 
             <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider flex items-center gap-1 animate-pulse select-none">
-              🚨 Only 27 children still waiting for meals today
+              🚨 Only 27 children still waiting today
             </p>
           </div>
 
           {/* SPLIT ROW: DONATION FORM & SIDE INFO */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" id="main-donation-form">
             
             {/* LEFT COLUMN: INTERACTIVE FORM (8 COLS) */}
             <div className="lg:col-span-8 bg-white border border-[#E5EAF2] rounded-[24px] shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-hidden">
@@ -274,7 +284,7 @@ export default function DonatePage() {
                           key={opt.id}
                           type="button"
                           onClick={() => handleImpactSelect(opt.id)}
-                          className={`w-full p-4 rounded-xl border flex items-center justify-between transition-all text-left ${
+                          className={`w-full p-3.5 rounded-xl border flex items-center justify-between transition-all text-left ${
                             isSelected
                               ? 'bg-blue-50/50 border-[#1E63FF] text-[#1E63FF] shadow-sm'
                               : 'bg-white border-[#E5EAF2] text-[#0A2540] hover:bg-slate-50'
@@ -286,7 +296,9 @@ export default function DonatePage() {
                             </div>
                             <span className="text-xs font-bold">{opt.label}</span>
                           </div>
-                          <span className="text-xs font-black">₹{opt.amount}</span>
+                          <span className="text-xs font-black">
+                            ₹{opt.amount} {opt.tag && <span className="text-[8px] bg-[#1E63FF] text-white px-1.5 py-0.5 rounded ml-1.5 uppercase font-black tracking-wider">⭐ Most Popular</span>}
+                          </span>
                         </button>
                       );
                     })}
@@ -295,7 +307,7 @@ export default function DonatePage() {
                     <button
                       type="button"
                       onClick={() => { setIsCustomMode(true); setSelectedImpactId(''); }}
-                      className={`w-full p-4 rounded-xl border flex items-center justify-between transition-all text-left ${
+                      className={`w-full p-3.5 rounded-xl border flex items-center justify-between transition-all text-left ${
                         isCustomMode
                           ? 'bg-blue-50/50 border-[#1E63FF] text-[#1E63FF] shadow-sm'
                           : 'bg-white border-[#E5EAF2] text-[#0A2540] hover:bg-slate-50'
@@ -305,7 +317,7 @@ export default function DonatePage() {
                         <div className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center ${isCustomMode ? 'border-[#1E63FF] bg-[#1E63FF]' : 'border-slate-300 bg-white'}`}>
                           {isCustomMode && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
                         </div>
-                        <span className="text-xs font-bold">Custom Amount</span>
+                        <span className="text-xs font-bold">✏️ Custom Amount</span>
                       </div>
                       <span className="text-xs font-semibold text-slate-400">Specify sum</span>
                     </button>
@@ -314,13 +326,13 @@ export default function DonatePage() {
 
                 {/* 3. MULTIPLIER OR CUSTOM FIELD INPUT */}
                 {!isCustomMode ? (
-                  <div className="p-4 bg-slate-50 rounded-xl flex items-center justify-between">
+                  <div className="p-3.5 bg-slate-50 rounded-xl flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-500">Multiply Impact Quantity:</span>
                     <div className="flex items-center gap-3.5">
                       <button
                         type="button"
                         onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center"
+                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center active:scale-95 transition-all"
                       >
                         -
                       </button>
@@ -328,7 +340,7 @@ export default function DonatePage() {
                       <button
                         type="button"
                         onClick={() => setQuantity(q => q + 1)}
-                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center"
+                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center active:scale-95 transition-all"
                       >
                         +
                       </button>
@@ -337,13 +349,13 @@ export default function DonatePage() {
                 ) : (
                   <div className="space-y-3">
                     <div className="relative">
-                      <span className="absolute left-4 top-3 text-[#0A2540] font-black text-sm">₹</span>
+                      <span className="absolute left-4 top-2.5 text-[#0A2540] font-black text-sm">₹</span>
                       <input
                         type="number"
                         placeholder="Enter amount"
                         value={customAmount}
                         onChange={(e) => setCustomAmount(e.target.value)}
-                        className="w-full h-11 pl-8 pr-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-bold text-[#0A2540]"
+                        className="w-full h-10 pl-8 pr-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-bold text-[#0A2540]"
                       />
                     </div>
                     <div className="flex flex-wrap gap-2">
@@ -362,16 +374,16 @@ export default function DonatePage() {
                 )}
 
                 {/* 4. DONOR PARTICULARS */}
-                <div className="space-y-4 pt-2">
+                <div className="space-y-3.5 pt-2">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Your Particulars</label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
                     <input
                       type="text"
                       placeholder="Your Full Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
-                      className="w-full h-11 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                      className="w-full h-10 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
                     />
                     <input
                       type="email"
@@ -379,7 +391,7 @@ export default function DonatePage() {
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full h-11 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                      className="w-full h-10 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
                     />
                   </div>
                   <input
@@ -387,7 +399,7 @@ export default function DonatePage() {
                     placeholder="Phone Number (For Updates)"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full h-11 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                    className="w-full h-10 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
                   />
                   <label className="flex items-center gap-2 cursor-pointer pt-1">
                     <input
@@ -401,7 +413,7 @@ export default function DonatePage() {
                 </div>
 
                 {/* 5. PAYMENT METHOD LOGOS SELECTOR */}
-                <div className="space-y-3 pt-2">
+                <div className="space-y-3 pt-1">
                   <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Choose Payment Method</label>
                   <div className="grid grid-cols-3 gap-3">
                     {(['UPI', 'Card', 'Netbanking'] as const).map((method) => (
@@ -409,7 +421,7 @@ export default function DonatePage() {
                         key={method}
                         type="button"
                         onClick={() => setPaymentMethod(method)}
-                        className={`h-12 rounded-xl border flex flex-col justify-center items-center transition-all ${
+                        className={`h-11 rounded-xl border flex flex-col justify-center items-center transition-all ${
                           paymentMethod === method
                             ? 'bg-[#1E63FF]/5 border-[#1E63FF] text-[#1E63FF] shadow-sm'
                             : 'bg-white border-[#E5EAF2] text-slate-600 hover:bg-slate-50'
@@ -431,12 +443,12 @@ export default function DonatePage() {
                   </div>
                 </div>
 
-                {/* SUBMIT BUTTON */}
+                {/* SUBMIT BUTTON (BLUE PRIMARY CTA - STYLED CONVERSION OPTIMIZED) */}
                 <button
                   type="submit"
-                  className="w-full h-13 bg-[#22C55E] hover:bg-[#1CA24C] text-white font-extrabold rounded-xl text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-98 shadow-md"
+                  className="w-full h-12 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-98 shadow-md font-poppins"
                 >
-                  <Heart size={16} fill="currentColor" />
+                  <Heart size={15} fill="currentColor" />
                   <span>Donate ₹{getFinalAmount().toLocaleString()} Now</span>
                 </button>
 
@@ -449,65 +461,65 @@ export default function DonatePage() {
               {/* TRUST UTILIZATION BLOCK */}
               <div className="bg-[#0A2540] text-white rounded-[24px] p-6 shadow-sm space-y-4 text-left">
                 <span className="text-xs font-bold text-slate-350 uppercase tracking-widest block border-b border-white/10 pb-2">
-                  Live Metrics
+                  Impact Statistics
                 </span>
-                <div className="space-y-4">
+                <div className="space-y-4 font-poppins">
                   <div>
                     <span className="block text-2xl font-black text-[#22C55E]">12,000+</span>
-                    <span className="text-xs text-slate-400 font-semibold">Nutritional Meals Served</span>
+                    <span className="text-xs text-slate-400 font-semibold font-inter">Nutritional Meals Served</span>
                   </div>
                   <div>
                     <span className="block text-2xl font-black text-white">₹42L+</span>
-                    <span className="text-xs text-slate-400 font-semibold">Procurement Funds Utilized</span>
+                    <span className="text-xs text-slate-400 font-semibold font-inter">Procurement Funds Utilized</span>
                   </div>
                   <div>
                     <span className="block text-2xl font-black text-[#1E63FF]">98%</span>
-                    <span className="text-xs text-slate-400 font-semibold">Verified Ground Delivery Rate</span>
+                    <span className="text-xs text-slate-400 font-semibold font-inter font-bold">Verified Sponsoring Success</span>
                   </div>
                 </div>
               </div>
 
-              {/* VERIFICATION ICONS (ONE COLUMN LIST) */}
-              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm space-y-3.5 text-left font-semibold text-xs text-slate-700">
-                <div className="flex items-center gap-2.5 text-[#22C55E]">
-                  <CheckCircle2 size={16} />
-                  <span>✔ Rishikesh Ground Work</span>
+              {/* VERIFICATION ICONS (ONE COLUMN LIST - ELEGANT COMPACT CHIPS) */}
+              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm space-y-3.5 text-left font-semibold text-xs text-slate-700 select-none">
+                <div className="flex items-center gap-2.5 text-slate-750">
+                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
+                  <span>Verified Campaign Sponsoring</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-[#22C55E]">
-                  <CheckCircle2 size={16} />
-                  <span>✔ Public Transparency Ledger</span>
+                <div className="flex items-center gap-2.5 text-slate-750">
+                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
+                  <span>Public Ledger Distribution</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-[#22C55E]">
-                  <CheckCircle2 size={16} />
-                  <span>✔ Mapped Procurement Proofs</span>
+                <div className="flex items-center gap-2.5 text-slate-750">
+                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
+                  <span>Secure Encrypted Channels</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-[#22C55E]">
-                  <CheckCircle2 size={16} />
-                  <span>✔ 100% Direct Relief</span>
+                <div className="flex items-center gap-2.5 text-slate-750">
+                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
+                  <span>Mapped Sourcing Receipts</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-[#22C55E]">
-                  <CheckCircle2 size={16} />
-                  <span>✔ Secure Bank Encryption</span>
+                <div className="flex items-center gap-2.5 text-slate-750">
+                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
+                  <span>Real Photos & Videos Proof</span>
                 </div>
               </div>
 
               {/* RECENT SOCIAL PROOF BAR */}
-              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-5 shadow-sm space-y-3.5 text-left">
+              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-5 shadow-sm space-y-3.5 text-left select-none">
                 <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
                   Last Donations
                 </span>
                 <div className="space-y-3 text-xs font-semibold text-slate-650">
                   <div className="flex justify-between items-center border-b border-slate-50 pb-2">
                     <span className="text-slate-800">Aman S.</span>
-                    <span className="text-slate-500 font-bold">₹500 <span className="text-[10px] text-slate-400 ml-1">2m ago</span></span>
+                    <span className="text-slate-500 font-bold">₹500 <span className="text-[10px] text-slate-400 ml-1 font-bold">2m ago</span></span>
                   </div>
                   <div className="flex justify-between items-center border-b border-slate-50 pb-2">
                     <span className="text-slate-800">Riya J.</span>
-                    <span className="text-slate-500 font-bold">₹1000 <span className="text-[10px] text-slate-400 ml-1">8m ago</span></span>
+                    <span className="text-slate-500 font-bold">₹1000 <span className="text-[10px] text-slate-400 ml-1 font-bold">8m ago</span></span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-slate-800">Rahul M.</span>
-                    <span className="text-slate-500 font-bold">₹200 <span className="text-[10px] text-slate-400 ml-1">15m ago</span></span>
+                    <span className="text-slate-500 font-bold">₹200 <span className="text-[10px] text-slate-400 ml-1 font-bold">15m ago</span></span>
                   </div>
                 </div>
               </div>
@@ -516,19 +528,19 @@ export default function DonatePage() {
 
           </div>
 
-          {/* ================= EVERY DONATION INCLUDES (TRUST INFO) ================= */}
-          <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm text-left">
+          {/* ================= TRUST SECTION (EVERY DONATION INCLUDES) ================= */}
+          <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm text-left select-none">
             <h3 className="text-xs font-bold text-slate-450 uppercase tracking-widest border-b border-slate-100 pb-3 block">
               Every Donation Includes
             </h3>
-            <div className="grid grid-cols-2 md:grid-cols-6 gap-4 pt-4 text-xs font-bold text-slate-700 text-center">
+            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 pt-4 text-xs font-bold text-slate-700 text-center">
               <div className="space-y-1">
                 <span className="text-xl block">📸</span>
                 <span className="text-slate-600 block">Photos</span>
               </div>
               <div className="space-y-1">
                 <span className="text-xl block">🎥</span>
-                <span className="text-slate-600 block">Videos</span>
+                <span className="text-slate-600 block">Video</span>
               </div>
               <div className="space-y-1">
                 <span className="text-xl block">🧾</span>
@@ -536,21 +548,21 @@ export default function DonatePage() {
               </div>
               <div className="space-y-1">
                 <span className="text-xl block">📍</span>
-                <span className="text-slate-600 block">Location Tag</span>
+                <span className="text-slate-600 block">Location</span>
               </div>
               <div className="space-y-1">
                 <span className="text-xl block">📅</span>
-                <span className="text-slate-600 block">Date Proof</span>
+                <span className="text-slate-600 block">Date</span>
               </div>
               <div className="space-y-1">
                 <span className="text-xl block">👤</span>
-                <span className="text-slate-600 block">Volunteer Sign</span>
+                <span className="text-slate-600 block">Volunteer Name</span>
               </div>
             </div>
           </div>
 
-          {/* ================= ONE SINGLE EMOTIONAL STORY ================= */}
-          <div className="bg-white border border-[#E5EAF2] rounded-[24px] overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12 text-left">
+          {/* ================= ONE SINGLE STORY ================= */}
+          <div className="bg-white border border-[#E5EAF2] rounded-[24px] overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12 text-left" id="story-focus-section">
             <div className="md:col-span-5 relative h-48 md:h-auto bg-slate-100">
               <Image 
                 src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600"
@@ -603,7 +615,7 @@ export default function DonatePage() {
 
         {/* ================= MINIMAL FOOTER FOR CONVERSION ================= */}
         <footer className="max-w-4xl mx-auto px-4 pt-16 pb-8 border-t border-slate-200 mt-16 text-center select-none font-inter">
-          <div className="flex justify-center gap-6 text-xs font-semibold text-slate-400">
+          <div className="flex justify-center gap-6 text-xs font-semibold text-slate-450">
             <a href="/privacy" className="hover:text-[#0A2540] transition-colors">Privacy Policy</a>
             <span>•</span>
             <a href="/terms" className="hover:text-[#0A2540] transition-colors">Terms of Service</a>
@@ -636,9 +648,10 @@ export default function DonatePage() {
               <button
                 type="button"
                 onClick={() => {
-                  window.scrollTo({ top: 120, behavior: 'smooth' });
+                  const formElem = document.getElementById('main-donation-form');
+                  if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className="px-6 py-2.5 bg-[#22C55E] hover:bg-[#1CA24C] text-white font-extrabold rounded-lg text-[10px] uppercase tracking-wider transition-colors shadow-sm"
+                className="px-6 py-2.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-extrabold rounded-lg text-[10px] uppercase tracking-wider transition-colors shadow-sm font-poppins"
               >
                 Donate Now
               </button>
@@ -663,7 +676,7 @@ export default function DonatePage() {
               >
                 {/* Razorpay simulation brand tag */}
                 <div className="flex justify-between items-center border-b border-slate-100 pb-3">
-                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Razorpay Secure</span>
+                  <span className="text-xs font-bold text-slate-450 uppercase tracking-wider">Razorpay Secure</span>
                   <span className="px-2 py-0.5 bg-blue-50 text-[#1E63FF] rounded text-[8px] font-black uppercase">Sandbox Mode</span>
                 </div>
 
