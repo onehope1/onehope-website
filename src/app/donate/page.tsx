@@ -13,11 +13,21 @@ import {
 } from 'lucide-react';
 
 const liveTickerDonations = [
-  { id: 1, name: 'Ayesha K.', amount: 2500, time: '8m ago', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80' },
-  { id: 2, name: 'Vikram A.', amount: 1500, time: '12m ago', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80' },
-  { id: 3, name: 'Rohan M.', amount: 5000, time: '24m ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80' },
-  { id: 4, name: 'Neha S.', amount: 1000, time: '35m ago', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80' },
-  { id: 5, name: 'Priya D.', amount: 3000, time: '48m ago', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=80' }
+  { id: 1, name: 'Aman S.', amount: 500, time: '2m ago', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80' },
+  { id: 2, name: 'Riya J.', amount: 1000, time: '8m ago', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80' },
+  { id: 3, name: 'Rahul M.', amount: 200, time: '15m ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80' },
+  { id: 4, name: 'Neha S.', amount: 1200, time: '30m ago', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80' },
+  { id: 5, name: 'Vikram A.', amount: 2500, time: '45m ago', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=80' }
+];
+
+const coreCampaigns = [
+  { id: 'camp-1', label: 'Feed Hungry Children', unitPrice: 100, unitLabel: 'children', desc: 'hot nutritious meals and fresh water bottles' },
+  { id: 'camp-2', label: 'School Supplies for Children', unitPrice: 500, unitLabel: 'students', desc: 'textbooks, school uniforms, and stationary kits' },
+  { id: 'camp-3', label: 'Family Ration Kit', unitPrice: 2500, unitLabel: 'families', desc: 'monthly grocery packages and raw kitchen staples' },
+  { id: 'camp-4', label: 'New Clothes for Children', unitPrice: 800, unitLabel: 'children', desc: 'new protective garments and warm outfits' },
+  { id: 'camp-5', label: 'Animal Feed & Care', unitPrice: 150, unitLabel: 'animals', desc: 'nutritious feed, clean shelter water, and medical care' },
+  { id: 'camp-6', label: 'Celebrate Your Special Day', unitPrice: 1000, unitLabel: 'celebrations', desc: 'festive distributions and ground meals sharing' },
+  { id: 'camp-7', label: 'Emergency Medical Fund', unitPrice: 1, unitLabel: 'contributions', desc: 'critical operations and life-saving diagnosis support', isCustom: true }
 ];
 
 export default function DonatePage() {
@@ -25,16 +35,15 @@ export default function DonatePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const campaignId = searchParams.get('campaignId') || '';
+  const paramCampaign = searchParams.get('campaign') || searchParams.get('campaignId') || '';
 
   // Form states
   const [amountType, setAmountType] = useState<'One-Time' | 'Monthly' | 'Yearly'>('One-Time');
-  const [selectedImpactId, setSelectedImpactId] = useState<string>('opt-3'); // Default Feed 10 Children (₹1000)
-  const [customAmount, setCustomAmount] = useState<string>('');
-  const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
-  const [quantity, setQuantity] = useState<number>(1);
-  const [targetCampaignId, setTargetCampaignId] = useState<string>(campaignId || 'camp-1');
-
+  const [targetCampaignId, setTargetCampaignId] = useState<string>('camp-1');
+  const [isLocked, setIsLocked] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(10); // Default set to 10
+  const [customQuantity, setCustomQuantity] = useState<string>('');
+  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
@@ -60,7 +69,7 @@ export default function DonatePage() {
   // Handle scroll to toggle sticky CTA bar
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 520) {
+      if (window.scrollY > 550) {
         setShowStickyBar(true);
       } else {
         setShowStickyBar(false);
@@ -70,42 +79,56 @@ export default function DonatePage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const impactOptions = [
-    { id: 'opt-1', label: '🍛 Feed 1 Child', amount: 100, unit: 'Child', campaignId: 'camp-1' },
-    { id: 'opt-2', label: '🍛 Feed 5 Children', amount: 500, unit: 'Children', campaignId: 'camp-1' },
-    { id: 'opt-3', label: '🍛 Feed 10 Children', amount: 1000, unit: 'Children', campaignId: 'camp-1', tag: 'Most Popular' },
-    { id: 'opt-5', label: '👨‍👩‍👧 Sponsor Family Food Kit', amount: 5000, unit: 'Family', campaignId: 'camp-3' }
-  ];
+  // Listen to campaign parameter to pre-select and lock active form state
+  useEffect(() => {
+    if (paramCampaign) {
+      const found = coreCampaigns.find(
+        c => c.id === paramCampaign || c.label.toLowerCase().includes(paramCampaign.toLowerCase())
+      );
+      if (found) {
+        setTargetCampaignId(found.id);
+        setIsLocked(true);
+      }
+    }
+  }, [paramCampaign]);
 
-  const suggestedCustomAmounts = [100, 500, 1000, 2500];
+  const handleMultiplierClick = (num: number) => {
+    setQuantity(num);
+    setCustomQuantity('');
+  };
 
-  const handleImpactSelect = (optId: string) => {
-    setSelectedImpactId(optId);
-    setIsCustomMode(false);
-    setCustomAmount('');
-    const opt = impactOptions.find(o => o.id === optId);
-    if (opt) setTargetCampaignId(opt.campaignId);
+  const handleCustomQuantityChange = (val: string) => {
+    setCustomQuantity(val);
+    const parsed = parseInt(val);
+    if (!isNaN(parsed) && parsed > 0) {
+      setQuantity(parsed);
+    } else {
+      setQuantity(1);
+    }
   };
 
   const getFinalAmount = () => {
-    if (isCustomMode) {
-      const custom = parseInt(customAmount);
-      return isNaN(custom) ? 0 : custom;
-    }
-    const opt = impactOptions.find(o => o.id === selectedImpactId);
+    const opt = coreCampaigns.find(o => o.id === targetCampaignId);
     if (!opt) return 0;
-    return opt.amount * quantity;
+    return opt.unitPrice * quantity;
   };
 
   const getImpactText = () => {
-    if (isCustomMode) {
-      return `Custom Sponsoring of ₹${getFinalAmount().toLocaleString()}`;
-    }
-    const opt = impactOptions.find(o => o.id === selectedImpactId);
+    const opt = coreCampaigns.find(o => o.id === targetCampaignId);
     if (!opt) return '';
-    const cleanLabel = opt.label.replace(/[^\w\s]/g, '').trim();
-    const totalKids = (opt.id === 'opt-5') ? 1 : (parseInt(cleanLabel.replace(/\D/g, '')) || 1) * quantity;
-    return `${opt.id === 'opt-5' ? 'Sponsor' : 'Feed'} ${totalKids} ${opt.unit}`;
+    if (opt.isCustom) {
+      return `Emergency Medical Support`;
+    }
+    return `Sponsor ${quantity} ${opt.unitLabel}`;
+  };
+
+  const getMathString = () => {
+    const selectedCamp = coreCampaigns.find(c => c.id === targetCampaignId) || coreCampaigns[0];
+    const totalAmount = getFinalAmount();
+    if (selectedCamp.isCustom) {
+      return `You are contributing to the Emergency Medical Fund. Total: INR ${totalAmount.toLocaleString()}`;
+    }
+    return `You are sponsoring ${selectedCamp.desc} for ${quantity} ${selectedCamp.unitLabel}. Total: INR ${totalAmount.toLocaleString()}`;
   };
 
   const handleSimulateRazorpay = (e: React.FormEvent) => {
@@ -139,61 +162,74 @@ export default function DonatePage() {
     }, 2000);
   };
 
-  // FAQ Accordion states
-  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const toggleFaq = (index: number) => {
-    setOpenFaqIndex(openFaqIndex === index ? null : index);
-  };
-
-  const faqs = [
-    { q: 'Where does my money go?', a: 'Your donation directly funds ground procurement of grain packages, education kits, or medical aid near Triveni slum points. We post geo-tagged photos and purchase invoices for every batch.' },
-    { q: 'Will I receive proof?', a: 'Yes! An automated confirmation report containing volunteer photos, timestamped logs, and digital receipts will be generated and sent directly to your email.' },
-    { q: 'Can I donate anonymously?', a: 'Yes, absolutely. Check the "Donate Anonymously" box in the form to hide your name on our public donation ledger and scrolling tickers.' },
-    { q: 'Is payment secure?', a: 'All transactions are processed through 255-bit bank-grade encryption gateways. We do not store any card or UPI credentials on our servers.' }
-  ];
-
   return (
     <PublicLayout>
       <div className="bg-[#F8FBFF] min-h-screen font-inter select-none overflow-hidden pb-12">
         
-        {/* ================= HERO SECTION (STRIPE / APPLE STYLE - 35% SHRUNK) ================= */}
-        <section className="relative bg-[#0A2540] text-white py-12 md:py-16 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] px-6 text-center select-none">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
+        {/* ================= 1. PREMIUM SPLIT-GRID HERO BANNER ================= */}
+        <section className="relative bg-[#0A2540] text-white py-16 md:py-24 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] px-6">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-25 pointer-events-none" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[120px] pointer-events-none" />
 
-          <div className="max-w-3xl mx-auto space-y-4 pt-28 lg:pt-32 relative z-10">
-            <h1 className="text-3xl sm:text-4xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
-              ₹100 Can Put Food On Someone's Plate Today.
-            </h1>
+          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center relative z-10">
+            
+            {/* Left Column: Premium Title & Navigation */}
+            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-slate-300 text-[10px] font-bold uppercase tracking-wider">
+                100% Traceable Ground Sponsoring
+              </span>
+              
+              <h1 className="text-3xl sm:text-5xl font-black font-poppins tracking-tight leading-[1.1] text-white">
+                Transform Compassion
+                <span className="bg-gradient-to-r from-[#1E63FF] to-[#22C55E] bg-clip-text text-transparent block mt-1">
+                  Into Audited Impact.
+                </span>
+              </h1>
+              
+              <p className="text-slate-350 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
+                Every purchase is logged on a public ledger with photos, invoices, and GPS tags. Sponsor food, study materials, or medical aid directly.
+              </p>
 
-            <p className="text-slate-350 text-xs sm:text-xs leading-relaxed max-w-lg mx-auto font-medium select-none tracking-wide text-slate-300">
-              100% verified. Every donation is publicly tracked.
-            </p>
-
-            <div className="flex justify-center gap-3 pt-2">
-              <button
-                onClick={() => {
-                  const formElem = document.getElementById('main-donation-form');
-                  if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }}
-                className="px-6 h-11 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 shadow-sm font-poppins"
-              >
-                Donate Now
-              </button>
-              <button
-                onClick={() => {
-                  const storyElem = document.getElementById('story-focus-section');
-                  if (storyElem) storyElem.scrollIntoView({ behavior: 'smooth' });
-                }}
-                className="px-6 h-11 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 font-poppins"
-              >
-                See Impact
-              </button>
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3.5 pt-2">
+                <button
+                  onClick={() => {
+                    const formElem = document.getElementById('donation-core-widget');
+                    if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="w-full sm:w-auto px-8 h-12 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 shadow-sm font-poppins"
+                >
+                  Start Sponsoring
+                </button>
+                <button
+                  onClick={() => {
+                    const metricsElem = document.getElementById('trust-verification-assets');
+                    if (metricsElem) metricsElem.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="w-full sm:w-auto px-8 h-12 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-xl text-xs uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 font-poppins"
+                >
+                  See Live Verification Loop
+                </button>
+              </div>
             </div>
+
+            {/* Right Column: Premium Video Container */}
+            <div className="lg:col-span-5">
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-[0_25px_60px_-15px_rgba(30,99,255,0.25)] border border-white/10 bg-slate-900 group">
+                <iframe
+                  className="w-full h-full object-cover pointer-events-none group-hover:pointer-events-auto"
+                  src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=0&mute=1&controls=0"
+                  title="OneHope Ground Sponsoring Verification"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+            </div>
+
           </div>
         </section>
 
-        {/* ================= LIVE DONATIONS TICKER BAR ================= */}
+        {/* ================= LIVE TICKER RIBBON ================= */}
         <section className="bg-slate-50 border-b border-slate-150 py-3 font-inter select-none overflow-hidden relative">
           <div className="flex whitespace-nowrap animate-marquee gap-8">
             {liveTickerDonations.map((d, index) => (
@@ -201,7 +237,7 @@ export default function DonatePage() {
                 <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white shrink-0">
                   <Image src={d.avatar} alt={d.name} fill className="object-cover" />
                 </div>
-                <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
+                <span>{d.name} donated <strong className="text-[#1E63FF]">INR {d.amount}</strong></span>
                 <span className="text-[10px] text-slate-400 font-bold">• {d.time}</span>
               </div>
             ))}
@@ -210,411 +246,292 @@ export default function DonatePage() {
                 <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white shrink-0">
                   <Image src={d.avatar} alt={d.name} fill className="object-cover" />
                 </div>
-                <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
+                <span>{d.name} donated <strong className="text-[#1E63FF]">INR {d.amount}</strong></span>
                 <span className="text-[10px] text-slate-400 font-bold">• {d.time}</span>
               </div>
             ))}
           </div>
         </section>
 
-        {/* ================= MAIN COMPACT FLOW CONTAINER ================= */}
-        <main className="max-w-4xl mx-auto px-4 pt-6 md:pt-10 space-y-10">
+        {/* ================= 2. THE ULTIMATE DYNAMIC DONATION WIDGET ================= */}
+        <main className="max-w-7xl mx-auto px-4 py-12 md:py-16 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start" id="donation-core-widget">
           
-          {/* URGENCY PROGRESS STRIP */}
-          <div className="bg-white border border-[#E5EAF2] rounded-[20px] p-5 shadow-sm space-y-3 font-poppins text-left">
-            <div className="flex justify-between items-center text-xs font-bold text-slate-600">
-              <span className="flex items-center gap-1.5 text-[#0A2540]">
-                <TrendingUp size={14} className="text-[#1E63FF]" />
-                <span>Today's Goal: Feed 300 Children</span>
-              </span>
-              <span className="text-slate-500"><strong className="text-[#22C55E]">186 Fed</strong> • 114 Waiting</span>
-            </div>
-            
-            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden relative">
-              <div className="h-full bg-gradient-to-r from-[#1E63FF] to-[#22C55E] rounded-full" style={{ width: '62%' }} />
-            </div>
+          {/* LEFT COLUMN: THE INTERACTIVE WIDGET CARD (7 COLS) */}
+          <div className="lg:col-span-8 bg-white border border-[#E5EAF2] rounded-[24px] shadow-[0_15px_40px_rgba(0,0,0,0.05)] overflow-hidden">
+            <form onSubmit={handleSimulateRazorpay} className="p-6 md:p-8 space-y-6 text-left">
+              
+              {/* FREQUENCY SELECTOR */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sponsorship Cycle</label>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['One-Time', 'Monthly', 'Yearly'] as const).map((type) => (
+                    <button
+                      key={type}
+                      type="button"
+                      onClick={() => setAmountType(type)}
+                      className={`h-11 rounded-xl text-xs font-bold transition-all flex flex-col justify-center items-center border ${
+                        amountType === type 
+                          ? 'bg-[#0047AB] text-white border-[#0047AB] shadow-[0_2px_10px_rgba(0,71,171,0.15)]' 
+                          : 'bg-white text-[#0A2540] border-[#E5EAF2] hover:bg-slate-50'
+                      }`}
+                    >
+                      <span>{type === 'Monthly' ? 'Monthly' : type}</span>
+                      {type === 'Monthly' && <span className="text-[7.5px] opacity-90 font-medium uppercase tracking-wider">Recommended</span>}
+                    </button>
+                  ))}
+                </div>
+              </div>
 
-            <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider flex items-center gap-1 animate-pulse select-none">
-              🚨 Only 27 children still waiting today
-            </p>
-          </div>
+              {/* DYNAMIC CAUSE SELECTION LOGIC */}
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Sponsorship Cause</label>
+                {isLocked ? (
+                  <div className="w-full h-11 px-4 bg-slate-50 border border-[#E5EAF2] rounded-xl flex items-center justify-between text-xs font-bold text-[#0A2540]">
+                    <span>{coreCampaigns.find(c => c.id === targetCampaignId)?.label}</span>
+                    <span className="px-2 py-0.5 bg-[#0047AB] text-white rounded text-[8px] uppercase font-black tracking-wider">Pre-Selected Cause</span>
+                  </div>
+                ) : (
+                  <div className="relative">
+                    <select
+                      value={targetCampaignId}
+                      onChange={(e) => {
+                        setTargetCampaignId(e.target.value);
+                        setQuantity(10); // Reset quantity to default on swap
+                      }}
+                      className="w-full h-11 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none focus:border-[#0047AB] text-xs font-semibold text-[#0A2540] appearance-none"
+                    >
+                      {coreCampaigns.map((c) => (
+                        <option key={c.id} value={c.id}>{c.label} (Base: INR {c.unitPrice})</option>
+                      ))}
+                    </select>
+                    <ChevronDown size={14} className="absolute right-4 top-3.5 text-slate-400 pointer-events-none" />
+                  </div>
+                )}
+              </div>
 
-          {/* SPLIT ROW: DONATION FORM & SIDE INFO */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start" id="main-donation-form">
-            
-            {/* LEFT COLUMN: INTERACTIVE FORM (8 COLS) */}
-            <div className="lg:col-span-8 bg-white border border-[#E5EAF2] rounded-[24px] shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-hidden">
-              <form onSubmit={handleSimulateRazorpay} className="p-6 md:p-8 space-y-6 text-left">
-                
-                {/* 1. FREQUENCY SELECTOR */}
-                <div className="space-y-2">
-                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Select Frequency</label>
-                  <div className="grid grid-cols-3 gap-2">
-                    {(['One-Time', 'Monthly', 'Yearly'] as const).map((type) => (
+              {/* SLEEK MULTIPLIER QUANTITY GRID */}
+              <div className="space-y-3">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Select Quantity</label>
+                <div className="grid grid-cols-5 gap-2">
+                  {[10, 20, 50, 100].map((num) => {
+                    const isActive = quantity === num && !customQuantity;
+                    return (
                       <button
-                        key={type}
+                        key={num}
                         type="button"
-                        onClick={() => setAmountType(type)}
-                        className={`h-11 rounded-xl text-xs font-bold transition-all flex flex-col justify-center items-center border ${
-                          amountType === type 
-                            ? 'bg-[#1E63FF] text-white border-[#1E63FF]' 
+                        onClick={() => handleMultiplierClick(num)}
+                        className={`h-11 rounded-xl text-xs font-bold transition-all border ${
+                          isActive 
+                            ? 'bg-[#0047AB] text-white border-[#0047AB] shadow-[0_2px_10px_rgba(0,71,171,0.15)]'
                             : 'bg-white text-[#0A2540] border-[#E5EAF2] hover:bg-slate-50'
                         }`}
                       >
-                        <span>{type === 'Monthly' ? 'Monthly ❤️' : type}</span>
-                        {type === 'Monthly' && <span className="text-[7.5px] opacity-90 font-medium">Recommended</span>}
+                        {num}
                       </button>
-                    ))}
-                  </div>
-                  {amountType === 'Monthly' && (
-                    <p className="text-[10px] text-[#1E63FF] font-bold">
-                      💡 Help a child every month.
-                    </p>
-                  )}
+                    );
+                  })}
+                  
+                  {/* Custom Number numerical input box */}
+                  <input
+                    type="number"
+                    placeholder="Custom"
+                    value={customQuantity}
+                    onChange={(e) => handleCustomQuantityChange(e.target.value)}
+                    className="h-11 px-3 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none focus:border-[#0047AB] text-xs font-bold text-[#0A2540] text-center placeholder-slate-400"
+                  />
                 </div>
+              </div>
 
-                {/* 2. IMPACT CHOICE (PSYCHOLOGICAL PRESETS) */}
-                <div className="space-y-3">
-                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">I Want To Help</label>
-                  <div className="space-y-2.5">
-                    {impactOptions.map((opt) => {
-                      const isSelected = !isCustomMode && selectedImpactId === opt.id;
-                      return (
-                        <button
-                          key={opt.id}
-                          type="button"
-                          onClick={() => handleImpactSelect(opt.id)}
-                          className={`w-full p-3.5 rounded-xl border flex items-center justify-between transition-all text-left ${
-                            isSelected
-                              ? 'bg-blue-50/50 border-[#1E63FF] text-[#1E63FF] shadow-sm'
-                              : 'bg-white border-[#E5EAF2] text-[#0A2540] hover:bg-slate-50'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            <div className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center ${isSelected ? 'border-[#1E63FF] bg-[#1E63FF]' : 'border-slate-300 bg-white'}`}>
-                              {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                            </div>
-                            <span className="text-xs font-bold">{opt.label}</span>
-                          </div>
-                          <span className="text-xs font-black">
-                            ₹{opt.amount} {opt.tag && <span className="text-[8px] bg-[#1E63FF] text-white px-1.5 py-0.5 rounded ml-1.5 uppercase font-black tracking-wider">⭐ Most Popular</span>}
-                          </span>
-                        </button>
-                      );
-                    })}
+              {/* REAL-TIME MATH STRING TRACKING */}
+              <div className="p-4 bg-slate-50 rounded-2xl border border-[#E5EAF2] text-left select-none">
+                <p className="text-xs font-bold text-[#0A2540] leading-relaxed">
+                  {getMathString()}
+                </p>
+              </div>
 
-                    {/* Custom Amount option trigger */}
-                    <button
-                      type="button"
-                      onClick={() => { setIsCustomMode(true); setSelectedImpactId(''); }}
-                      className={`w-full p-3.5 rounded-xl border flex items-center justify-between transition-all text-left ${
-                        isCustomMode
-                          ? 'bg-blue-50/50 border-[#1E63FF] text-[#1E63FF] shadow-sm'
-                          : 'bg-white border-[#E5EAF2] text-[#0A2540] hover:bg-slate-50'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <div className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center ${isCustomMode ? 'border-[#1E63FF] bg-[#1E63FF]' : 'border-slate-300 bg-white'}`}>
-                          {isCustomMode && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
-                        </div>
-                        <span className="text-xs font-bold">✏️ Custom Amount</span>
-                      </div>
-                      <span className="text-xs font-semibold text-slate-400">Specify sum</span>
-                    </button>
-                  </div>
-                </div>
-
-                {/* 3. MULTIPLIER OR CUSTOM FIELD INPUT */}
-                {!isCustomMode ? (
-                  <div className="p-3.5 bg-slate-50 rounded-xl flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-500">Multiply Impact Quantity:</span>
-                    <div className="flex items-center gap-3.5">
-                      <button
-                        type="button"
-                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
-                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center active:scale-95 transition-all"
-                      >
-                        -
-                      </button>
-                      <span className="text-sm font-black font-poppins">{quantity}</span>
-                      <button
-                        type="button"
-                        onClick={() => setQuantity(q => q + 1)}
-                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center active:scale-95 transition-all"
-                      >
-                        +
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="relative">
-                      <span className="absolute left-4 top-2.5 text-[#0A2540] font-black text-sm">₹</span>
-                      <input
-                        type="number"
-                        placeholder="Enter amount"
-                        value={customAmount}
-                        onChange={(e) => setCustomAmount(e.target.value)}
-                        className="w-full h-10 pl-8 pr-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-bold text-[#0A2540]"
-                      />
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {suggestedCustomAmounts.map((amt) => (
-                        <button
-                          key={amt}
-                          type="button"
-                          onClick={() => setCustomAmount(amt.toString())}
-                          className="px-3 py-1.5 bg-slate-50 border border-[#E5EAF2] rounded-lg text-xs font-bold text-slate-650 hover:bg-slate-100 transition-colors"
-                        >
-                          ₹{amt}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {/* 4. DONOR PARTICULARS */}
-                <div className="space-y-3.5 pt-2">
-                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Your Particulars</label>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+              {/* PARTICULARS (STREAMLINED FLOATING-LABEL FORMS) */}
+              <div className="space-y-3 pt-2">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Your Particulars</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                  <div className="relative">
                     <input
                       type="text"
-                      placeholder="Your Full Name"
+                      placeholder="Full Name"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
                       required
-                      className="w-full h-10 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                      id="fullName"
+                      className="w-full h-12 px-4 pt-4 pb-1 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none focus:border-[#0047AB] text-xs font-semibold text-[#0A2540] placeholder-transparent peer"
                     />
+                    <label
+                      htmlFor="fullName"
+                      className="absolute left-4 top-1.5 text-[8px] font-bold text-slate-400 uppercase tracking-wider transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[8px]"
+                    >
+                      Full Name
+                    </label>
+                  </div>
+
+                  <div className="relative">
                     <input
                       type="email"
-                      placeholder="Your Email ID"
+                      placeholder="Email Address"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
                       required
-                      className="w-full h-10 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                      id="emailAddress"
+                      className="w-full h-12 px-4 pt-4 pb-1 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none focus:border-[#0047AB] text-xs font-semibold text-[#0A2540] placeholder-transparent peer"
                     />
+                    <label
+                      htmlFor="emailAddress"
+                      className="absolute left-4 top-1.5 text-[8px] font-bold text-slate-400 uppercase tracking-wider transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[8px]"
+                    >
+                      Email Address
+                    </label>
                   </div>
+                </div>
+
+                <div className="relative">
                   <input
                     type="tel"
-                    placeholder="Phone Number (For Updates)"
+                    placeholder="Phone Number"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    className="w-full h-10 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                    id="phoneNumber"
+                    className="w-full h-12 px-4 pt-4 pb-1 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none focus:border-[#0047AB] text-xs font-semibold text-[#0A2540] placeholder-transparent peer"
                   />
-                  <label className="flex items-center gap-2 cursor-pointer pt-1">
-                    <input
-                      type="checkbox"
-                      checked={isAnonymous}
-                      onChange={(e) => setIsAnonymous(e.target.checked)}
-                      className="w-4.5 h-4.5 accent-[#1E63FF] rounded border-slate-350"
-                    />
-                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider select-none">Donate Anonymously</span>
+                  <label
+                    htmlFor="phoneNumber"
+                    className="absolute left-4 top-1.5 text-[8px] font-bold text-slate-400 uppercase tracking-wider transition-all peer-placeholder-shown:text-xs peer-placeholder-shown:top-3.5 peer-focus:top-1.5 peer-focus:text-[8px]"
+                  >
+                    Phone Number
                   </label>
                 </div>
 
-                {/* 5. PAYMENT METHOD LOGOS SELECTOR */}
-                <div className="space-y-3 pt-1">
-                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Choose Payment Method</label>
-                  <div className="grid grid-cols-3 gap-3">
-                    {(['UPI', 'Card', 'Netbanking'] as const).map((method) => (
+                <label className="flex items-center gap-2 cursor-pointer pt-1">
+                  <input
+                    type="checkbox"
+                    checked={isAnonymous}
+                    onChange={(e) => setIsAnonymous(e.target.checked)}
+                    className="w-4.5 h-4.5 accent-[#0047AB] rounded border-slate-350"
+                  />
+                  <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider select-none">Donate Anonymously</span>
+                </label>
+              </div>
+
+              {/* PAYMENT SEGMENTS */}
+              <div className="space-y-3.5 pt-2">
+                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Payment Method</label>
+                <div className="grid grid-cols-3 gap-2 bg-slate-50 p-1.5 rounded-xl border border-[#E5EAF2]">
+                  {(['UPI', 'Card', 'Netbanking'] as const).map((method) => {
+                    const isActive = paymentMethod === method;
+                    return (
                       <button
                         key={method}
                         type="button"
                         onClick={() => setPaymentMethod(method)}
-                        className={`h-11 rounded-xl border flex flex-col justify-center items-center transition-all ${
-                          paymentMethod === method
-                            ? 'bg-[#1E63FF]/5 border-[#1E63FF] text-[#1E63FF] shadow-sm'
-                            : 'bg-white border-[#E5EAF2] text-slate-600 hover:bg-slate-50'
+                        className={`py-2 text-xs font-bold rounded-lg transition-all ${
+                          isActive 
+                            ? 'bg-[#0047AB] text-white shadow-[0_2px_10px_rgba(0,71,171,0.2)]'
+                            : 'text-slate-650 hover:text-slate-800'
                         }`}
                       >
-                        <span className="text-xs font-bold font-poppins">{method}</span>
+                        {method}
                       </button>
-                    ))}
-                  </div>
-                  <div className="flex justify-center gap-3 opacity-60 grayscale hover:grayscale-0 transition-all pt-1 select-none">
-                    <span className="text-[9px] font-bold text-slate-450 uppercase tracking-widest my-auto mr-1">Accepting:</span>
-                    <span className="text-slate-400 font-extrabold text-[10px]">Google Pay</span>
-                    <span className="text-slate-400 font-extrabold text-[10px]">•</span>
-                    <span className="text-slate-400 font-extrabold text-[10px]">PhonePe</span>
-                    <span className="text-slate-400 font-extrabold text-[10px]">•</span>
-                    <span className="text-slate-400 font-extrabold text-[10px]">UPI</span>
-                    <span className="text-slate-400 font-extrabold text-[10px]">•</span>
-                    <span className="text-slate-400 font-extrabold text-[10px]">Cards</span>
-                  </div>
-                </div>
-
-                {/* SUBMIT BUTTON (BLUE PRIMARY CTA - STYLED CONVERSION OPTIMIZED) */}
-                <button
-                  type="submit"
-                  className="w-full h-12 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-98 shadow-md font-poppins"
-                >
-                  <Heart size={15} fill="currentColor" />
-                  <span>Donate ₹{getFinalAmount().toLocaleString()} Now</span>
-                </button>
-
-              </form>
-            </div>
-
-            {/* RIGHT COLUMN: VERIFICATION BADGES & LIVE SOCIAL PROOF (4 COLS) */}
-            <div className="lg:col-span-4 space-y-6">
-              
-              {/* TRUST UTILIZATION BLOCK */}
-              <div className="bg-[#0A2540] text-white rounded-[24px] p-6 shadow-sm space-y-4 text-left">
-                <span className="text-xs font-bold text-slate-350 uppercase tracking-widest block border-b border-white/10 pb-2">
-                  Impact Statistics
-                </span>
-                <div className="space-y-4 font-poppins">
-                  <div>
-                    <span className="block text-2xl font-black text-[#22C55E]">12,000+</span>
-                    <span className="text-xs text-slate-400 font-semibold font-inter">Nutritional Meals Served</span>
-                  </div>
-                  <div>
-                    <span className="block text-2xl font-black text-white">₹42L+</span>
-                    <span className="text-xs text-slate-400 font-semibold font-inter">Procurement Funds Utilized</span>
-                  </div>
-                  <div>
-                    <span className="block text-2xl font-black text-[#1E63FF]">98%</span>
-                    <span className="text-xs text-slate-400 font-semibold font-inter font-bold">Verified Sponsoring Success</span>
-                  </div>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* VERIFICATION ICONS (ONE COLUMN LIST - ELEGANT COMPACT CHIPS) */}
-              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm space-y-3.5 text-left font-semibold text-xs text-slate-700 select-none">
-                <div className="flex items-center gap-2.5 text-slate-750">
-                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
-                  <span>Verified Campaign Sponsoring</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-slate-750">
-                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
-                  <span>Public Ledger Distribution</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-slate-750">
-                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
-                  <span>Secure Encrypted Channels</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-slate-750">
-                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
-                  <span>Mapped Sourcing Receipts</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-slate-750">
-                  <CheckCircle2 size={15} className="text-[#1E63FF]" />
-                  <span>Real Photos & Videos Proof</span>
-                </div>
-              </div>
+              {/* SUBMIT BLOCK (SPRING SCALE HOVER MICRO-INTERACTION) */}
+              <button
+                type="submit"
+                className="w-full h-12 bg-[#0047AB] hover:bg-[#003C91] text-white font-extrabold rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 hover:scale-[1.02] active:scale-[0.98] shadow-md font-poppins"
+              >
+                <span>Donate INR {getFinalAmount().toLocaleString()} Now</span>
+              </button>
 
-              {/* RECENT SOCIAL PROOF BAR */}
-              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-5 shadow-sm space-y-3.5 text-left select-none">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
-                  Last Donations
-                </span>
-                <div className="space-y-3 text-xs font-semibold text-slate-650">
-                  <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                    <span className="text-slate-800">Aman S.</span>
-                    <span className="text-slate-500 font-bold">₹500 <span className="text-[10px] text-slate-400 ml-1 font-bold">2m ago</span></span>
-                  </div>
-                  <div className="flex justify-between items-center border-b border-slate-50 pb-2">
-                    <span className="text-slate-800">Riya J.</span>
-                    <span className="text-slate-500 font-bold">₹1000 <span className="text-[10px] text-slate-400 ml-1 font-bold">8m ago</span></span>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <span className="text-slate-800">Rahul M.</span>
-                    <span className="text-slate-500 font-bold">₹200 <span className="text-[10px] text-slate-400 ml-1 font-bold">15m ago</span></span>
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
+            </form>
           </div>
 
-          {/* ================= TRUST SECTION (EVERY DONATION INCLUDES) ================= */}
-          <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm text-left select-none">
-            <h3 className="text-xs font-bold text-slate-450 uppercase tracking-widest border-b border-slate-100 pb-3 block">
-              Every Donation Includes
-            </h3>
-            <div className="grid grid-cols-3 md:grid-cols-6 gap-4 pt-4 text-xs font-bold text-slate-700 text-center">
-              <div className="space-y-1">
-                <span className="text-xl block">📸</span>
-                <span className="text-slate-600 block">Photos</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-xl block">🎥</span>
-                <span className="text-slate-600 block">Video</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-xl block">🧾</span>
-                <span className="text-slate-600 block">Expense Proof</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-xl block">📍</span>
-                <span className="text-slate-600 block">Location</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-xl block">📅</span>
-                <span className="text-slate-600 block">Date</span>
-              </div>
-              <div className="space-y-1">
-                <span className="text-xl block">👤</span>
-                <span className="text-slate-600 block">Volunteer Name</span>
+          {/* RIGHT COLUMN: CORE METRICS & VERIFIED AUDITS PANEL (4 COLS) */}
+          <div className="lg:col-span-4 space-y-6">
+            
+            {/* AUDITED DISBURSEMENTS SUMMARY */}
+            <div className="bg-[#0A2540] text-white rounded-[24px] p-6 shadow-sm space-y-5 text-left select-none">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block border-b border-white/10 pb-2.5">
+                Audit Statistics
+              </span>
+              <div className="space-y-4 font-poppins">
+                <div>
+                  <span className="block text-2xl font-black text-[#22C55E]">12,500+</span>
+                  <span className="text-[10px] text-slate-400 font-semibold font-inter uppercase tracking-wider">Lives Helped</span>
+                </div>
+                <div>
+                  <span className="block text-2xl font-black text-white">INR 28L+</span>
+                  <span className="text-[10px] text-slate-400 font-semibold font-inter uppercase tracking-wider">Raised & Mapped</span>
+                </div>
+                <div>
+                  <span className="block text-2xl font-black text-[#1E63FF]">98%</span>
+                  <span className="text-[10px] text-slate-400 font-semibold font-inter uppercase tracking-wider font-bold">Verified Sponsoring Success</span>
+                </div>
               </div>
             </div>
-          </div>
 
-          {/* ================= ONE SINGLE STORY ================= */}
-          <div className="bg-white border border-[#E5EAF2] rounded-[24px] overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12 text-left" id="story-focus-section">
-            <div className="md:col-span-5 relative h-48 md:h-auto bg-slate-100">
-              <Image 
-                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600"
-                alt="Help Priya continue school"
-                fill
-                className="object-cover"
-              />
+            {/* LIVE VERIFICATION TIMELINE STEPS (CONDENSED) */}
+            <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-5 shadow-sm space-y-4 text-left select-none" id="trust-verification-assets">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                Verification Steps
+              </span>
+              <div className="space-y-3.5 text-xs font-semibold text-slate-700 font-inter">
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={15} className="text-[#22C55E]" />
+                  <span>1. Sponsorship Lodged & Hashed</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={15} className="text-[#22C55E]" />
+                  <span>2. Registered on Ledger</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={15} className="text-[#22C55E]" />
+                  <span>3. Ground Sourcing in Rishikesh</span>
+                </div>
+                <div className="flex items-center gap-2.5">
+                  <CheckCircle2 size={15} className="text-[#22C55E]" />
+                  <span>4. GPS Verification Uploaded</span>
+                </div>
+              </div>
             </div>
-            <div className="md:col-span-7 p-6 space-y-3.5">
-              <span className="text-[#1E63FF] text-[10px] font-black uppercase tracking-wider">Beneficiary Focus</span>
-              <h3 className="text-lg font-bold text-[#0A2540] font-poppins">Help Priya Continue School</h3>
-              <p className="text-slate-600 text-xs leading-relaxed font-semibold">
-                Priya, 9, lives in a temporary Rishikesh shelter. Your gift sponsors study books, uniform kits, and local tuition support to prevent dropping out.
-              </p>
-              <a href="/stories" className="text-[#1E63FF] text-xs font-bold inline-flex items-center gap-1 hover:underline">
-                <span>Read Full Story</span>
-                <ChevronRight size={13} />
-              </a>
-            </div>
-          </div>
 
-          {/* ================= FAQ SECTION (4 SIMPLE QUESTIONS) ================= */}
-          <div className="space-y-4 text-left">
-            <h3 className="text-lg font-bold text-[#0A2540] font-poppins">Frequently Asked Questions</h3>
-            <div className="space-y-2.5">
-              {faqs.map((faq, idx) => {
-                const isOpen = openFaqIndex === idx;
-                return (
-                  <div key={idx} className="bg-white border border-[#E5EAF2] rounded-xl overflow-hidden shadow-sm">
-                    <button
-                      type="button"
-                      onClick={() => toggleFaq(idx)}
-                      className="w-full p-4 flex items-center justify-between text-left transition-colors hover:bg-slate-50"
-                    >
-                      <span className="text-xs font-bold text-[#0A2540]">{faq.q}</span>
-                      <ChevronDown size={14} className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
-                    </button>
-                    {isOpen && (
-                      <div className="px-4 pb-4 text-xs font-medium text-slate-550 border-t border-slate-50 pt-2 leading-relaxed">
-                        {faq.a}
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
           </div>
 
         </main>
 
+        {/* ================= COMPACT TRUST ASSETS ROW ================= */}
+        <section className="py-8 border-t border-[#E5EAF2] select-none text-slate-600 font-inter" id="trust-verification-assets">
+          <div className="max-w-7xl mx-auto px-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-x divide-slate-150">
+              <div className="space-y-0.5">
+                <span className="block text-xs font-bold text-[#0A2540] uppercase tracking-wider">Verified Sponsoring</span>
+                <span className="block text-[10px] text-slate-400">Audited procurement receipts</span>
+              </div>
+              <div className="space-y-0.5 pl-4 sm:pl-0">
+                <span className="block text-xs font-bold text-[#0A2540] uppercase tracking-wider">Public Ledger Log</span>
+                <span className="block text-[10px] text-slate-400">All disbursements are traceable</span>
+              </div>
+              <div className="space-y-0.5 pl-4 sm:pl-0">
+                <span className="block text-xs font-bold text-[#0A2540] uppercase tracking-wider">Secure Gateways</span>
+                <span className="block text-[10px] text-slate-400">256-bit bank-grade encryption</span>
+              </div>
+              <div className="space-y-0.5 pl-4 sm:pl-0">
+                <span className="block text-xs font-bold text-[#0A2540] uppercase tracking-wider">100% Direct Sourced</span>
+                <span className="block text-[10px] text-slate-400">Zero middleman administrative loss</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
         {/* ================= MINIMAL FOOTER FOR CONVERSION ================= */}
-        <footer className="max-w-4xl mx-auto px-4 pt-16 pb-8 border-t border-slate-200 mt-16 text-center select-none font-inter">
+        <footer className="max-w-4xl mx-auto px-4 pt-10 pb-8 border-t border-[#E5EAF2] mt-4 text-center select-none font-inter">
           <div className="flex justify-center gap-6 text-xs font-semibold text-slate-450">
             <a href="/privacy" className="hover:text-[#0A2540] transition-colors">Privacy Policy</a>
             <span>•</span>
@@ -640,18 +557,18 @@ export default function DonatePage() {
               <div className="text-left font-poppins">
                 <span className="text-[9.5px] text-slate-450 uppercase tracking-widest block">Sponsorship Active</span>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[#1E63FF] text-xs font-black">❤️ {getImpactText()}</span>
+                  <span className="text-[#0047AB] text-xs font-black">{getImpactText()}</span>
                   <span className="text-slate-400 font-medium">•</span>
-                  <span className="text-[#22C55E] text-xs font-black">₹{getFinalAmount().toLocaleString()}</span>
+                  <span className="text-[#22C55E] text-xs font-black">INR {getFinalAmount().toLocaleString()}</span>
                 </div>
               </div>
               <button
                 type="button"
                 onClick={() => {
-                  const formElem = document.getElementById('main-donation-form');
+                  const formElem = document.getElementById('donation-core-widget');
                   if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className="px-6 py-2.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-extrabold rounded-lg text-[10px] uppercase tracking-wider transition-colors shadow-sm font-poppins"
+                className="px-6 py-2.5 bg-[#0047AB] hover:bg-[#003C91] text-white font-extrabold rounded-lg text-[10px] uppercase tracking-wider transition-colors shadow-sm font-poppins"
               >
                 Donate Now
               </button>
@@ -674,7 +591,6 @@ export default function DonatePage() {
                 exit={{ scale: 0.9, y: 15 }}
                 className="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full text-center space-y-6 shadow-2xl relative border border-slate-100"
               >
-                {/* Razorpay simulation brand tag */}
                 <div className="flex justify-between items-center border-b border-slate-100 pb-3">
                   <span className="text-xs font-bold text-slate-450 uppercase tracking-wider">Razorpay Secure</span>
                   <span className="px-2 py-0.5 bg-blue-50 text-[#1E63FF] rounded text-[8px] font-black uppercase">Sandbox Mode</span>
