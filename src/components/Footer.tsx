@@ -111,6 +111,9 @@ export const Footer: React.FC = () => {
           </div>
         </motion.div>
 
+        {/* Divider Line */}
+        <div className="w-full h-[1px] bg-white/10 my-12" />
+
         {/* Main Columns Grid - Stacked cleanly for mobile */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 pb-16 border-b border-white/10">
           
@@ -118,22 +121,22 @@ export const Footer: React.FC = () => {
           <div className="space-y-5">
             <Link href="/" className="inline-block">
               {/* Force white variant of logo if rendered in dark layout */}
-              <Logo size={32} light={true} />
+              <Logo size={42} light={true} />
             </Link>
             <p className="text-[#E2E8F0]/70 text-xs leading-relaxed pr-4 font-semibold">
               Dedicated to restoring hope, dignity, and a better future for children and families. Verified on a public digital ledger.
             </p>
             
-            {/* Social Links - Borderless SVGs with white strokes that translate and scale */}
-            <div className="flex items-center gap-4.5 pt-2">
+            {/* Social Links inside circular buttons */}
+            <div className="flex items-center gap-3 pt-2">
               <a
                 href={state.settings.socials.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="text-white hover:text-[#2ECC71] hover:-translate-y-1 hover:scale-110 block transform transition-all duration-300"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[#1E63FF] hover:bg-white flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1"
                 aria-label="Instagram"
               >
-                <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4.5 h-4.5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/>
                   <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/>
@@ -143,10 +146,10 @@ export const Footer: React.FC = () => {
                 href={state.settings.socials.youtube}
                 target="_blank"
                 rel="noreferrer"
-                className="text-white hover:text-[#2ECC71] hover:-translate-y-1 hover:scale-110 block transform transition-all duration-300"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[#1E63FF] hover:bg-white flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1"
                 aria-label="YouTube"
               >
-                <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4.5 h-4.5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58 2.78 2.78 0 0 0 1.95 1.96C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/>
                   <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02"/>
                 </svg>
@@ -155,10 +158,10 @@ export const Footer: React.FC = () => {
                 href={state.settings.socials.facebook}
                 target="_blank"
                 rel="noreferrer"
-                className="text-white hover:text-[#2ECC71] hover:-translate-y-1 hover:scale-110 block transform transition-all duration-300"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[#1E63FF] hover:bg-white flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1"
                 aria-label="Facebook"
               >
-                <svg className="w-5 h-5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <svg className="w-4.5 h-4.5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
               </a>
@@ -253,11 +256,11 @@ export const Footer: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="w-full pl-3.5 pr-10 py-3 bg-white/5 border border-white/10 focus:outline-none focus:ring-1 focus:ring-[#2ECC71] focus:border-[#2ECC71] rounded-xl text-xs text-white placeholder-slate-400"
+                  className="w-full pl-4 pr-12 py-3.5 bg-white/[0.03] backdrop-blur-md border border-white/[0.08] focus:outline-none focus:ring-1 focus:ring-[#1E63FF] focus:border-[#1E63FF] focus:bg-white/[0.05] rounded-2xl text-xs text-white placeholder-slate-400 font-medium transition-all"
                 />
                 <button
                   type="submit"
-                  className="absolute right-1 px-3 py-2 bg-[#2ECC71] hover:bg-[#27ae60] text-white rounded-lg transition-colors flex items-center justify-center"
+                  className="absolute right-1.5 w-8 h-8 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white rounded-xl transition-all flex items-center justify-center shadow-lg shadow-blue-500/20"
                   aria-label="Subscribe"
                 >
                   <Send size={12} />
