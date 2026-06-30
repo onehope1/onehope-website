@@ -30,6 +30,16 @@ export default function CampaignsCatalog() {
     { label: 'Emergency', icon: Flame }
   ];
 
+  // Helper to map category to emoji badge styling
+  const getCategoryBadge = (cat: string) => {
+    if (cat === 'Food') return { emoji: '🍛', text: 'Food', bg: 'bg-orange-50 text-orange-600 border-orange-100' };
+    if (cat === 'Education') return { emoji: '📚', text: 'Education', bg: 'bg-blue-50 text-blue-600 border-blue-100' };
+    if (cat === 'Medical') return { emoji: '🩺', text: 'Medical', bg: 'bg-red-50 text-red-600 border-red-100' };
+    if (cat === 'Animals') return { emoji: '🐶', text: 'Animal', bg: 'bg-amber-50 text-amber-600 border-amber-100' };
+    if (cat === 'Emergency') return { emoji: '🚨', text: 'Emergency', bg: 'bg-rose-50 text-rose-600 border-rose-200 animate-pulse border-2' };
+    return { emoji: '🌱', text: cat, bg: 'bg-emerald-50 text-emerald-600 border-emerald-100' };
+  };
+
   // Reset pagination when filter or search changes
   useEffect(() => {
     setVisibleCount(6);
@@ -89,26 +99,45 @@ export default function CampaignsCatalog() {
       <div className="bg-[#F8FBFF] font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
         
         {/* ================= 1. COMPACT HERO SECTION ================= */}
-        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-12 md:py-16 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052]">
+        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-12 md:py-16 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] min-h-[60vh]">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
 
-          <div className="max-w-4xl mx-auto px-6 text-center space-y-5 pt-28 lg:pt-32 relative z-10">
+          <div className="max-w-4xl mx-auto px-6 text-center space-y-6 pt-28 lg:pt-32 relative z-10">
             <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[#1E63FF] text-[10px] font-bold uppercase tracking-wider">
               <Sparkles size={12} className="text-[#1E63FF]" />
               <span>100% Traceable Sponsoring</span>
             </span>
 
             <h1 className="text-3xl md:text-5xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
-              Choose a Cause. Change a Life.
+              One Small Gift. One Big Impact.
             </h1>
 
             <p className="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-medium">
               Support verified campaigns for children, elderly people, animals and families in need across Rishikesh.
             </p>
 
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full pt-2">
+              <motion.a 
+                whileHover={{ scale: 1.02 }} 
+                whileTap={{ scale: 0.98 }}
+                href="#campaigns-grid"
+                className="w-full max-w-[90%] sm:max-w-none sm:w-auto px-8 py-3.5 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center shadow-lg shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center"
+              >
+                Explore Campaigns
+              </motion.a>
+              <motion.a 
+                whileHover={{ scale: 1.02 }} 
+                whileTap={{ scale: 0.98 }}
+                href="/stories"
+                className="w-full max-w-[90%] sm:max-w-none sm:w-auto px-8 py-3.5 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center transition-all font-semibold h-12 flex items-center justify-center"
+              >
+                Watch Impact
+              </motion.a>
+            </div>
+
             {/* Badges without NGO/Trust mentions */}
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 text-[10px] font-bold text-slate-350 uppercase tracking-widest">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-4 text-[10px] font-bold text-slate-350 uppercase tracking-widest">
               <div className="flex items-center gap-1">
                 <CheckCircle2 size={12} className="text-[#1E63FF]" />
                 <span>100% Transparent</span>
@@ -224,12 +253,12 @@ export default function CampaignsCatalog() {
                 className="bg-white rounded-[24px] border border-[#E5EAF2] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.08)] grid grid-cols-1 lg:grid-cols-12 gap-0 group"
               >
                 {/* Left side: Image */}
-                <div className="lg:col-span-6 relative h-[250px] sm:h-[320px] lg:h-auto overflow-hidden bg-slate-50">
+                <div className="lg:col-span-6 relative h-[260px] sm:h-[340px] lg:h-auto overflow-hidden bg-slate-50">
                   <Image
                     src={featuredCampaign.image}
                     alt={featuredCampaign.title}
                     fill
-                    className="object-cover group-hover:scale-102 transition-transform duration-700"
+                    className="object-cover group-hover:scale-102 transition-transform duration-700 brightness-[0.96]"
                     priority
                   />
                   <div className="absolute top-4 left-4 flex flex-wrap gap-2">
@@ -269,7 +298,7 @@ export default function CampaignsCatalog() {
                         <>
                           <div className="flex justify-between items-end text-xs font-bold font-poppins">
                             <span className="text-[#22C55E]">{percent}% Funded</span>
-                            <span className="text-slate-400">Goal: ₹{featuredCampaign.goalAmount.toLocaleString()}</span>
+                            <span className="text-slate-450">Goal: ₹{featuredCampaign.goalAmount.toLocaleString()}</span>
                           </div>
 
                           <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden relative">
@@ -282,7 +311,7 @@ export default function CampaignsCatalog() {
                           </div>
 
                           <div className="flex justify-between items-center text-[10px] text-[#667085] font-bold">
-                            <span className="text-[#2ECC71]">₹{featuredCampaign.raisedAmount.toLocaleString()} Raised</span>
+                            <span className="text-[#2ECC71]">₹{featuredCampaign.raisedAmount.toLocaleString()} raised of ₹{featuredCampaign.goalAmount.toLocaleString()}</span>
                             <span className="flex items-center gap-3">
                               <span>👥 {donorsCount} Donors</span>
                               <span>📅 {daysLeft} Days Left</span>
@@ -302,7 +331,7 @@ export default function CampaignsCatalog() {
                       </Link>
                       <Link
                         href={{ pathname: '/donate', query: { campaignId: featuredCampaign.id } }}
-                        className="h-11 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider flex items-center justify-center transition-all hover:scale-[1.01] shadow-sm font-poppins"
+                        className="h-11 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 shadow-sm font-poppins"
                       >
                         Donate Now
                       </Link>
@@ -317,7 +346,7 @@ export default function CampaignsCatalog() {
 
         {/* ================= 5. CAMPAIGNS GRID ================= */}
         <section className="pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="campaigns-grid">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
             <AnimatePresence>
               {gridCampaigns.map((camp, idx) => {
                 const percent = Math.min(100, Math.round((camp.raisedAmount / camp.goalAmount) * 100));
@@ -334,19 +363,25 @@ export default function CampaignsCatalog() {
                   >
                     <div>
                       {/* Banner Image */}
-                      <div className="relative aspect-[16/10.5] w-full overflow-hidden bg-slate-50">
+                      <div className="relative w-full h-[210px] overflow-hidden bg-slate-50 rounded-t-[24px]">
                         <Image
                           src={camp.image}
                           alt={camp.title}
                           fill
                           sizes="(max-w-7xl) 33vw, 100vw"
-                          className="object-cover group-hover:scale-103 transition-transform duration-500"
+                          className="object-cover group-hover:scale-103 transition-transform duration-500 brightness-[0.96]"
                         />
                         <div className="absolute top-4 left-4 flex flex-wrap gap-1.5 max-w-[90%]">
-                          <span className="px-2 py-0.5 bg-white/95 rounded-lg text-[9px] font-bold text-[#0A2540] shadow-sm border border-slate-100/50 uppercase tracking-wider">
-                            {camp.category}
-                          </span>
-                          <span className="px-2 py-0.5 bg-[#1E63FF]/90 text-white rounded-lg text-[9px] font-bold shadow-sm uppercase tracking-wider flex items-center gap-0.5">
+                          {(() => {
+                            const badge = getCategoryBadge(camp.category);
+                            return (
+                              <span className={`px-2.5 py-0.5 rounded-lg text-[9px] font-bold shadow-sm border uppercase tracking-wider flex items-center gap-1.5 ${badge.bg}`}>
+                                <span>{badge.emoji}</span>
+                                <span>{badge.text}</span>
+                              </span>
+                            );
+                          })()}
+                          <span className="px-2 py-0.5 bg-[#1E63FF] text-white rounded-lg text-[9px] font-bold shadow-sm uppercase tracking-wider flex items-center gap-0.5">
                             ✔ Verified
                           </span>
                         </div>
@@ -374,7 +409,7 @@ export default function CampaignsCatalog() {
                       <div className="space-y-2.5 pt-4 border-t border-slate-100">
                         <div className="flex justify-between items-end text-xs font-bold font-poppins">
                           <span className="text-[#22C55E]">{percent}% Funded</span>
-                          <span className="text-slate-400">Goal: ₹{camp.goalAmount.toLocaleString()}</span>
+                          <span className="text-slate-450">Goal: ₹{camp.goalAmount.toLocaleString()}</span>
                         </div>
                         
                         {/* Progress Bar */}
@@ -386,7 +421,7 @@ export default function CampaignsCatalog() {
                         </div>
 
                         <div className="flex justify-between items-center text-[10px] text-[#667085] font-bold pt-0.5">
-                          <span className="text-[#2ECC71]">₹{camp.raisedAmount.toLocaleString()} Raised</span>
+                          <span className="text-[#2ECC71]">₹{camp.raisedAmount.toLocaleString()} raised of ₹{camp.goalAmount.toLocaleString()}</span>
                           <span className="flex items-center gap-2">
                             <span>👥 {donorsCount}</span>
                             <span>📅 {daysLeft} Days Left</span>
@@ -404,7 +439,7 @@ export default function CampaignsCatalog() {
                         </Link>
                         <Link
                           href={{ pathname: '/donate', query: { campaignId: camp.id } }}
-                          className="h-9.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[10px] uppercase tracking-wider flex items-center justify-center transition-all hover:scale-[1.01] shadow-sm font-poppins"
+                          className="h-9.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[10px] uppercase tracking-wider flex items-center justify-center transition-all hover:scale-102 active:scale-98 shadow-sm font-poppins"
                         >
                           Donate Now
                         </Link>
@@ -460,7 +495,7 @@ export default function CampaignsCatalog() {
               Can't Decide Where To Help?
             </h2>
             <p className="text-slate-500 text-xs sm:text-[13px] font-semibold max-w-md mx-auto leading-relaxed select-none">
-              Your donation goes wherever the need is greatest.
+              Your donation will automatically support the most urgent verified campaign.
             </p>
             
             <div className="flex justify-center pt-2">

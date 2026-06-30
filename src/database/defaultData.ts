@@ -79,7 +79,7 @@ export const initialDatabaseState: DatabaseState = {
   campaigns: [
     {
       id: 'camp-1',
-      title: 'Feed a Hungry Child Today',
+      title: 'Feed 50 Hungry Children Today',
       category: 'Food',
       goalAmount: 300000,
       raisedAmount: 185000,
@@ -119,7 +119,7 @@ export const initialDatabaseState: DatabaseState = {
     },
     {
       id: 'camp-2',
-      title: 'Help a Child Continue Education',
+      title: 'Help Priya Continue Her Education',
       category: 'Education',
       goalAmount: 500000,
       raisedAmount: 245000,
@@ -160,7 +160,7 @@ export const initialDatabaseState: DatabaseState = {
     },
     {
       id: 'camp-3',
-      title: 'Support a Complete Family Ration Kit',
+      title: 'Support Mayakund Families with Ration Kits',
       category: 'Food',
       goalAmount: 800000,
       raisedAmount: 410000,
@@ -199,7 +199,7 @@ export const initialDatabaseState: DatabaseState = {
     },
     {
       id: 'camp-4',
-      title: 'Give a Child the Joy of New Clothes',
+      title: 'Gift New Clothes to 30 Slum Kids',
       category: 'Children',
       goalAmount: 400000,
       raisedAmount: 128000,
@@ -230,7 +230,7 @@ export const initialDatabaseState: DatabaseState = {
     },
     {
       id: 'camp-5',
-      title: 'Care for Stray Animals',
+      title: 'Feed and Care for 60 Stray Animals',
       category: 'Animals',
       goalAmount: 300000,
       raisedAmount: 92000,
@@ -259,7 +259,7 @@ export const initialDatabaseState: DatabaseState = {
     },
     {
       id: 'camp-6',
-      title: 'Celebrate With Children',
+      title: 'Celebrate Festivals with Rishikesh Kids',
       category: 'Children',
       goalAmount: 600000,
       raisedAmount: 310000,
