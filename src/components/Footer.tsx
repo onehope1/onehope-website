@@ -30,8 +30,39 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#0A2540] text-[#E2E8F0] pt-20 pb-12 border-t border-white/10 font-inter">
-      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
+    <footer className="bg-[#0A2540] text-[#E2E8F0] pt-20 pb-12 border-t border-white/10 font-inter relative overflow-hidden">
+      {/* Ambient Animated Particles / Night Sky Starfield */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        {[...Array(20)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-[2px] h-[2px] bg-white rounded-full opacity-0"
+            animate={{
+              opacity: [0, 0.4, 0.8, 0.4, 0],
+              scale: [0.8, 1.2, 0.8],
+              y: [0, -100 - Math.random() * 200]
+            }}
+            transition={{
+              duration: Math.random() * 8 + 6,
+              repeat: Infinity,
+              delay: Math.random() * 10,
+              ease: 'easeInOut'
+            }}
+            style={{
+              left: `${Math.random() * 100}%`,
+              bottom: `${Math.random() * 40}%`,
+            }}
+          />
+        ))}
+        {/* Subtle grid mesh background */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-35" />
+        
+        {/* Glowing background auroras */}
+        <div className="absolute -top-40 left-1/4 w-[500px] h-[400px] bg-gradient-to-br from-[#1E63FF]/5 to-[#2ECC71]/3 rounded-full blur-[120px]" />
+        <div className="absolute -bottom-40 right-1/4 w-[400px] h-[350px] bg-[#1E63FF]/4 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative z-10">
         
         {/* Top Highlight: Spotlight Glassmorphic Call to Action Panel */}
         <motion.div
@@ -57,10 +88,10 @@ export const Footer: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-xl sm:text-2xl font-black font-poppins text-white !text-white !font-extrabold tracking-tight select-none"
             >
-              Join Us in Creating Lasting Impact
+              Hope Starts with You.
             </motion.h3>
             <p className="text-[#CBD5E1] !text-[#CBD5E1] text-xs sm:text-sm font-semibold select-none leading-relaxed">
-              Your contribution delivers immediate, audited nutrition and education on the ground.
+              Join us in bringing verified food, education, and care to those in need.
             </p>
           </div>
 

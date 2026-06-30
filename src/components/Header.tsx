@@ -74,12 +74,12 @@ export const Header: React.FC = () => {
   return (
     <>
       <div className={`z-50 transition-all duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'} ${
-        isScrolled 
-        ? 'fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-150' 
-        : isHomepage 
-          ? 'absolute top-0 left-0 w-full bg-transparent' 
+        isHomepage
+          ? isScrolled 
+            ? 'fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-150' 
+            : 'absolute top-0 left-0 w-full bg-transparent'
           : 'sticky top-0 w-full bg-white/95 border-b border-slate-150 shadow-sm'
-    }`}>
+      }`}>
       {/* Slim Announcement Information Bar */}
       {(!isHomepage || isScrolled) && (
         <div className="bg-[#1E63FF] text-white text-[10px] sm:text-xs py-1 px-4 font-semibold select-none border-b border-white/10">

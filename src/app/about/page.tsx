@@ -346,35 +346,6 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
-
-        {/* ================= 8. JOIN THE MOVEMENT ================= */}
-        <section className="py-16 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] text-white text-center relative overflow-hidden font-inter border-t border-white/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_60%)] pointer-events-none" />
-          <div className="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
-            <h2 className="text-2xl sm:text-4xl font-black font-poppins leading-tight">
-              Every Change Starts With One.
-            </h2>
-            <div className="flex flex-col sm:flex-row justify-center items-center gap-3.5 pt-2">
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
-                <Link
-                  href="/donate"
-                  className="w-full px-8 py-3.5 bg-white text-[#0047AB] hover:bg-slate-50 font-bold rounded-xl text-xs uppercase tracking-wider block text-center shadow-lg transition-all h-12 flex items-center justify-center font-semibold"
-                >
-                  Donate Now
-                </Link>
-              </motion.div>
-              <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full sm:w-auto">
-                <Link
-                  href="/volunteer"
-                  className="w-full px-8 py-3.5 border border-white/30 hover:border-white hover:bg-white/5 text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center transition-all h-12 flex items-center justify-center font-semibold"
-                >
-                  Volunteer
-                </Link>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
       </div>
     </PublicLayout>
   );
