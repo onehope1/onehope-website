@@ -227,24 +227,24 @@ export default function Home() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="lg:col-span-7 space-y-4 text-center lg:text-left"
+              className="lg:col-span-7 space-y-5 text-center lg:text-left"
             >
-              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[#22C55E] text-[10px] font-bold uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[#22C55E] text-[10px] font-bold uppercase tracking-wider">
                 <ShieldCheck size={12} />
-                <span>100% Traceable Ground Welfare</span>
+                <span>100% Sourced & Audited Sponsoring</span>
               </span>
 
               <h1 className="text-[34px] sm:text-5xl font-black font-poppins leading-tight tracking-tight select-none">
                 <span className="bg-gradient-to-b from-white to-slate-200 bg-clip-text text-transparent block">
-                  One Donation Can
+                  Sponsor Food & Education.
                 </span>
                 <span className="bg-gradient-to-r from-[#1E63FF] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                  Change a Life Today.
+                  Trace Every Rupee.
                 </span>
               </h1>
 
-              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-2xl mx-auto lg:mx-0 font-medium">
-                Every rupee is tracked on our public ledger, geo-tagged, and verified. Join supporters globally who are financing food kitchens, classroom kits, and medical care directly with absolute honesty.
+              <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
+                Direct ground delivery in Rishikesh. No administrative cuts or overhead leaks. Check raw invoices, supplier receipts, and geo-tagged video proof for every sponsorship.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full pt-1">
@@ -267,6 +267,15 @@ export default function Home() {
                     See Our Impact
                   </button>
                 </motion.div>
+              </div>
+
+              {/* Trust Signals underneath CTA buttons */}
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2.5 pt-4 border-t border-white/10 text-[9px] font-bold text-slate-300 uppercase tracking-wider">
+                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Secure Payment (Razorpay)</span></div>
+                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Verified Platform</span></div>
+                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>100% Direct Ground Sourcing</span></div>
+                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Transparent Public Ledger</span></div>
+                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Geo-tagged Video Proofs</span></div>
               </div>
             </motion.div>
 
@@ -352,12 +361,19 @@ export default function Home() {
         {/* ================= 3. IMPACT STATS ================= */}
         <section className="py-10 bg-white border-b border-[#E5EAF2] font-inter" id="impact-stats-row">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-            {/* Grid 2x2 on Mobile, 4 columns on Desktop */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
-              <AnimatedCounter value={livePeople} label="Lives Helped" icon={Heart} />
-              <AnimatedCounter value={18000000} suffix="+" label="Aid Delivered" icon={Award} />
-              <AnimatedCounter value={187} label="Communities" icon={Users} />
-              <AnimatedCounter value={99} suffix="%" label="Delivery Success" icon={ShieldCheck} />
+            <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
+                <AnimatedCounter value={livePeople} label="Lives Helped" icon={Heart} />
+              </div>
+              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
+                <AnimatedCounter value={18000000} suffix="+" label="Aid Delivered" icon={Award} />
+              </div>
+              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
+                <AnimatedCounter value={187} label="Communities" icon={Users} />
+              </div>
+              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
+                <AnimatedCounter value={99} suffix="%" label="Delivery Success" icon={ShieldCheck} />
+              </div>
             </div>
           </div>
         </section>
@@ -465,51 +481,38 @@ export default function Home() {
               </p>
             </div>
 
-            {/* Swipeable peeking carousel on mobile / 3 columns desktop */}
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 md:pb-0 no-scrollbar w-full px-2 sm:px-0">
+            <div className="flex overflow-x-auto pb-4 gap-5 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {causesList.map((cause, idx) => (
                 <div
                   key={idx}
-                  className="w-[82vw] md:w-auto shrink-0 snap-center relative p-[1px] rounded-[24px] overflow-hidden group cursor-pointer transition-all duration-300 md:grid-cols-3"
+                  className="w-[82vw] lg:w-auto shrink-0 snap-center p-[1px] rounded-[24px] overflow-hidden group cursor-pointer transition-all duration-300 relative shadow-sm border border-slate-200/50 bg-[#F8FAFC]/90 hover:bg-white hover:shadow-md hover:-translate-y-1"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-[#1E63FF] to-[#22C55E] rounded-[24px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-[0.5px]" />
-                  
-                  <div className="relative bg-white rounded-[23px] overflow-hidden h-full flex flex-col justify-between z-10 shadow-[0_15px_40px_rgba(0,0,0,0.08)] border border-[#E5EAF2] transition-all duration-300">
-                    <div>
-                      {/* Image crop 16:10 with zoom */}
-                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-50 rounded-t-[23px]">
-                        <Image
-                          src={cause.img}
-                          alt={cause.title}
-                          fill
-                          sizes="(max-w-7xl) 33vw, 100vw"
-                          className="object-cover group-hover:scale-105 transition-transform duration-500 rounded-t-[23px]"
-                        />
-                        <div className="absolute top-3 left-3 w-8 h-8 rounded-lg flex items-center justify-center backdrop-blur-md bg-white/95 shadow-sm border border-slate-100/50">
-                          <cause.icon size={15} className="text-[#1E63FF]" />
-                        </div>
+                  <div className="p-6 flex flex-col justify-between h-full space-y-6">
+                    <div className="space-y-4">
+                      {/* Large premium icon container */}
+                      <div className="w-12 h-12 rounded-2xl bg-blue-50/80 flex items-center justify-center border border-blue-100/50 text-[#1E63FF] transition-colors group-hover:bg-blue-100/50">
+                        <cause.icon size={22} />
                       </div>
-                      <div className="p-5 space-y-2">
-                        <h3 className="text-[18px] font-bold text-[#0A2540] font-poppins">{cause.title}</h3>
-                        <p className="text-[#667085] text-xs leading-relaxed line-clamp-2">{cause.desc}</p>
+                      <div className="space-y-2 text-left">
+                        <h3 className="text-lg font-bold text-[#0A2540] font-poppins">{cause.title}</h3>
+                        <p className="text-[#667085] text-xs leading-relaxed font-semibold">{cause.desc}</p>
                       </div>
                     </div>
 
-                    <div className="p-5 pt-0 space-y-4">
-                      {/* Progress slider inside card */}
-                      <div className="space-y-1">
+                    <div className="space-y-4 pt-6 border-t border-slate-100">
+                      {/* Progress bar */}
+                      <div className="space-y-1 text-left">
                         <div className="flex justify-between text-[9px] font-bold text-slate-400">
-                          <span>Verified Impact</span>
-                          <span className="text-[#1E63FF]">{cause.percent}% Mapped</span>
+                          <span>Ground verified</span>
+                          <span className="text-[#2ECC71]">{cause.percent}% Mapped</span>
                         </div>
                         <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#1E63FF] rounded-full" style={{ width: `${cause.percent}%` }} />
+                          <div className="h-full bg-[#2ECC71] rounded-full" style={{ width: `${cause.percent}%` }} />
                         </div>
                       </div>
-                      
                       <div className="flex gap-2 w-full pt-1">
-                        <Link href="/donate" className="flex-grow text-center py-2 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white rounded-[18px] text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm block h-10 flex items-center justify-center">Donate</Link>
-                        <Link href="/about" className="px-3.5 py-2 border border-[#0A2540]/15 hover:bg-slate-50 text-[#0A2540] rounded-[18px] text-[10px] font-bold uppercase tracking-wider transition-colors block font-semibold h-10 flex items-center justify-center">Details</Link>
+                        <Link href="/donate" className="flex-grow text-center py-2.5 bg-[#0047AB] hover:bg-[#003C91] text-white rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm block h-10 flex items-center justify-center">Sponsor</Link>
+                        <Link href="/about" className="px-4 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors block font-semibold h-10 flex items-center justify-center">Audit</Link>
                       </div>
                     </div>
                   </div>
@@ -799,13 +802,16 @@ export default function Home() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
               {trustCards.map((card, idx) => (
-                <div key={idx} className="p-5.5 bg-white rounded-[24px] border border-[#E5EAF2] shadow-[0_15px_40px_rgba(0,0,0,0.08)] flex flex-col justify-between space-y-3.5 h-[170px]">
-                  <div className="w-10 h-10 rounded-xl bg-[#EEF3FA] flex items-center justify-center border border-slate-200/50 text-[#1E63FF] shrink-0">
-                    <card.icon size={20} />
+                <div key={idx} className="relative p-6 bg-[#F8FAFC]/65 border border-slate-200/50 rounded-[20px] flex flex-col justify-between space-y-4 h-[160px] hover:bg-white hover:border-blue-500/20 transition-all duration-300 group overflow-hidden select-none">
+                  {/* Floating geometric index behind text */}
+                  <span className="absolute top-2 right-4 text-[42px] font-black text-slate-100 group-hover:text-blue-50 transition-colors pointer-events-none select-none">0{idx + 1}</span>
+                  
+                  <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200/60 text-[#1E63FF] shrink-0 shadow-sm relative z-10">
+                    <card.icon size={16} />
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="font-bold text-[#0A2540] text-sm font-poppins">{card.title}</h4>
-                    <p className="text-[#667085] text-[13px] leading-normal font-semibold">{card.desc}</p>
+                  <div className="space-y-1 text-left relative z-10">
+                    <h4 className="font-bold text-[#0A2540] text-xs sm:text-sm font-poppins leading-tight">{card.title}</h4>
+                    <p className="text-[#667085] text-[11px] leading-relaxed font-semibold">{card.desc}</p>
                   </div>
                 </div>
               ))}

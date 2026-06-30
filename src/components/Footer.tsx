@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useDatabase } from '@/context/DatabaseContext';
 import { Logo } from './Logo';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { Send, MapPin, Mail, Phone, ChevronRight } from 'lucide-react';
 
 export const Footer: React.FC = () => {
@@ -131,6 +132,12 @@ export const Footer: React.FC = () => {
                 </svg>
               </a>
             </div>
+
+            {/* Impact Counter */}
+            <div className="pt-4 border-t border-white/10 space-y-1 text-left">
+              <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider block">Live Impact</span>
+              <span className="text-[#2ECC71] text-xs font-poppins font-black block">12.8K+ Assisted • 99% Verified</span>
+            </div>
           </div>
 
           {/* Quick Links Column */}
@@ -152,6 +159,15 @@ export const Footer: React.FC = () => {
                 </li>
               ))}
             </ul>
+
+            <div className="pt-4 border-t border-white/10 space-y-2 text-left">
+              <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-poppins">Quick Donate</h5>
+              <div className="flex flex-col space-y-1.5 text-[11px] font-semibold text-[#E2E8F0]/80">
+                <Link href="/donate?amount=100&campaignId=camp-1" className="hover:text-[#2ECC71] transition-colors">Sponsor 1 Meal (₹100)</Link>
+                <Link href="/donate?amount=500&campaignId=camp-2" className="hover:text-[#2ECC71] transition-colors">Sponsor School kit (₹500)</Link>
+                <Link href="/donate?amount=2500&campaignId=camp-3" className="hover:text-[#2ECC71] transition-colors">Sponsor Family Ration (₹2500)</Link>
+              </div>
+            </div>
           </div>
 
           {/* Contact Info Column */}
@@ -175,6 +191,21 @@ export const Footer: React.FC = () => {
                 </a>
               </li>
             </ul>
+
+            {/* Ground Reels Grid */}
+            <div className="pt-4 border-t border-white/10 space-y-2 text-left">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest font-poppins block">Ground Reels</span>
+              <div className="flex gap-2">
+                <a href="https://youtube.com/@onehopeindia" target="_blank" rel="noreferrer" className="relative w-11 h-11 rounded-lg overflow-hidden border border-white/10 block group">
+                  <Image src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=120" alt="Reel thumbnail" fill className="object-cover group-hover:scale-105 transition-transform" />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-70 group-hover:opacity-100"><span className="text-[8px] text-white font-bold">▶ Reel</span></div>
+                </a>
+                <a href="https://instagram.com/onehope.in" target="_blank" rel="noreferrer" className="relative w-11 h-11 rounded-lg overflow-hidden border border-white/10 block group">
+                  <Image src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=120" alt="Reel thumbnail" fill className="object-cover group-hover:scale-105 transition-transform" />
+                  <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-70 group-hover:opacity-100"><span className="text-[8px] text-white font-bold">▶ Reel</span></div>
+                </a>
+              </div>
+            </div>
           </div>
 
           {/* Newsletter Column */}

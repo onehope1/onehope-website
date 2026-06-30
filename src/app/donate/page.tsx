@@ -735,6 +735,23 @@ export default function DonatePage() {
                       </button>
                     </div>
 
+                    {/* Payment Partners & Security Trust row */}
+                    <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
+                      <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase tracking-wider">
+                        <Lock size={12} className="text-[#22C55E]" />
+                        <span>SSL Encrypted</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold font-poppins tracking-wider">
+                        <span>UPI</span>
+                        <span>•</span>
+                        <span>VISA</span>
+                        <span>•</span>
+                        <span>MASTERCARD</span>
+                        <span>•</span>
+                        <span className="text-blue-600 font-extrabold uppercase">Razorpay</span>
+                      </div>
+                    </div>
+
                   </div>
                 )}
               </form>

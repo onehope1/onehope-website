@@ -205,10 +205,10 @@ export const Header: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 w-screen h-screen bg-white z-[9999] flex flex-col justify-between overflow-y-auto lg:hidden"
+              className="fixed inset-0 w-screen h-screen bg-white/96 backdrop-blur-lg z-[9999] flex flex-col justify-between overflow-y-auto lg:hidden shadow-2xl"
             >
               {/* Mobile Menu Header */}
-              <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-white">
+              <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-white/50 backdrop-blur-sm">
                 <Logo size={34} />
                 <button
                   onClick={() => setIsOpen(false)}
