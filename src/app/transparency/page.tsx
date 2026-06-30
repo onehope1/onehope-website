@@ -174,13 +174,14 @@ export default function TransparencyDashboard() {
           </span>
           
           <h1 className="text-3xl sm:text-5xl md:text-6.5xl font-black font-poppins tracking-tight leading-tight select-none">
-            <span className="bg-gradient-to-b from-white to-slate-300 bg-clip-text text-transparent block">
-              Absolute Financial Transparency
+            <span className="text-white block">Absolute Financial</span>
+            <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
+              Transparency.
             </span>
           </h1>
           
           <p className="text-[#E2E8F0] max-w-2.5xl mx-auto text-sm sm:text-base leading-relaxed font-semibold">
-            Every single rupee donated to OneHope leaves a digital audit trail. We publish our itemized statements, tax audit certificates, and ledger percentages for public scrutiny.
+            Every single rupee donated to OneHope leaves a digital audit trail. We publish our itemized statements, procurement receipts, and ledger logs for public scrutiny.
           </p>
         </motion.div>
       </section>
