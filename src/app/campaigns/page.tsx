@@ -52,7 +52,6 @@ export default function CampaignsCatalog() {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     }
     if (sortBy === 'Most Urgent') {
-      // Urgent campaigns are those with higher progress gap or Emergency category
       const aEmergency = a.category === 'Emergency' ? 2 : 1;
       const bEmergency = b.category === 'Emergency' ? 2 : 1;
       if (bEmergency !== aEmergency) return bEmergency - aEmergency;
@@ -70,11 +69,10 @@ export default function CampaignsCatalog() {
     return 0;
   });
 
-  // Split featured campaign from grid listing
+  // Featured Campaign & Grid Campaigns
   const featuredCampaign = sorted[0];
   const gridCampaigns = sorted.slice(1, visibleCount);
 
-  // Helpers to get days left and donor counts deterministically
   const getDaysLeft = (createdAtStr: string) => {
     const days = 30 - Math.floor((Date.now() - new Date(createdAtStr).getTime()) / (1000 * 60 * 60 * 24));
     return Math.max(3, days);
@@ -90,47 +88,57 @@ export default function CampaignsCatalog() {
     <PublicLayout>
       <div className="bg-[#F8FBFF] font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
         
-        {/* ================= 1. HERO SECTION ================= */}
-        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-16 md:py-20 border-b border-[#E5EAF2]">
+        {/* ================= 1. COMPACT HERO SECTION ================= */}
+        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-12 md:py-16 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052]">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
 
-          <div className="max-w-4xl mx-auto px-6 text-center space-y-6 relative z-10">
-            <span className="inline-flex items-center gap-1 bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[#1E63FF] text-[10px] font-bold uppercase tracking-wider">
+          <div className="max-w-4xl mx-auto px-6 text-center space-y-5 pt-28 lg:pt-32 relative z-10">
+            <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[#1E63FF] text-[10px] font-bold uppercase tracking-wider">
               <Sparkles size={12} className="text-[#1E63FF]" />
               <span>100% Traceable Sponsoring</span>
             </span>
 
-            <h1 className="text-[34px] md:text-5xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
-              Direct Welfare Sponsoring.
-              <span className="bg-gradient-to-r from-[#1E63FF] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                Zero Middlemen Loss.
-              </span>
+            <h1 className="text-3xl md:text-5xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
+              Choose a Cause. Change a Life.
             </h1>
 
-            <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-medium">
-              Every campaign represents an active, audited ground action in Rishikesh. Track purchases, download receipts, and view geo-tagged media proof.
+            <p className="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-medium">
+              Support verified campaigns for children, elderly people, animals and families in need across Rishikesh.
             </p>
 
-            {/* Quick Impact Stats */}
-            <div className="grid grid-cols-3 gap-4 max-w-lg mx-auto pt-4 border-t border-white/10">
-              <div className="text-center space-y-0.5">
-                <span className="text-[18px] md:text-xl font-bold text-white block">12.8K+</span>
-                <span className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">Lives Helped</span>
+            {/* Badges without NGO/Trust mentions */}
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-2 text-[10px] font-bold text-slate-350 uppercase tracking-widest">
+              <div className="flex items-center gap-1">
+                <CheckCircle2 size={12} className="text-[#1E63FF]" />
+                <span>100% Transparent</span>
               </div>
-              <div className="text-center space-y-0.5">
-                <span className="text-[18px] md:text-xl font-bold text-white block">{activeCampaigns.length}</span>
-                <span className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">Active Causes</span>
+              <div className="flex items-center gap-1">
+                <CheckCircle2 size={12} className="text-[#1E63FF]" />
+                <span>Verified Ground Work</span>
               </div>
-              <div className="text-center space-y-0.5">
-                <span className="text-[18px] md:text-xl font-bold text-white block">100%</span>
-                <span className="text-slate-400 text-[10px] font-semibold uppercase tracking-wider">Direct Relief</span>
+              <div className="flex items-center gap-1">
+                <CheckCircle2 size={12} className="text-[#1E63FF]" />
+                <span>Public Impact Updates</span>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ================= 2. STICKY FILTER & SEARCH TOOLBAR ================= */}
+        {/* ================= 2. LIVE IMPACT METRICS STRIP ================= */}
+        <div className="bg-white border-b border-[#E5EAF2] py-4.5 select-none font-poppins">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-wrap justify-center items-center gap-x-8 gap-y-2.5 text-xs font-bold text-slate-600">
+            <div className="flex items-center gap-1.5"><span className="text-[#1E63FF] text-sm font-black">12.5K+</span> <span className="text-slate-500 text-[10px] uppercase tracking-wider font-inter font-bold">Lives Helped</span></div>
+            <span className="text-slate-200 hidden sm:inline">|</span>
+            <div className="flex items-center gap-1.5"><span className="text-[#1E63FF] text-sm font-black">₹28L+</span> <span className="text-slate-500 text-[10px] uppercase tracking-wider font-inter font-bold">Raised</span></div>
+            <span className="text-slate-200 hidden sm:inline">|</span>
+            <div className="flex items-center gap-1.5"><span className="text-[#1E63FF] text-sm font-black">125+</span> <span className="text-slate-500 text-[10px] uppercase tracking-wider font-inter font-bold">Campaigns</span></div>
+            <span className="text-slate-200 hidden sm:inline">|</span>
+            <div className="flex items-center gap-1.5"><span className="text-[#22C55E] text-sm font-black">98%</span> <span className="text-slate-500 text-[10px] uppercase tracking-wider font-inter font-bold">Delivered</span></div>
+          </div>
+        </div>
+
+        {/* ================= 3. STICKY FILTER & SEARCH TOOLBAR ================= */}
         <section className="sticky top-[58px] md:top-[72px] bg-[#F8FBFF]/80 backdrop-blur-md border-b border-[#E5EAF2] z-30 py-4 shadow-sm">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-4">
             <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
@@ -204,7 +212,7 @@ export default function CampaignsCatalog() {
           </div>
         </section>
 
-        {/* ================= 3. FEATURED CAMPAIGN HIGHLIGHT ================= */}
+        {/* ================= 4. FEATURED CAMPAIGN HIGHLIGHT ================= */}
         <section className="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <AnimatePresence mode="wait">
             {featuredCampaign && (
@@ -229,7 +237,7 @@ export default function CampaignsCatalog() {
                       Featured
                     </span>
                     <span className="px-2.5 py-1 bg-blue-600 text-white rounded-xl text-[9px] font-bold shadow-sm uppercase tracking-wider">
-                      📍 Currently Serving Rishikesh
+                      📍 Rishikesh Ground Work
                     </span>
                   </div>
                 </div>
@@ -242,11 +250,11 @@ export default function CampaignsCatalog() {
                       <span className="flex items-center gap-1 text-[#22C55E]"><CheckCircle2 size={12} /> Verified Relief</span>
                     </div>
 
-                    <h2 className="text-xl sm:text-2xl font-black text-[#0A2540] font-poppins leading-tight group-hover:text-[#1E63FF] transition-colors">
+                    <h2 className="text-xl sm:text-2xl font-black text-[#0A2540] font-poppins leading-tight group-hover:text-[#1E63FF] transition-colors text-left">
                       <Link href={`/campaigns/${featuredCampaign.id}`}>{featuredCampaign.title}</Link>
                     </h2>
 
-                    <p className="text-[#667085] text-xs sm:text-sm leading-relaxed font-semibold">
+                    <p className="text-[#667085] text-xs sm:text-sm leading-relaxed font-semibold text-left line-clamp-2">
                       {featuredCampaign.summary}
                     </p>
                   </div>
@@ -260,8 +268,8 @@ export default function CampaignsCatalog() {
                       return (
                         <>
                           <div className="flex justify-between items-end text-xs font-bold font-poppins">
-                            <span className="text-[#22C55E]">Raised: ₹{featuredCampaign.raisedAmount.toLocaleString()}</span>
-                            <span className="text-[#667085]">Goal: ₹{featuredCampaign.goalAmount.toLocaleString()}</span>
+                            <span className="text-[#22C55E]">{percent}% Funded</span>
+                            <span className="text-slate-400">Goal: ₹{featuredCampaign.goalAmount.toLocaleString()}</span>
                           </div>
 
                           <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden relative">
@@ -269,14 +277,12 @@ export default function CampaignsCatalog() {
                               initial={{ width: 0 }}
                               animate={{ width: `${percent}%` }}
                               transition={{ duration: 1, ease: 'easeOut' }}
-                              className="h-full bg-gradient-to-r from-[#1E63FF] to-[#0047AB] rounded-full relative"
-                            >
-                              <div className="absolute right-0 top-0 bottom-0 w-2.5 bg-[#22C55E]" />
-                            </motion.div>
+                              className="h-full bg-gradient-to-r from-[#1E63FF] to-[#22C55E] rounded-full relative"
+                            />
                           </div>
 
                           <div className="flex justify-between items-center text-[10px] text-[#667085] font-bold">
-                            <span>{percent}% Completed</span>
+                            <span className="text-[#2ECC71]">₹{featuredCampaign.raisedAmount.toLocaleString()} Raised</span>
                             <span className="flex items-center gap-3">
                               <span>👥 {donorsCount} Donors</span>
                               <span>📅 {daysLeft} Days Left</span>
@@ -296,7 +302,7 @@ export default function CampaignsCatalog() {
                       </Link>
                       <Link
                         href={{ pathname: '/donate', query: { campaignId: featuredCampaign.id } }}
-                        className="h-11 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider flex items-center justify-center transition-colors shadow-sm font-poppins"
+                        className="h-11 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider flex items-center justify-center transition-all hover:scale-[1.01] shadow-sm font-poppins"
                       >
                         Donate Now
                       </Link>
@@ -309,8 +315,8 @@ export default function CampaignsCatalog() {
           </AnimatePresence>
         </section>
 
-        {/* ================= 4. CAMPAIGNS GRID ================= */}
-        <section className="pb-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* ================= 5. CAMPAIGNS GRID ================= */}
+        <section className="pb-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" id="campaigns-grid">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             <AnimatePresence>
               {gridCampaigns.map((camp, idx) => {
@@ -328,7 +334,7 @@ export default function CampaignsCatalog() {
                   >
                     <div>
                       {/* Banner Image */}
-                      <div className="relative aspect-[16/10] w-full overflow-hidden bg-slate-50">
+                      <div className="relative aspect-[16/10.5] w-full overflow-hidden bg-slate-50">
                         <Image
                           src={camp.image}
                           alt={camp.title}
@@ -342,9 +348,6 @@ export default function CampaignsCatalog() {
                           </span>
                           <span className="px-2 py-0.5 bg-[#1E63FF]/90 text-white rounded-lg text-[9px] font-bold shadow-sm uppercase tracking-wider flex items-center gap-0.5">
                             ✔ Verified
-                          </span>
-                          <span className="px-2 py-0.5 bg-blue-600 text-white rounded-lg text-[9px] font-bold shadow-sm uppercase tracking-wider">
-                            📍 Currently Serving Rishikesh
                           </span>
                         </div>
                       </div>
@@ -360,7 +363,7 @@ export default function CampaignsCatalog() {
                           <Link href={`/campaigns/${camp.id}`}>{camp.title}</Link>
                         </h3>
                         
-                        <p className="text-[#667085] text-xs leading-relaxed line-clamp-3 font-semibold">
+                        <p className="text-[#667085] text-xs leading-relaxed line-clamp-2 font-semibold">
                           {camp.summary}
                         </p>
                       </div>
@@ -370,22 +373,20 @@ export default function CampaignsCatalog() {
                     <div className="p-5.5 pt-0 space-y-4 mt-auto">
                       <div className="space-y-2.5 pt-4 border-t border-slate-100">
                         <div className="flex justify-between items-end text-xs font-bold font-poppins">
-                          <span className="text-[#22C55E]">Raised: ₹{camp.raisedAmount.toLocaleString()}</span>
+                          <span className="text-[#22C55E]">{percent}% Funded</span>
                           <span className="text-slate-400">Goal: ₹{camp.goalAmount.toLocaleString()}</span>
                         </div>
                         
                         {/* Progress Bar */}
                         <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden relative">
                           <div
-                            className="h-full bg-[#1E63FF] rounded-full relative"
+                            className="h-full bg-gradient-to-r from-[#1E63FF] to-[#22C55E] rounded-full relative"
                             style={{ width: `${percent}%` }}
-                          >
-                            <div className="absolute right-0 top-0 bottom-0 w-2 bg-[#22C55E]" />
-                          </div>
+                          />
                         </div>
 
                         <div className="flex justify-between items-center text-[10px] text-[#667085] font-bold pt-0.5">
-                          <span>{percent}% Completed</span>
+                          <span className="text-[#2ECC71]">₹{camp.raisedAmount.toLocaleString()} Raised</span>
                           <span className="flex items-center gap-2">
                             <span>👥 {donorsCount}</span>
                             <span>📅 {daysLeft} Days Left</span>
@@ -403,9 +404,9 @@ export default function CampaignsCatalog() {
                         </Link>
                         <Link
                           href={{ pathname: '/donate', query: { campaignId: camp.id } }}
-                          className="h-9.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[10px] uppercase tracking-wider flex items-center justify-center transition-colors shadow-sm font-poppins"
+                          className="h-9.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[10px] uppercase tracking-wider flex items-center justify-center transition-all hover:scale-[1.01] shadow-sm font-poppins"
                         >
-                          Donate
+                          Donate Now
                         </Link>
                       </div>
                     </div>
@@ -449,32 +450,25 @@ export default function CampaignsCatalog() {
           )}
         </section>
 
-        {/* ================= 5. FOOTER GENERAL RELIEF FUND CTA ================= */}
-        <section className="relative bg-[#0A2540] text-white py-16 text-center overflow-hidden border-t border-[#0A2540]">
-          {/* Subtle grid pattern background illustration */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-25 pointer-events-none" />
-          <div className="absolute -top-24 -left-24 w-80 h-80 bg-[#1E63FF]/15 rounded-full blur-[120px] pointer-events-none" />
-
+        {/* ================= 6. GENERAL DONATION CTA ================= */}
+        <section className="py-20 bg-gradient-to-r from-blue-50 to-emerald-50/50 text-[#0A2540] text-center relative overflow-hidden font-inter border-t border-b border-slate-100">
           <div className="max-w-2xl mx-auto px-6 relative z-10 space-y-6">
-            <h2 className="text-2xl sm:text-[28px] font-black font-poppins tracking-tight leading-tight text-white !text-white select-none">
-              Support Our General Sponsoring Fund
+            <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
+              General Fund
+            </span>
+            <h2 className="text-2xl sm:text-[28px] font-black font-poppins tracking-tight leading-tight text-[#0A2540] select-none">
+              Can't Decide Where To Help?
             </h2>
-            <p className="text-slate-300 text-xs sm:text-[13px] font-semibold max-w-md mx-auto select-none">
-              Directly finances ground procurement for emergency items, disaster relief, and school supplies across all active Rishikesh slum nodes.
+            <p className="text-slate-500 text-xs sm:text-[13px] font-semibold max-w-md mx-auto leading-relaxed select-none">
+              Your donation goes wherever the need is greatest.
             </p>
             
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-3 max-w-md mx-auto font-poppins">
+            <div className="flex justify-center pt-2">
               <Link
                 href="/donate"
-                className="w-full sm:w-auto px-6 h-12 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider flex items-center justify-center transition-colors shadow-md shadow-blue-500/10"
+                className="px-8 h-12 bg-[#0047AB] hover:bg-[#003C91] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider flex items-center justify-center transition-colors shadow-md shadow-blue-500/10 font-semibold"
               >
-                Donate Now
-              </Link>
-              <Link
-                href={{ pathname: '/donate', query: { recurring: 'monthly' } }}
-                className="w-full sm:w-auto px-6 h-12 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider flex items-center justify-center transition-all"
-              >
-                Become a Monthly Donor
+                Donate Where Needed Most
               </Link>
             </div>
           </div>
