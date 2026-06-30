@@ -241,8 +241,11 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="lg:col-span-12 space-y-6 text-center"
             >
-              <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none text-white !text-white">
-                Hope Starts With One
+              <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none">
+                <span className="text-white block">Hope Starts</span>
+                <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
+                  With One.
+                </span>
               </h1>
 
               <p className="text-slate-200 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins">

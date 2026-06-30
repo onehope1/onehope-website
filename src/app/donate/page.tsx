@@ -179,9 +179,9 @@ export default function DonatePage() {
                 100% Traceable Ground Sponsoring
               </span>
               
-              <h1 className="text-3xl sm:text-5xl font-black font-poppins tracking-tight leading-[1.1] text-white">
-                Transform Compassion
-                <span className="bg-gradient-to-r from-[#1E63FF] to-[#22C55E] bg-clip-text text-transparent block mt-1">
+              <h1 className="text-3xl sm:text-5xl font-black font-poppins tracking-tight leading-[1.1]">
+                <span className="text-white block font-black">Transform Compassion</span>
+                <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
                   Into Audited Impact.
                 </span>
               </h1>

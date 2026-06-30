@@ -142,8 +142,11 @@ export default function CampaignsCatalog() {
               <span>100% Traceable Sponsoring</span>
             </span>
 
-            <h1 className="text-3xl md:text-5xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
-              One Small Gift. One Big Impact.
+            <h1 className="text-3xl md:text-5xl font-black font-poppins tracking-tight leading-tight">
+              <span className="text-white block">One Small Gift.</span>
+              <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
+                One Big Impact.
+              </span>
             </h1>
 
             <p className="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-medium">

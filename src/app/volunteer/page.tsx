@@ -94,8 +94,11 @@ export default function VolunteerPortal() {
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[300px] bg-[#1E63FF]/12 rounded-full blur-[130px] pointer-events-none z-10" />
 
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative z-20 text-center space-y-6">
-            <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none text-white !text-white">
-              Become Someone's Hope Today.
+            <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none">
+              <span className="text-white block">Become Someone's</span>
+              <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
+                Hope Today.
+              </span>
             </h1>
 
             <p className="text-slate-200 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins max-w-xl mx-auto leading-relaxed">
