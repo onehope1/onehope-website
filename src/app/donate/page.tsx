@@ -8,9 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import { 
   Heart, ShieldCheck, Check, CreditCard, Smartphone, Award, 
-  FileText, Lock, Shield, Star, ChevronLeft, ChevronRight, 
-  ArrowRight, Clock, Eye, ShoppingCart, Truck, UploadCloud, 
-  TrendingUp, Users, CheckCircle2
+  FileText, Lock, Shield, Star, ChevronDown, CheckCircle2,
+  TrendingUp, Users, ChevronRight, HelpCircle
 } from 'lucide-react';
 
 const liveTickerDonations = [
@@ -25,65 +24,29 @@ export default function DonatePage() {
   const { state, addDonation } = useDatabase();
   const searchParams = useSearchParams();
   const router = useRouter();
-  
+
   const campaignId = searchParams.get('campaignId') || '';
 
   // Form states
   const [amountType, setAmountType] = useState<'One-Time' | 'Monthly' | 'Yearly'>('One-Time');
-  const [selectedAmount, setSelectedAmount] = useState<number>(1000);
+  const [selectedImpactId, setSelectedImpactId] = useState<string>('opt-3'); // Default Feed 10 Children (₹1000)
   const [customAmount, setCustomAmount] = useState<string>('');
-  const [targetCampaignId, setTargetCampaignId] = useState<string>(campaignId);
-  const [quantity, setQuantity] = useState<number>(5);
-  const [selectedLevelIndex, setSelectedLevelIndex] = useState<number>(0);
+  const [isCustomMode, setIsCustomMode] = useState<boolean>(false);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [targetCampaignId, setTargetCampaignId] = useState<string>(campaignId || 'camp-1');
 
-  // Set initial default quantity for specific campaigns
-  useEffect(() => {
-    if (targetCampaignId === 'camp-1') setQuantity(5);
-    else if (targetCampaignId === 'camp-2') setQuantity(2);
-    else if (targetCampaignId === 'camp-3') setQuantity(1);
-    else if (targetCampaignId === 'camp-4') setQuantity(2);
-    else if (targetCampaignId === 'camp-5') setQuantity(10);
-    else setQuantity(1);
-    setSelectedLevelIndex(0);
-  }, [targetCampaignId]);
-
-  // Load amount from query params if specified
-  useEffect(() => {
-    const amtParam = searchParams.get('amount');
-    if (amtParam) {
-      const parsedAmt = parseInt(amtParam);
-      if (!isNaN(parsedAmt) && parsedAmt > 0) {
-        setSelectedAmount(0);
-        setCustomAmount(parsedAmt.toString());
-      }
-    }
-  }, [searchParams]);
-  
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [isAnonymous, setIsAnonymous] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState<'UPI' | 'Card' | 'Netbanking'>('UPI');
-  
+
   // Checkout flow states
-  const [step, setStep] = useState<1 | 2>(1);
   const [showRazorpay, setShowRazorpay] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success'>('idle');
 
-  // Live metrics simulation
-  const [liveDonationsCount, setLiveDonationsCount] = useState(0);
-  const [liveMealsServed, setLiveMealsServed] = useState(0);
-
-  useEffect(() => {
-    let isMounted = true;
-    setTimeout(() => {
-      if (isMounted) {
-        setLiveDonationsCount(state.donations.length + 1540);
-        setLiveMealsServed(state.cms.counters.mealsServed || 45200);
-      }
-    }, 500);
-    return () => { isMounted = false; };
-  }, [state.donations, state.cms.counters.mealsServed]);
+  // Sticky bar state
+  const [showStickyBar, setShowStickyBar] = useState(false);
 
   // Pre-fill user data if logged in
   useEffect(() => {
@@ -94,104 +57,77 @@ export default function DonatePage() {
     }
   }, [state.currentUser]);
 
-  // Sponsorship presets mapped strictly to our 7 permanent campaigns
-  const presetTiers = [
-    { amount: 100, label: 'Feed a Hungry Child', desc: 'Sponsors 1 hot nutritious meal for a child in Rishikesh.', impact: 'Feed 1 Child', campaignId: 'camp-1', tag: '' },
-    { amount: 500, label: 'Help a Child Continue Education', desc: 'Provides textbooks, uniforms, and stationary to a child.', impact: 'Sponsor 1 Student', campaignId: 'camp-2', tag: 'Most Popular' },
-    { amount: 2500, label: 'Family Ration Kit', desc: 'Delivers a full month of groceries and raw supplies to a migrant family.', impact: 'Sponsor 1 Family', campaignId: 'camp-3', tag: '' },
-    { amount: 100, label: 'Care for Stray Animals', desc: 'Provides fresh food, clean water, and basic treatment to stray animals.', impact: 'Care 1 Animal', campaignId: 'camp-5', tag: '' }
-  ];
-
-  const trustCards = [
-    { title: 'Public Blockchain Ledger', desc: 'Every single rupee is logged on our public digital transparency ledger.', icon: ShieldCheck },
-    { title: 'Instant PDF Receipts', desc: 'Download itemized ground transaction confirmation receipts instantly.', icon: FileText },
-    { title: 'Direct Ground Sourcing', desc: 'We source grains directly from local farmers, minimizing middleman loss.', icon: Truck },
-    { title: 'Zero Admin Padding', desc: 'We sponsor admin fees internally, leaving 100% of your funds for direct impact.', icon: Award }
-  ];
-
-  const timelineSteps = [
-    { title: 'Sponsorship Lodged', desc: 'Your contribution is processed via bank-grade keys and logged.', icon: Heart, color: 'bg-[#1E63FF]' },
-    { title: 'Digital Verification', desc: 'Transaction is verified on the transparency ledger with a unique hash.', icon: Eye, color: 'bg-[#22C55E]' },
-    { title: 'Bulk Sourcing Sourced', desc: 'Supplies are purchased directly from verified local suppliers.', icon: ShoppingCart, color: 'bg-[#1E63FF]' },
-    { title: 'Ground Field Delivery', desc: 'Volunteer squads distribute items to targets at field points.', icon: Truck, color: 'bg-[#22C55E]' },
-    { title: 'Proof Disclosed Online', desc: 'Photos, videos, and distribution audit receipts uploaded live.', icon: UploadCloud, color: 'bg-[#1E63FF]' }
-  ];
-
-  const testimonials = [
-    { name: 'Dr. Gauri Sharma', role: 'Medical Volunteer', quote: 'Sponsoring operations at OneHope is different because of the direct visual proofs. I can trace exactly where the medicine boxes went.', rating: 5, avatar: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=150' },
-    { name: 'Aakash Mehta', role: 'Monthly Supporter', quote: 'The monthly ledger reports have set a new benchmark for transparency. The confirmation receipt was processed automatically in 2 minutes.', rating: 5, avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=150' },
-    { name: 'Prerna Joshi', role: 'CSR Director', quote: 'Our corporate network has partnered with OneHope for rural tablet setup. Flawless tracking and verified field execution.', rating: 5, avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150' }
-  ];
-
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
-
+  // Handle scroll to toggle sticky CTA bar
   useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveTestimonial((prev) => (prev + 1) % testimonials.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [testimonials.length]);
+    const handleScroll = () => {
+      if (window.scrollY > 480) {
+        setShowStickyBar(true);
+      } else {
+        setShowStickyBar(false);
+      }
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  const handleAmountSelect = (tier: typeof presetTiers[0]) => {
-    setSelectedAmount(tier.amount);
+  const impactOptions = [
+    { id: 'opt-1', label: 'Feed 1 Child', amount: 100, unit: 'Child', campaignId: 'camp-1' },
+    { id: 'opt-2', label: 'Feed 5 Children', amount: 500, unit: 'Children', campaignId: 'camp-1' },
+    { id: 'opt-3', label: 'Feed 10 Children', amount: 1000, unit: 'Children', campaignId: 'camp-1' },
+    { id: 'opt-4', label: 'Feed 25 Children', amount: 2500, unit: 'Children', campaignId: 'camp-1' },
+    { id: 'opt-5', label: 'Sponsor Family Kit', amount: 5000, unit: 'Family', campaignId: 'camp-3' }
+  ];
+
+  const suggestedCustomAmounts = [100, 500, 1000, 2500];
+
+  const handleImpactSelect = (optId: string) => {
+    setSelectedImpactId(optId);
+    setIsCustomMode(false);
     setCustomAmount('');
-    if (tier.campaignId) {
-      setTargetCampaignId(tier.campaignId);
-    }
-  };
-
-  const handleCustomAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomAmount(e.target.value);
-    setSelectedAmount(0);
-  };
-
-  const getCalculatorAmount = () => {
-    const camp = state.campaigns.find(c => c.id === targetCampaignId);
-    if (!camp) return 0;
-    if (camp.pricePerUnit) {
-      return camp.pricePerUnit * quantity;
-    }
-    if (camp.donationLevels) {
-      const base = camp.donationLevels[selectedLevelIndex]?.amount || 0;
-      return base * quantity;
-    }
-    return 0;
+    const opt = impactOptions.find(o => o.id === optId);
+    if (opt) setTargetCampaignId(opt.campaignId);
   };
 
   const getFinalAmount = () => {
-    if (customAmount) {
+    if (isCustomMode) {
       const custom = parseInt(customAmount);
       return isNaN(custom) ? 0 : custom;
     }
-    if (targetCampaignId) {
-      return getCalculatorAmount();
+    const opt = impactOptions.find(o => o.id === selectedImpactId);
+    if (!opt) return 0;
+    return opt.amount * quantity;
+  };
+
+  const getImpactText = () => {
+    if (isCustomMode) {
+      return `Custom Donation of ₹${getFinalAmount().toLocaleString()}`;
     }
-    return selectedAmount;
+    const opt = impactOptions.find(o => o.id === selectedImpactId);
+    if (!opt) return '';
+    const totalKids = (opt.id === 'opt-5') ? 1 : (parseInt(opt.label.replace(/\D/g, '')) || 1) * quantity;
+    return `${opt.id === 'opt-5' ? 'Sponsor' : 'Feed'} ${totalKids} ${opt.unit}`;
   };
 
-  const handleNextStep = (e: React.FormEvent) => {
+  const handleSimulateRazorpay = (e: React.FormEvent) => {
     e.preventDefault();
-    if (getFinalAmount() <= 0) return alert('Please specify a donation amount.');
+    const finalAmount = getFinalAmount();
+    if (finalAmount <= 0) return alert('Please specify a donation amount.');
     if (!name || !email) return alert('Please provide your name and email.');
-    setStep(2);
-  };
 
-  const handleSimulateRazorpay = () => {
-    setShowRazorpay(true);
     setPaymentStatus('processing');
+    setShowRazorpay(true);
     
     setTimeout(() => {
       setPaymentStatus('success');
       
-      const finalAmount = getFinalAmount();
       const donationRecord = addDonation({
-        donorName: name || 'Anonymous',
+        donorName: isAnonymous ? 'Anonymous' : (name || 'Anonymous'),
         email: email || 'donor@onehope.in',
         phone: phone || '',
         amount: finalAmount,
         isAnonymous,
         campaignId: targetCampaignId || undefined,
-        paymentMethod: paymentMethod === 'UPI' ? 'UPI' : paymentMethod === 'Card' ? 'Card' : 'Netbanking',
+        paymentMethod: paymentMethod,
         isMonthly: amountType !== 'One-Time'
       });
 
@@ -203,101 +139,47 @@ export default function DonatePage() {
     }, 2000);
   };
 
+  // FAQ Accordion states
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
+
+  const faqs = [
+    { q: 'Where does my money go?', a: 'Your donation directly funds ground procurement of grain packages, education kits, or medical aid near Triveni slum points. We post geo-tagged photos and purchase invoices for every batch.' },
+    { q: 'Will I receive proof?', a: 'Yes! An automated confirmation report containing volunteer photos, timestamped logs, and digital receipts will be generated and sent directly to your email.' },
+    { q: 'Can I donate anonymously?', a: 'Yes, absolutely. Check the "Donate Anonymously" box in the form to hide your name on our public donation ledger and scrolling tickers.' },
+    { q: 'Is payment secure?', a: 'All transactions are processed through 256-bit bank-grade encryption gateways. We do not store any card or UPI credentials on our servers.' }
+  ];
+
   return (
     <PublicLayout>
-      <div className="bg-[#F7FAFF] min-h-screen font-inter overflow-hidden">
+      <div className="bg-[#F7FAFF] min-h-screen font-inter select-none overflow-hidden pb-12">
         
-        {/* ================= HERO SECTION ================= */}
-        <section className="relative bg-[#092C5C] text-white py-16 md:py-24 lg:py-32 overflow-hidden border-b border-[#092C5C] px-4 md:px-12">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[350px] bg-[#1E63FF]/15 rounded-full blur-[140px] pointer-events-none" />
+        {/* ================= HERO SECTION (COMPACT 30% HEIGHT) ================= */}
+        <section className="relative bg-[#092C5C] text-white py-10 md:py-14 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] px-6 text-center">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[200px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
 
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-            
-            {/* Left Column: Emotion Text */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="lg:col-span-7 space-y-6 text-center lg:text-left"
-            >
-              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-4 py-2 rounded-full text-[#22C55E] text-xs font-bold uppercase tracking-wider">
-                <ShieldCheck size={14} />
-                <span>100% Verified Ground Procurement</span>
-              </span>
-              
-              <h1 className="text-3xl sm:text-5xl font-black font-poppins tracking-tight leading-[1.1]">
-                <span className="bg-gradient-to-b from-white to-slate-200 bg-clip-text text-transparent block">
-                  Transform Compassion
-                </span>
-                <span className="bg-gradient-to-r from-[#1E63FF] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                  Into Audited Impact.
-                </span>
-              </h1>
-              
-              <p className="text-slate-300 text-sm sm:text-base leading-relaxed font-semibold max-w-2xl mx-auto lg:mx-0">
-                Every single rupee feeds families, sponsors classrooms, or supplies medical packages. Direct, audited, and mapped live on our digital transparency ledger.
-              </p>
-
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
-                <button
-                  onClick={() => {
-                    const formElem = document.getElementById('donation-interactive-grid');
-                    if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
-                  className="w-full sm:w-auto px-8 py-4 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-2xl text-xs uppercase tracking-wider shadow-lg shadow-blue-500/20 transform hover:-translate-y-0.5 transition-all duration-200"
-                >
-                  Start Sponsoring
-                </button>
-                <button
-                  onClick={() => {
-                    const blockElem = document.getElementById('transparency-timeline');
-                    if (blockElem) blockElem.scrollIntoView({ behavior: 'smooth' });
-                  }}
-                  className="w-full sm:w-auto px-8 py-4 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-2xl text-xs uppercase tracking-wider transition-all"
-                >
-                  See Verification Loop
-                </button>
+          <div className="max-w-3xl mx-auto space-y-4 pt-28 lg:pt-32 relative z-10">
+            <div className="flex justify-center items-center gap-1 text-amber-400 text-xs font-bold uppercase tracking-wider">
+              <div className="flex text-amber-400">
+                <Star size={11} fill="currentColor" />
+                <Star size={11} fill="currentColor" />
+                <Star size={11} fill="currentColor" />
+                <Star size={11} fill="currentColor" />
+                <Star size={11} fill="currentColor" />
               </div>
-            </motion.div>
+              <span className="text-white opacity-85 ml-1">Trusted by supporters</span>
+            </div>
 
-            {/* Right Column: Hero Image & Floating Impact Card */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="lg:col-span-5 relative"
-            >
-              <div className="relative w-full aspect-[4/3] sm:aspect-square rounded-[32px] overflow-hidden border border-white/10 bg-slate-800 shadow-2xl">
-                <Image 
-                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=600"
-                  alt="Child nutrition campaign ground photos"
-                  fill
-                  className="object-cover opacity-85"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#092C5C]/50 to-transparent" />
-              </div>
+            <h1 className="text-2xl sm:text-4xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
+              ₹100 Can Put Food On Someone's Plate Today.
+            </h1>
 
-              {/* Floating Impact Card */}
-              <motion.div
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.6, delay: 0.6 }}
-                className="absolute -bottom-6 -left-6 sm:-left-10 bg-white/95 backdrop-blur-md p-5 rounded-2xl shadow-xl border border-slate-100/50 text-[#092C5C] space-y-2 max-w-[240px] select-none text-left"
-              >
-                <div className="flex gap-2 items-center text-[#22C55E]">
-                  <TrendingUp size={16} />
-                  <span className="text-[10px] font-bold uppercase tracking-wider">Live Metrics</span>
-                </div>
-                <div className="text-2xl font-black font-poppins tracking-tight text-[#092C5C]">
-                  {liveMealsServed.toLocaleString()}+
-                </div>
-                <p className="text-[10px] text-slate-500 leading-normal font-semibold">
-                  Nutritional meals distributed to slums and schools this month.
-                </p>
-              </motion.div>
-            </motion.div>
-
+            <p className="text-slate-350 text-xs sm:text-xs leading-relaxed max-w-lg mx-auto font-medium select-none uppercase tracking-widest text-[#22C55E]">
+              Every donation is verified with photos, videos and public updates.
+            </p>
           </div>
         </section>
 
@@ -313,7 +195,6 @@ export default function DonatePage() {
                 <span className="text-[10px] text-slate-400 font-bold">• {d.time}</span>
               </div>
             ))}
-            {/* Repeat list for seamless infinite loop */}
             {liveTickerDonations.map((d, index) => (
               <div key={`dup-${index}`} className="inline-flex items-center gap-2 text-xs text-slate-650 font-semibold shrink-0">
                 <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white shrink-0">
@@ -326,732 +207,496 @@ export default function DonatePage() {
           </div>
         </section>
 
-        {/* ================= TRUST METRICS ROW ================= */}
-        <section className="py-8 bg-white border-b border-slate-100 font-inter px-4 md:px-12">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 divide-x divide-slate-100 text-center">
-              <div className="space-y-0.5">
-                <span className="block text-2xl sm:text-3xl font-black font-poppins text-[#092C5C] tracking-tight">{liveDonationsCount.toLocaleString()}</span>
-                <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest">Verified Donations</span>
-              </div>
-              <div className="space-y-0.5 pl-4 sm:pl-0">
-                <span className="block text-2xl sm:text-3xl font-black font-poppins text-[#092C5C] tracking-tight">₹12.4M+</span>
-                <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest">Audited Disbursements</span>
-              </div>
-              <div className="space-y-0.5 pl-4 sm:pl-0">
-                <span className="block text-2xl sm:text-3xl font-black font-poppins text-[#092C5C] tracking-tight">100%</span>
-                <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest">Public Transparency</span>
-              </div>
-              <div className="space-y-0.5 pl-4 sm:pl-0">
-                <span className="block text-2xl sm:text-3xl font-black font-poppins text-[#092C5C] tracking-tight">₹0</span>
-                <span className="block text-[9px] font-bold text-slate-400 uppercase tracking-widest">Admin Cost Deduct</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ================= MAIN INTERACTIVE AREA: SPLIT-SCREEN LAYOUT ================= */}
-        <section className="py-12 md:py-20 px-4 md:px-12 max-w-7xl mx-auto space-y-12" id="donation-interactive-grid">
+        {/* ================= MAIN COMPACT FLOW CONTAINER ================= */}
+        <main className="max-w-4xl mx-auto px-4 pt-8 md:pt-12 space-y-12">
           
-          {/* Header Title */}
-          <div className="text-center max-w-xl mx-auto space-y-3">
-            <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-              Sponsorship Setup
-            </span>
-            <h2 className="text-3xl font-black text-[#092C5C] font-poppins tracking-tight">
-              {targetCampaignId ? 'Configure Your Ground Sponsoring' : 'Select Sponsorship Target'}
-            </h2>
-            <p className="text-slate-500 text-xs sm:text-sm font-semibold">
-              Select one of our 4 preset tiers, customize using our steppers, or enter a custom details amount below.
+          {/* URGENCY PROGRESS STRIP */}
+          <div className="bg-white border border-[#E5EAF2] rounded-[20px] p-5 shadow-sm space-y-3 font-poppins text-left">
+            <div className="flex justify-between items-center text-xs font-bold text-slate-600">
+              <span className="flex items-center gap-1.5 text-[#1E63FF]">
+                <TrendingUp size={14} />
+                <span>Today's Sponsoring Goal: Feed 300 Children</span>
+              </span>
+              <span className="text-[#22C55E]">186 Fed • 114 Remaining</span>
+            </div>
+            
+            <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden relative">
+              <div className="h-full bg-gradient-to-r from-[#1E63FF] to-[#22C55E] rounded-full" style={{ width: '62%' }} />
+            </div>
+
+            <p className="text-[10px] text-red-500 font-bold uppercase tracking-wider flex items-center gap-1 animate-pulse select-none">
+              🚨 Only 27 children still waiting for meals today
             </p>
           </div>
 
-          {/* Tiers Block (Horizontal Grid on desktop, horizontal scroll on mobile) */}
-          <div className="relative">
-            {!targetCampaignId ? (
-              <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-                {presetTiers.map((tier) => {
-                  const isSelected = selectedAmount === tier.amount;
-                  const hasTag = tier.tag !== '';
-                  return (
-                    <motion.div
-                      key={tier.label}
-                      onClick={() => handleAmountSelect(tier)}
-                      whileHover={{ y: -6 }}
-                      className={`shrink-0 w-[280px] snap-center lg:w-auto p-6 rounded-[24px] border cursor-pointer h-full flex flex-col justify-between transition-all bg-white relative overflow-hidden group select-none shadow-[0_4px_15px_rgba(0,0,0,0.01)] ${
-                        isSelected 
-                          ? 'border-[#1E63FF] ring-2 ring-[#1E63FF]/20' 
-                          : 'border-slate-200 hover:border-slate-350 hover:shadow-md'
-                      }`}
-                    >
-                      {hasTag && (
-                        <div className="absolute top-4 right-4 bg-[#1E63FF] text-white text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full shadow-sm">
-                          {tier.tag}
-                        </div>
-                      )}
-                      <div className="space-y-3">
-                        <div className="space-y-1 text-left">
-                          <span className="text-2xl font-black font-poppins text-[#092C5C] block">₹{tier.amount.toLocaleString()}</span>
-                          <span className={`text-[9px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md inline-block ${
-                            isSelected ? 'bg-green-50 text-[#22C55E]' : 'bg-slate-50 text-slate-400'
-                          }`}>
-                            {tier.impact}
-                          </span>
-                        </div>
-                        <h4 className="font-bold text-[#092C5C] text-sm font-poppins leading-snug text-left">{tier.label}</h4>
-                        <p className="text-slate-500 text-xs leading-relaxed text-left">{tier.desc}</p>
-                      </div>
-                      <div className="pt-4 border-t border-slate-50 mt-5 flex justify-between items-center text-[9px] font-bold text-slate-400 uppercase tracking-wider">
-                        <span>{amountType} Gift</span>
-                        {isSelected ? <span className="text-[#22C55E] font-bold">✓ Selected</span> : <span className="text-slate-300">Select Tier</span>}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            ) : (
-              // If a campaign is selected, render its calculator panel horizontally/cohesively
-              (() => {
-                const selectedCampaign = state.campaigns.find(c => c.id === targetCampaignId);
-                if (!selectedCampaign) return null;
-                const hasPrice = !!selectedCampaign.pricePerUnit;
-                const hasLevels = !!selectedCampaign.donationLevels;
-                return (
-                  <div className="max-w-3xl mx-auto bg-white border border-slate-200/80 rounded-[28px] p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.02)] space-y-6 text-left">
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#1E63FF] flex items-center justify-center font-bold text-lg">
-                          {selectedCampaign.id === 'camp-1' ? '🍽' : selectedCampaign.id === 'camp-2' ? '📚' : selectedCampaign.id === 'camp-3' ? '🛒' : selectedCampaign.id === 'camp-4' ? '👕' : selectedCampaign.id === 'camp-5' ? '🐶' : selectedCampaign.id === 'camp-6' ? '🎂' : '🚑'}
-                        </div>
-                        <div>
-                          <span className="px-2.5 py-0.5 bg-blue-550/10 text-[#1E63FF] rounded-lg text-[9px] font-extrabold uppercase tracking-wider block w-max mb-0.5">📍 Currently Serving Rishikesh</span>
-                          <h4 className="font-bold text-[#092C5C] text-sm sm:text-base font-poppins leading-tight">{selectedCampaign.title}</h4>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setTargetCampaignId('')}
-                        className="text-xs font-bold text-blue-600 hover:underline text-left"
-                      >
-                        ← Back to Preset Tiers
-                      </button>
-                    </div>
-
-                    <p className="text-slate-500 text-xs sm:text-sm font-semibold">{selectedCampaign.summary}</p>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-                      {/* Calculator Stepper controls */}
-                      {hasPrice && (
-                        <div className="space-y-4 p-4.5 bg-slate-50 border border-slate-100 rounded-2xl">
-                          <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider block font-poppins">Option 1: Impact Stepper</span>
-                          <div className="flex items-center justify-between gap-4">
-                            <div className="space-y-0.5 text-left">
-                              <span className="text-xs text-slate-500 font-semibold block">Sponsor Cost:</span>
-                              <span className="font-extrabold text-sm text-[#092C5C]">₹{selectedCampaign.pricePerUnit} per {selectedCampaign.unitLabel}</span>
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <button
-                                type="button"
-                                onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                                className="w-9 h-9 rounded-lg border border-slate-250 bg-white text-slate-700 font-bold hover:bg-slate-50 flex items-center justify-center shadow-sm select-none"
-                              >
-                                -
-                              </button>
-                              <span className="font-extrabold text-sm text-[#092C5C] w-6 text-center">{quantity}</span>
-                              <button
-                                type="button"
-                                onClick={() => setQuantity(prev => prev + 1)}
-                                className="w-9 h-9 rounded-lg border border-slate-250 bg-white text-slate-700 font-bold hover:bg-slate-50 flex items-center justify-center shadow-sm select-none"
-                              >
-                                +
-                              </button>
-                            </div>
-                          </div>
-                          <div className="pt-3 border-t border-slate-200/60 flex justify-between items-center text-xs">
-                            <span className="font-semibold text-slate-500">Calculated Sponsorship:</span>
-                            <span className="font-black text-[#22C55E] text-sm">₹{(selectedCampaign.pricePerUnit || 0) * quantity}</span>
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Package selections */}
-                      {hasLevels && (
-                        <div className="space-y-3 p-4.5 bg-slate-50 border border-slate-100 rounded-2xl">
-                          <span className="text-[9px] uppercase font-bold text-slate-400 tracking-wider block font-poppins">Option 1: Sponsorship Packages</span>
-                          <div className="grid grid-cols-2 gap-2">
-                            {selectedCampaign.donationLevels?.map((lvl, index) => {
-                              const isLvlSelected = selectedLevelIndex === index;
-                              return (
-                                <button
-                                  key={index}
-                                  type="button"
-                                  onClick={() => setSelectedLevelIndex(index)}
-                                  className={`p-2.5 rounded-lg border text-left transition-all ${
-                                    isLvlSelected 
-                                      ? 'bg-[#1E63FF] border-[#1E63FF] text-white shadow-sm' 
-                                      : 'bg-white border-slate-250 text-[#092C5C] hover:bg-slate-50'
-                                  }`}
-                                >
-                                  <span className={`text-[9px] font-black uppercase tracking-wider block ${isLvlSelected ? 'text-white/80' : 'text-[#1E63FF]'}`}>{lvl.label}</span>
-                                  <span className="font-extrabold text-xs block mt-0.5">₹{lvl.amount.toLocaleString()}</span>
-                                </button>
-                              );
-                            })}
-                          </div>
-                        </div>
-                      )}
-
-                      {/* Ground supplies provided checklist */}
-                      {selectedCampaign.provides && (
-                        <div className="space-y-2.5 p-4.5 bg-slate-50 border border-slate-100 rounded-2xl">
-                          <h5 className="text-[9px] font-extrabold text-slate-450 uppercase tracking-widest font-poppins">What Your Donation Provides</h5>
-                          <div className="space-y-1.5 text-xs font-semibold text-slate-700">
-                            {selectedCampaign.provides.map((prov, index) => (
-                              <div key={index} className="flex items-center gap-1.5">
-                                <CheckCircle2 size={12} className="text-[#22C55E] shrink-0" />
-                                <span>{prov}</span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                );
-              })()
-            )}
-          </div>
-
-          {/* Checkout Form Split-Screen Layout */}
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-6">
+          {/* SPLIT ROW: DONATION FORM & SIDE INFO */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* LEFT COLUMN: Selected Summary Box (Sticky) */}
-            <div className="lg:col-span-5 space-y-6 lg:sticky lg:top-24 text-left">
-              <div className="bg-slate-900 text-white rounded-[28px] p-6 shadow-md border border-slate-800 space-y-4">
-                <div>
-                  <span className="text-[9px] uppercase font-bold text-slate-400 block tracking-widest">Sponsorship Target</span>
-                  <h3 className="font-bold text-base font-poppins text-white" style={{ color: '#FFFFFF' }}>
-                    {targetCampaignId 
-                      ? state.campaigns.find(c => c.id === targetCampaignId)?.title 
-                      : 'General Support Fund'
-                    }
-                  </h3>
-                </div>
+            {/* LEFT COLUMN: INTERACTIVE FORM (8 COLS) */}
+            <div className="lg:col-span-8 bg-white border border-[#E5EAF2] rounded-[24px] shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-hidden">
+              <form onSubmit={handleSimulateRazorpay} className="p-6 md:p-8 space-y-6 text-left">
                 
-                <div className="space-y-2 border-t border-b border-slate-800 py-4 text-xs font-semibold text-slate-300">
-                  <div className="flex justify-between">
-                    <span>Donation Mode:</span>
-                    <span className="text-white">{amountType} support</span>
+                {/* 1. FREQUENCY SELECTOR */}
+                <div className="space-y-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Select Frequency</label>
+                  <div className="grid grid-cols-3 gap-2">
+                    {(['One-Time', 'Monthly', 'Yearly'] as const).map((type) => (
+                      <button
+                        key={type}
+                        type="button"
+                        onClick={() => setAmountType(type)}
+                        className={`h-11 rounded-xl text-xs font-bold transition-all flex flex-col justify-center items-center border ${
+                          amountType === type 
+                            ? 'bg-[#1E63FF] text-white border-[#1E63FF]' 
+                            : 'bg-white text-[#0A2540] border-[#E5EAF2] hover:bg-slate-50'
+                        }`}
+                      >
+                        <span>{type === 'Monthly' ? 'Monthly ❤️' : type}</span>
+                        {type === 'Monthly' && <span className="text-[7.5px] opacity-90 font-medium">Recommended</span>}
+                      </button>
+                    ))}
                   </div>
-                  {targetCampaignId && (
-                    <div className="flex justify-between">
-                      <span>Calculated Units:</span>
-                      <span className="text-white">{quantity} unit{quantity > 1 ? 's' : ''}</span>
-                    </div>
+                  {amountType === 'Monthly' && (
+                    <p className="text-[10px] text-[#1E63FF] font-bold">
+                      💡 Help a child every month.
+                    </p>
                   )}
                 </div>
 
-                <div className="flex justify-between items-center pt-2">
-                  <span className="text-slate-400 text-xs font-bold uppercase">Estimated Amount:</span>
-                  <span className="text-2xl font-black text-[#22C55E]">₹{getFinalAmount().toLocaleString()}</span>
-                </div>
-              </div>
+                {/* 2. IMPACT CHOICE (PSYCHOLOGICAL PRESETS) */}
+                <div className="space-y-3">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">I Want To Help</label>
+                  <div className="space-y-2.5">
+                    {impactOptions.map((opt) => {
+                      const isSelected = !isCustomMode && selectedImpactId === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => handleImpactSelect(opt.id)}
+                          className={`w-full p-4 rounded-xl border flex items-center justify-between transition-all text-left ${
+                            isSelected
+                              ? 'bg-blue-50/50 border-[#1E63FF] text-[#1E63FF] shadow-sm'
+                              : 'bg-white border-[#E5EAF2] text-[#0A2540] hover:bg-slate-50'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center ${isSelected ? 'border-[#1E63FF] bg-[#1E63FF]' : 'border-slate-300 bg-white'}`}>
+                              {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                            </div>
+                            <span className="text-xs font-bold">{opt.label}</span>
+                          </div>
+                          <span className="text-xs font-black">₹{opt.amount}</span>
+                        </button>
+                      );
+                    })}
 
-              {/* Trust Indicators */}
-              <div className="space-y-3">
-                <div className="p-4 bg-white rounded-2xl border border-slate-150 flex items-center gap-3.5 text-xs text-slate-500 font-semibold shadow-sm">
-                  <Lock size={18} className="text-[#22C55E] shrink-0" />
-                  <span>Encrypted secure gateway connection with SSL authentication.</span>
-                </div>
-                <div className="p-4 bg-white rounded-2xl border border-slate-150 flex items-center gap-3.5 text-xs text-slate-500 font-semibold shadow-sm">
-                  <ShieldCheck size={18} className="text-[#1E63FF] shrink-0" />
-                  <span>Public audit ledger reference generated dynamically.</span>
-                </div>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN: Donor Details form */}
-            <div className="lg:col-span-7 bg-white border border-slate-200/80 rounded-[30px] p-6 sm:p-8 shadow-sm text-left">
-              <div className="flex items-center gap-4 mb-6">
-                <div className="flex items-center gap-2">
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                    step === 1 ? 'bg-[#1E63FF] text-white' : 'bg-[#22C55E] text-white'
-                  }`}>
-                    {step === 1 ? '1' : <Check size={12} strokeWidth={3} />}
-                  </span>
-                  <span className="text-xs font-black uppercase tracking-wider text-[#092C5C]">
-                    Information
-                  </span>
-                </div>
-                <div className="h-[1px] w-6 bg-slate-200" />
-                <div className="flex items-center gap-2">
-                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                    step === 2 ? 'bg-[#1E63FF] text-white' : 'bg-slate-100 text-slate-400'
-                  }`}>
-                    2
-                  </span>
-                  <span className={`text-xs font-black uppercase tracking-wider ${step === 2 ? 'text-[#092C5C]' : 'text-slate-400'}`}>
-                    Payment
-                  </span>
-                </div>
-              </div>
-
-              {step === 1 && (
-                <div className="bg-slate-50 p-1.5 rounded-xl flex gap-1 border border-slate-150 mb-6">
-                  {(['One-Time', 'Monthly', 'Yearly'] as const).map((type) => (
+                    {/* Custom Amount option trigger */}
                     <button
-                      key={type}
                       type="button"
-                      onClick={() => setAmountType(type)}
-                      className={`flex-grow text-center py-2 text-[9px] font-extrabold uppercase tracking-wider rounded-lg transition-all ${
-                        amountType === type 
-                          ? 'bg-white text-[#1E63FF] shadow-sm border border-slate-100' 
-                          : 'text-slate-500 hover:text-slate-700'
+                      onClick={() => { setIsCustomMode(true); setSelectedImpactId(''); }}
+                      className={`w-full p-4 rounded-xl border flex items-center justify-between transition-all text-left ${
+                        isCustomMode
+                          ? 'bg-blue-50/50 border-[#1E63FF] text-[#1E63FF] shadow-sm'
+                          : 'bg-white border-[#E5EAF2] text-[#0A2540] hover:bg-slate-50'
                       }`}
                     >
-                      {type}
+                      <div className="flex items-center gap-3">
+                        <div className={`w-4.5 h-4.5 rounded-full border flex items-center justify-center ${isCustomMode ? 'border-[#1E63FF] bg-[#1E63FF]' : 'border-slate-300 bg-white'}`}>
+                          {isCustomMode && <div className="w-1.5 h-1.5 rounded-full bg-white" />}
+                        </div>
+                        <span className="text-xs font-bold">Custom Amount</span>
+                      </div>
+                      <span className="text-xs font-semibold text-slate-400">Specify sum</span>
                     </button>
-                  ))}
+                  </div>
                 </div>
-              )}
 
-              <form onSubmit={handleNextStep} className="space-y-5">
-                {step === 1 ? (
-                  <div className="space-y-5">
-                    
-                    {/* Custom Amount field */}
-                    <div className="space-y-1.5">
-                      <label className="block text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Custom Amount Override (₹)</label>
-                      <div className="relative">
-                        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 font-extrabold text-xs">₹</span>
-                        <input
-                          type="number"
-                          placeholder="Or enter any custom amount override"
-                          value={customAmount}
-                          onChange={handleCustomAmountChange}
-                          className="w-full pl-8 pr-4 py-3 bg-white border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E63FF] focus:border-[#1E63FF] rounded-xl text-xs text-slate-800 transition-all font-semibold"
-                        />
-                      </div>
-                    </div>
-
-                    {/* Target Campaign selector */}
-                    <div className="space-y-1.5">
-                      <label className="block text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Direct donation to campaign</label>
-                      <select
-                        value={targetCampaignId}
-                        onChange={(e) => setTargetCampaignId(e.target.value)}
-                        className="w-full px-4 py-3 bg-white border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E63FF] focus:border-[#1E63FF] rounded-xl text-xs text-slate-800 transition-all font-bold"
+                {/* 3. MULTIPLIER OR CUSTOM FIELD INPUT */}
+                {!isCustomMode ? (
+                  <div className="p-4 bg-slate-50 rounded-xl flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-500">Multiply Impact Quantity:</span>
+                    <div className="flex items-center gap-3.5">
+                      <button
+                        type="button"
+                        onClick={() => setQuantity(q => Math.max(1, q - 1))}
+                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center"
                       >
-                        <option value="">General Support Fund</option>
-                        {state.campaigns.map((camp) => (
-                          <option key={camp.id} value={camp.id}>
-                            {camp.title}
-                          </option>
-                        ))}
-                      </select>
+                        -
+                      </button>
+                      <span className="text-sm font-black font-poppins">{quantity}</span>
+                      <button
+                        type="button"
+                        onClick={() => setQuantity(q => q + 1)}
+                        className="w-8 h-8 rounded-lg bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold flex items-center justify-center"
+                      >
+                        +
+                      </button>
                     </div>
-
-                    {/* Personal Details */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="block text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Full Name</label>
-                        <input
-                          type="text"
-                          placeholder="Your name"
-                          value={name}
-                          onChange={(e) => setName(e.target.value)}
-                          required
-                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E63FF] focus:border-[#1E63FF] rounded-xl text-xs text-slate-800 transition-all font-semibold"
-                        />
-                      </div>
-                      <div className="space-y-1.5">
-                        <label className="block text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Email Address</label>
-                        <input
-                          type="email"
-                          placeholder="your@email.com"
-                          value={email}
-                          onChange={(e) => setEmail(e.target.value)}
-                          required
-                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E63FF] focus:border-[#1E63FF] rounded-xl text-xs text-slate-800 transition-all font-semibold"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="space-y-1.5">
-                        <label className="block text-[9px] font-extrabold text-slate-455 uppercase tracking-widest">Phone Number (Optional)</label>
-                        <input
-                          type="tel"
-                          placeholder="Mobile number"
-                          value={phone}
-                          onChange={(e) => setPhone(e.target.value)}
-                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:outline-none focus:ring-1 focus:ring-[#1E63FF] focus:border-[#1E63FF] rounded-xl text-xs text-slate-800 transition-all font-semibold"
-                        />
-                      </div>
-                      
-                      <div className="flex items-center gap-2 pt-5 sm:pt-7 select-none">
-                        <input
-                          type="checkbox"
-                          id="anonymous"
-                          checked={isAnonymous}
-                          onChange={(e) => setIsAnonymous(e.target.checked)}
-                          className="w-4 h-4 text-[#1E63FF] focus:ring-[#1E63FF] border-slate-250 rounded cursor-pointer"
-                        />
-                        <label htmlFor="anonymous" className="text-xs text-slate-500 font-bold cursor-pointer">
-                          Keep donation anonymous
-                        </label>
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full h-12 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md shadow-blue-500/10 flex items-center justify-center"
-                    >
-                      Continue to Payment Setup
-                    </button>
-
                   </div>
                 ) : (
-                  <div className="space-y-5">
-                    
-                    {/* Summary lists */}
-                    <div className="bg-slate-50 border border-slate-200/80 p-5 rounded-2xl space-y-3 text-xs text-slate-550 font-semibold">
-                      <div className="flex justify-between">
-                        <span>Donation Mode:</span>
-                        <span className="font-bold text-[#092C5C]">{amountType} support</span>
-                      </div>
-                      <div className="flex justify-between border-t border-slate-200/60 pt-3 text-sm">
-                        <span className="font-bold text-[#092C5C]">Final Amount:</span>
-                        <span className="font-black text-[#22C55E]">₹{getFinalAmount().toLocaleString()}</span>
-                      </div>
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <span className="absolute left-4 top-3 text-[#0A2540] font-black text-sm">₹</span>
+                      <input
+                        type="number"
+                        placeholder="Enter amount"
+                        value={customAmount}
+                        onChange={(e) => setCustomAmount(e.target.value)}
+                        className="w-full h-11 pl-8 pr-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-bold text-[#0A2540]"
+                      />
                     </div>
-
-                    {/* Payment Gateway */}
-                    <div className="space-y-2.5">
-                      <label className="block text-[9px] font-extrabold text-slate-450 uppercase tracking-widest">Select Payment Method</label>
-                      <div className="grid grid-cols-3 gap-2.5">
-                        {(['UPI', 'Card', 'Netbanking'] as const).map((method) => {
-                          const isSel = paymentMethod === method;
-                          return (
-                            <button
-                              key={method}
-                              type="button"
-                              onClick={() => setPaymentMethod(method)}
-                              className={`py-3 border rounded-xl flex flex-col items-center justify-center gap-1.5 transition-all text-[9px] font-bold uppercase tracking-wider ${
-                                isSel 
-                                  ? 'border-[#1E63FF] bg-blue-50/20 text-[#1E63FF]' 
-                                  : 'border-slate-200 hover:bg-slate-50 text-slate-650'
-                              }`}
-                            >
-                              {method === 'UPI' ? <Smartphone size={15} /> : method === 'Card' ? <CreditCard size={15} /> : <FileText size={15} />}
-                              <span>{method}</span>
-                            </button>
-                          );
-                        })}
-                      </div>
+                    <div className="flex flex-wrap gap-2">
+                      {suggestedCustomAmounts.map((amt) => (
+                        <button
+                          key={amt}
+                          type="button"
+                          onClick={() => setCustomAmount(amt.toString())}
+                          className="px-3 py-1.5 bg-slate-50 border border-[#E5EAF2] rounded-lg text-xs font-bold text-slate-650 hover:bg-slate-100 transition-colors"
+                        >
+                          ₹{amt}
+                        </button>
+                      ))}
                     </div>
-
-                    <div className="flex gap-3 pt-2">
-                      <button
-                        type="button"
-                        onClick={() => setStep(1)}
-                        className="w-1/3 h-12 border border-slate-250 text-[#092C5C] hover:bg-slate-50 font-bold rounded-xl text-xs uppercase tracking-wider"
-                      >
-                        Back
-                      </button>
-                      <button
-                        type="button"
-                        onClick={handleSimulateRazorpay}
-                        className="w-2/3 h-12 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-md shadow-blue-500/10 flex items-center justify-center"
-                      >
-                        Simulate Pay (Razorpay)
-                      </button>
-                    </div>
-
-                    {/* Payment Partners & Security Trust row */}
-                    <div className="pt-4 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4">
-                      <div className="flex items-center gap-1.5 text-[9px] font-black text-slate-400 uppercase tracking-wider">
-                        <Lock size={12} className="text-[#22C55E]" />
-                        <span>SSL Encrypted</span>
-                      </div>
-                      <div className="flex items-center gap-3 text-[10px] text-slate-400 font-bold font-poppins tracking-wider">
-                        <span>UPI</span>
-                        <span>•</span>
-                        <span>VISA</span>
-                        <span>•</span>
-                        <span>MASTERCARD</span>
-                        <span>•</span>
-                        <span className="text-blue-600 font-extrabold uppercase">Razorpay</span>
-                      </div>
-                    </div>
-
                   </div>
                 )}
+
+                {/* 4. DONOR PARTICULARS */}
+                <div className="space-y-4 pt-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Your Particulars</label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <input
+                      type="text"
+                      placeholder="Your Full Name"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      required
+                      className="w-full h-11 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                    />
+                    <input
+                      type="email"
+                      placeholder="Your Email ID"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      required
+                      className="w-full h-11 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                    />
+                  </div>
+                  <input
+                    type="tel"
+                    placeholder="Phone Number (For Updates)"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    className="w-full h-11 px-4 bg-white border border-[#E5EAF2] rounded-xl focus:outline-none text-xs font-semibold text-[#0A2540]"
+                  />
+                  <label className="flex items-center gap-2 cursor-pointer pt-1">
+                    <input
+                      type="checkbox"
+                      checked={isAnonymous}
+                      onChange={(e) => setIsAnonymous(e.target.checked)}
+                      className="w-4.5 h-4.5 accent-[#1E63FF] rounded border-slate-350"
+                    />
+                    <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider select-none">Donate Anonymously</span>
+                  </label>
+                </div>
+
+                {/* 5. PAYMENT METHOD LOGOS SELECTOR */}
+                <div className="space-y-3 pt-2">
+                  <label className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block">Choose Payment Method</label>
+                  <div className="grid grid-cols-3 gap-3">
+                    {(['UPI', 'Card', 'Netbanking'] as const).map((method) => (
+                      <button
+                        key={method}
+                        type="button"
+                        onClick={() => setPaymentMethod(method)}
+                        className={`h-12 rounded-xl border flex flex-col justify-center items-center transition-all ${
+                          paymentMethod === method
+                            ? 'bg-[#1E63FF]/5 border-[#1E63FF] text-[#1E63FF] shadow-sm'
+                            : 'bg-white border-[#E5EAF2] text-slate-600 hover:bg-slate-50'
+                        }`}
+                      >
+                        <span className="text-xs font-bold font-poppins">{method}</span>
+                      </button>
+                    ))}
+                  </div>
+                  <div className="flex justify-center gap-3 opacity-60 grayscale hover:grayscale-0 transition-all pt-1 select-none">
+                    <span className="text-[9px] font-bold text-slate-450 uppercase tracking-widest my-auto mr-1">Accepting:</span>
+                    <span className="text-slate-400 font-extrabold text-[10px]">Google Pay</span>
+                    <span className="text-slate-400 font-extrabold text-[10px]">•</span>
+                    <span className="text-slate-400 font-extrabold text-[10px]">PhonePe</span>
+                    <span className="text-slate-400 font-extrabold text-[10px]">•</span>
+                    <span className="text-slate-400 font-extrabold text-[10px]">UPI</span>
+                    <span className="text-slate-400 font-extrabold text-[10px]">•</span>
+                    <span className="text-slate-400 font-extrabold text-[10px]">Cards</span>
+                  </div>
+                </div>
+
+                {/* SUBMIT BUTTON */}
+                <button
+                  type="submit"
+                  className="w-full h-13 bg-[#22C55E] hover:bg-[#1CA24C] text-white font-extrabold rounded-xl text-sm uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-98 shadow-md"
+                >
+                  <Heart size={16} fill="currentColor" />
+                  <span>Donate ₹{getFinalAmount().toLocaleString()} Now</span>
+                </button>
+
               </form>
             </div>
 
-          </div>
-        </section>
-
-        {/* ================= VERIFICATION BADGES (2x2 Grid or 4-Column Row) ================= */}
-        <section className="py-16 md:py-20 bg-white border-t border-b border-slate-100 font-inter px-4 md:px-12">
-          <div className="max-w-7xl mx-auto space-y-12">
-            <div className="text-center max-w-xl mx-auto space-y-3">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Complete Transparency
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#092C5C] font-poppins tracking-tight">
-                Our Verification System
-              </h2>
-              <p className="text-slate-500 text-xs sm:text-sm font-semibold">
-                Building confidence through direct verification loops, audited data releases, and blockchain mappings.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              {trustCards.map((card, idx) => (
-                <div key={idx} className="p-6 bg-[#F7FAFF] rounded-[20px] border border-slate-150 flex flex-col justify-between space-y-4 shadow-[0_4px_12px_rgba(0,0,0,0.015)] text-left">
-                  <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200 text-[#1E63FF] shadow-sm">
-                    <card.icon size={16} />
+            {/* RIGHT COLUMN: VERIFICATION BADGES & LIVE SOCIAL PROOF (4 COLS) */}
+            <div className="lg:col-span-4 space-y-6">
+              
+              {/* TRUST UTILIZATION BLOCK */}
+              <div className="bg-[#0A2540] text-white rounded-[24px] p-6 shadow-sm space-y-4 text-left">
+                <span className="text-xs font-bold text-slate-350 uppercase tracking-widest block border-b border-white/10 pb-2">
+                  Live Metrics
+                </span>
+                <div className="space-y-4">
+                  <div>
+                    <span className="block text-2xl font-black text-[#22C55E]">12,000+</span>
+                    <span className="text-xs text-slate-400 font-semibold">Nutritional Meals Served</span>
                   </div>
-                  <div className="space-y-1">
-                    <h4 className="font-bold text-[#092C5C] text-xs sm:text-sm font-poppins leading-tight">{card.title}</h4>
-                    <p className="text-slate-550 text-[11px] leading-relaxed font-semibold">{card.desc}</p>
+                  <div>
+                    <span className="block text-2xl font-black text-white">₹42L+</span>
+                    <span className="text-xs text-slate-400 font-semibold">Procurement Funds Utilized</span>
+                  </div>
+                  <div>
+                    <span className="block text-2xl font-black text-[#1E63FF]">98%</span>
+                    <span className="text-xs text-slate-400 font-semibold">Verified Ground Delivery Rate</span>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* VERIFICATION ICONS (ONE COLUMN LIST) */}
+              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm space-y-3.5 text-left font-semibold text-xs text-slate-700">
+                <div className="flex items-center gap-2.5 text-[#22C55E]">
+                  <CheckCircle2 size={16} />
+                  <span>✔ Rishikesh Ground Work</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-[#22C55E]">
+                  <CheckCircle2 size={16} />
+                  <span>✔ Public Transparency Ledger</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-[#22C55E]">
+                  <CheckCircle2 size={16} />
+                  <span>✔ Mapped Procurement Proofs</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-[#22C55E]">
+                  <CheckCircle2 size={16} />
+                  <span>✔ 100% Direct Relief</span>
+                </div>
+                <div className="flex items-center gap-2.5 text-[#22C55E]">
+                  <CheckCircle2 size={16} />
+                  <span>✔ Secure Bank Encryption</span>
+                </div>
+              </div>
+
+              {/* RECENT SOCIAL PROOF BAR */}
+              <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-5 shadow-sm space-y-3.5 text-left">
+                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">
+                  Last Donations
+                </span>
+                <div className="space-y-3 text-xs font-semibold text-slate-650">
+                  <div className="flex justify-between items-center border-b border-slate-50 pb-2">
+                    <span className="text-slate-800">Aman S.</span>
+                    <span className="text-slate-500 font-bold">₹500 <span className="text-[10px] text-slate-400 ml-1">2m ago</span></span>
+                  </div>
+                  <div className="flex justify-between items-center border-b border-slate-50 pb-2">
+                    <span className="text-slate-800">Riya J.</span>
+                    <span className="text-slate-500 font-bold">₹1000 <span className="text-[10px] text-slate-400 ml-1">8m ago</span></span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-800">Rahul M.</span>
+                    <span className="text-slate-500 font-bold">₹200 <span className="text-[10px] text-slate-400 ml-1">15m ago</span></span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+          {/* ================= EVERY DONATION INCLUDES (TRUST INFO) ================= */}
+          <div className="bg-white border border-[#E5EAF2] rounded-[24px] p-6 shadow-sm text-left">
+            <h3 className="text-xs font-bold text-slate-450 uppercase tracking-widest border-b border-slate-100 pb-3 block">
+              Every Donation Includes
+            </h3>
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-4 pt-4 text-xs font-bold text-slate-700 text-center">
+              <div className="space-y-1">
+                <span className="text-xl block">📸</span>
+                <span className="text-slate-600 block">Photos</span>
+              </div>
+              <div className="space-y-1">
+                <span className="text-xl block">🎥</span>
+                <span className="text-slate-600 block">Videos</span>
+              </div>
+              <div className="space-y-1">
+                <span className="text-xl block">🧾</span>
+                <span className="text-slate-600 block">Expense Proof</span>
+              </div>
+              <div className="space-y-1">
+                <span className="text-xl block">📍</span>
+                <span className="text-slate-600 block">Location Tag</span>
+              </div>
+              <div className="space-y-1">
+                <span className="text-xl block">📅</span>
+                <span className="text-slate-600 block">Date Proof</span>
+              </div>
+              <div className="space-y-1">
+                <span className="text-xl block">👤</span>
+                <span className="text-slate-600 block">Volunteer Sign</span>
+              </div>
             </div>
           </div>
-        </section>
 
-        {/* ================= PROCESS TIMELINE ================= */}
-        <section className="py-16 md:py-20 bg-[#F7FAFF] font-inter overflow-hidden px-4 md:px-12" id="transparency-timeline">
-          <div className="max-w-7xl mx-auto space-y-12">
-            
-            <div className="text-center max-w-xl mx-auto space-y-3">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Tracking Loop
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#092C5C] font-poppins tracking-tight">
-                How Your Donation Reaches the Ground
-              </h2>
-              <p className="text-slate-500 text-xs sm:text-sm font-semibold">
-                An auto-verifying, cyclical vertical distribution timeline mapping procurement directly to proof.
-              </p>
+          {/* ================= ONE SINGLE EMOTIONAL STORY ================= */}
+          <div className="bg-white border border-[#E5EAF2] rounded-[24px] overflow-hidden shadow-sm grid grid-cols-1 md:grid-cols-12 text-left">
+            <div className="md:col-span-5 relative h-48 md:h-auto bg-slate-100">
+              <Image 
+                src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=600"
+                alt="Help Priya continue school"
+                fill
+                className="object-cover"
+              />
             </div>
+            <div className="md:col-span-7 p-6 space-y-3.5">
+              <span className="text-[#1E63FF] text-[10px] font-black uppercase tracking-wider">Beneficiary Focus</span>
+              <h3 className="text-lg font-bold text-[#0A2540] font-poppins">Help Priya Continue School</h3>
+              <p className="text-slate-600 text-xs leading-relaxed font-semibold">
+                Priya, 9, lives in a temporary Rishikesh shelter. Your gift sponsors study books, uniform kits, and local tuition support to prevent dropping out.
+              </p>
+              <a href="/stories" className="text-[#1E63FF] text-xs font-bold inline-flex items-center gap-1 hover:underline">
+                <span>Read Full Story</span>
+                <ChevronRight size={13} />
+              </a>
+            </div>
+          </div>
 
-            <div className="relative max-w-2xl mx-auto pl-8 sm:pl-0">
-              <div className="absolute left-[15px] sm:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200 -translate-x-1/2" />
-
-              <div className="space-y-10 relative">
-                {timelineSteps.map((step, idx) => {
-                  const isEven = idx % 2 === 0;
-                  return (
-                    <motion.div 
-                      key={idx}
-                      initial={{ opacity: 0, y: 15 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.6, delay: idx * 0.1 }}
-                      className="flex flex-col sm:flex-row items-start sm:items-center relative"
+          {/* ================= FAQ SECTION (4 SIMPLE QUESTIONS) ================= */}
+          <div className="space-y-4 text-left">
+            <h3 className="text-lg font-bold text-[#0A2540] font-poppins">Frequently Asked Questions</h3>
+            <div className="space-y-2.5">
+              {faqs.map((faq, idx) => {
+                const isOpen = openFaqIndex === idx;
+                return (
+                  <div key={idx} className="bg-white border border-[#E5EAF2] rounded-xl overflow-hidden shadow-sm">
+                    <button
+                      type="button"
+                      onClick={() => toggleFaq(idx)}
+                      className="w-full p-4 flex items-center justify-between text-left transition-colors hover:bg-slate-50"
                     >
-                      <div className={`w-full pr-8 text-right hidden sm:block ${isEven ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
-                        {isEven && (
-                          <div className="space-y-1">
-                            <h4 className="font-bold text-[#092C5C] text-sm font-poppins">{step.title}</h4>
-                            <p className="text-slate-500 text-xs leading-normal font-semibold">{step.desc}</p>
-                          </div>
-                        )}
+                      <span className="text-xs font-bold text-[#0A2540]">{faq.q}</span>
+                      <ChevronDown size={14} className={`text-slate-400 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {isOpen && (
+                      <div className="px-4 pb-4 text-xs font-medium text-slate-550 border-t border-slate-50 pt-2 leading-relaxed">
+                        {faq.a}
                       </div>
-
-                      <div className={`absolute left-0 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full ${step.color} text-white flex items-center justify-center shadow-md z-10 shrink-0`}>
-                        <step.icon size={13} />
-                      </div>
-
-                      <div className={`w-full pl-8 text-left ${!isEven ? 'opacity-100' : 'opacity-100 sm:opacity-0 pointer-events-none'}`}>
-                        {(!isEven || true) && (
-                          <div className="space-y-1 sm:hidden block">
-                            <h4 className="font-bold text-[#092C5C] text-sm font-poppins">{step.title}</h4>
-                            <p className="text-slate-500 text-xs leading-normal font-semibold">{step.desc}</p>
-                          </div>
-                        )}
-                        {!isEven && (
-                          <div className="space-y-1 hidden sm:block">
-                            <h4 className="font-bold text-[#092C5C] text-sm font-poppins">{step.title}</h4>
-                            <p className="text-slate-500 text-xs leading-normal font-semibold">{step.desc}</p>
-                          </div>
-                        )}
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* ================= STORY SECTION ================= */}
-        <section className="py-16 md:py-20 bg-white font-inter border-t border-b border-slate-100 px-4 md:px-12">
-          <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center text-left">
-            <div className="lg:col-span-5 relative">
-              <div className="relative w-full aspect-[4/3] rounded-[28px] overflow-hidden border border-slate-100 shadow-md bg-slate-50">
-                <Image
-                  src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?auto=format&fit=crop&q=80&w=600"
-                  alt="Rural student receiving tablets in Rishikesh school"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
-
-            <div className="lg:col-span-7 space-y-6">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Field Story
-              </span>
-              <h3 className="text-2xl sm:text-3xl font-black text-[#092C5C] font-poppins tracking-tight">
-                How Priya Gained Access to Digital Schooling
-              </h3>
-              <p className="text-slate-500 text-sm sm:text-base leading-relaxed font-semibold">
-                &ldquo;Before the tablet camps, my studies stopped after sunset because we had no books or electricity at home. Now, I prepare for secondary school entrance exams with checked-in tablets. My scores are verified on the camp record page.&rdquo;
-              </p>
-              <div className="pt-2">
-                <button
-                  onClick={() => {
-                    const formElem = document.getElementById('donation-interactive-grid');
-                    if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                  }}
-                  className="px-6 h-12 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-sm transition-all"
-                >
-                  Sponsor Pediatric & School kits
-                </button>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ================= TESTIMONIALS SECTION ================= */}
-        <section className="py-16 md:py-20 bg-[#F7FAFF] font-inter overflow-hidden px-4 md:px-12">
-          <div className="max-w-7xl mx-auto space-y-12">
-            
-            <div className="text-center max-w-xl mx-auto space-y-3">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Endorsements
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-black text-[#092C5C] font-poppins tracking-tight">
-                Trusted by Supporters
-              </h2>
-              <p className="text-slate-550 text-xs sm:text-sm font-semibold">
-                Hear from active field volunteers and monthly transparent donors globally.
-              </p>
-            </div>
-
-            <div className="max-w-2xl mx-auto relative px-10">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTestimonial}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  transition={{ duration: 0.5 }}
-                  className="bg-white p-8 rounded-[28px] border border-slate-200/60 shadow-sm space-y-6 text-center"
-                >
-                  <div className="flex justify-center gap-1 text-[#22C55E]">
-                    {[...Array(testimonials[activeTestimonial].rating)].map((_, i) => (
-                      <Star key={i} size={15} fill="currentColor" stroke="none" />
-                    ))}
+                    )}
                   </div>
-
-                  <p className="text-slate-500 text-xs sm:text-sm leading-relaxed font-semibold italic">
-                    &ldquo;{testimonials[activeTestimonial].quote}&rdquo;
-                  </p>
-
-                  <div className="flex items-center justify-center gap-3.5">
-                    <div className="relative w-9 h-9 rounded-full overflow-hidden bg-slate-200 border border-slate-100 shadow-sm shrink-0">
-                      <Image 
-                        src={testimonials[activeTestimonial].avatar} 
-                        alt={testimonials[activeTestimonial].name} 
-                        fill 
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="text-left">
-                      <span className="font-bold text-[#092C5C] text-xs block">{testimonials[activeTestimonial].name}</span>
-                      <span className="text-[9px] text-slate-400 font-bold uppercase tracking-wider">{testimonials[activeTestimonial].role}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              <button
-                onClick={() => setActiveTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length)}
-                className="absolute left-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border border-slate-200 text-[#092C5C] hover:bg-slate-50 shadow-sm flex items-center justify-center"
-                aria-label="Previous review"
-              >
-                <ChevronLeft size={15} />
-              </button>
-              <button
-                onClick={() => setActiveTestimonial((prev) => (prev + 1) % testimonials.length)}
-                className="absolute right-0 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white border border-slate-200 text-[#092C5C] hover:bg-slate-50 shadow-sm flex items-center justify-center"
-                aria-label="Next review"
-              >
-                <ChevronRight size={15} />
-              </button>
+                );
+              })}
             </div>
-
           </div>
-        </section>
 
-      </div>
+        </main>
 
-      {/* Razorpay Simulated sandbox overlay */}
-      <AnimatePresence>
-        {showRazorpay && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        {/* ================= MINIMAL FOOTER FOR CONVERSION ================= */}
+        <footer className="max-w-4xl mx-auto px-4 pt-16 pb-8 border-t border-slate-200 mt-16 text-center select-none font-inter">
+          <div className="flex justify-center gap-6 text-xs font-semibold text-slate-400">
+            <a href="/privacy" className="hover:text-[#0A2540] transition-colors">Privacy Policy</a>
+            <span>•</span>
+            <a href="/terms" className="hover:text-[#0A2540] transition-colors">Terms of Service</a>
+            <span>•</span>
+            <a href="/contact" className="hover:text-[#0A2540] transition-colors">Contact Support</a>
+          </div>
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider pt-4 select-none">
+            © {new Date().getFullYear()} OneHope Sponsoring. All Rights Reserved.
+          </p>
+        </footer>
+
+        {/* ================= FLOATING STICKY BOTTOM BAR (CONVERSION BOOSTER) ================= */}
+        <AnimatePresence>
+          {showStickyBar && (
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-slate-950/60 backdrop-blur-sm"
-            />
-            
-            <motion.div
-              initial={{ scale: 0.95, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.95, opacity: 0 }}
-              className="relative bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl z-10 border border-slate-100 text-slate-900 text-center space-y-6"
+              initial={{ y: 80, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 80, opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200/80 p-3.5 z-40 shadow-xl flex items-center justify-between px-6 sm:px-12 select-none"
             >
-              <div className="w-12 h-12 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto text-blue-600 border border-blue-100">
-                <CreditCard size={24} />
+              <div className="text-left font-poppins">
+                <span className="text-[9.5px] text-slate-450 uppercase tracking-widest block">Sponsorship Active</span>
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[#1E63FF] text-xs font-black">❤️ {getImpactText()}</span>
+                  <span className="text-slate-400 font-medium">•</span>
+                  <span className="text-[#22C55E] text-xs font-black">₹{getFinalAmount().toLocaleString()}</span>
+                </div>
               </div>
+              <button
+                type="button"
+                onClick={() => {
+                  window.scrollTo({ top: 120, behavior: 'smooth' });
+                }}
+                className="px-6 py-2.5 bg-[#22C55E] hover:bg-[#1CA24C] text-white font-extrabold rounded-lg text-[10px] uppercase tracking-wider transition-colors shadow-sm"
+              >
+                Donate Now
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-              <div className="space-y-2">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Razorpay Secure Sandbox</span>
-                <h3 className="text-lg font-bold font-poppins text-slate-900">Processing Encrypted Transfer</h3>
-                <p className="text-slate-550 text-xs leading-relaxed max-w-xs mx-auto font-medium">
-                  Authorizing transaction of <strong className="text-[#092C5C] font-extrabold">₹{getFinalAmount().toLocaleString()}</strong> via tokenized gateway credentials...
-                </p>
-              </div>
+        {/* ================= RAZORPAY SIMULATION POPUP ================= */}
+        <AnimatePresence>
+          {showRazorpay && (
+            <motion.div 
+              initial={{ opacity: 0 }} 
+              animate={{ opacity: 1 }} 
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-[#092C5C]/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 font-inter"
+            >
+              <motion.div 
+                initial={{ scale: 0.9, y: 15 }}
+                animate={{ scale: 1, y: 0 }}
+                exit={{ scale: 0.9, y: 15 }}
+                className="bg-white rounded-3xl p-6 md:p-8 max-w-sm w-full text-center space-y-6 shadow-2xl relative border border-slate-100"
+              >
+                {/* Razorpay simulation brand tag */}
+                <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+                  <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Razorpay Secure</span>
+                  <span className="px-2 py-0.5 bg-blue-50 text-[#1E63FF] rounded text-[8px] font-black uppercase">Sandbox Mode</span>
+                </div>
 
-              <div className="flex justify-center pt-2">
+                <div className="w-16 h-16 bg-[#1E63FF]/5 rounded-full flex items-center justify-center mx-auto text-[#1E63FF]">
+                  <CreditCard size={28} />
+                </div>
+
+                <div className="space-y-1">
+                  <h3 className="text-base font-black text-[#0A2540] font-poppins">Processing Transaction</h3>
+                  <p className="text-slate-400 text-xs font-semibold px-2">
+                    Simulating secure gateway keys. Please do not close or reload this window.
+                  </p>
+                </div>
+
                 {paymentStatus === 'processing' ? (
-                  <div className="flex items-center gap-1">
-                    <span className="w-2.5 h-2.5 bg-blue-600 rounded-full animate-bounce" />
-                    <span className="w-2.5 h-2.5 bg-blue-600 rounded-full animate-bounce [animation-delay:0.2s]" />
-                    <span className="w-2.5 h-2.5 bg-blue-600 rounded-full animate-bounce [animation-delay:0.4s]" />
+                  <div className="space-y-4">
+                    <div className="w-8 h-8 border-3 border-[#1E63FF] border-t-transparent rounded-full animate-spin mx-auto" />
+                    <span className="text-[10px] text-slate-500 font-semibold block">Authorizing secure node verification...</span>
                   </div>
                 ) : (
-                  <div className="w-10 h-10 bg-green-50 border border-green-100 text-[#22C55E] rounded-full flex items-center justify-center animate-pulse">
-                    <CheckCircle2 size={20} />
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 bg-[#22C55E]/10 rounded-full flex items-center justify-center mx-auto text-[#22C55E]">
+                      <Check size={20} />
+                    </div>
+                    <span className="text-xs font-bold text-[#22C55E] block">Sponsorship Lodged Successfully!</span>
                   </div>
                 )}
-              </div>
-
-              <p className="text-[10px] text-slate-400 font-bold">Secure Gateway ref: Razorpay SEC-74639 • Rishikesh Initiative</p>
+              </motion.div>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+          )}
+        </AnimatePresence>
+
+      </div>
     </PublicLayout>
   );
 }
