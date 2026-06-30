@@ -69,36 +69,42 @@ export const Header: React.FC = () => {
     { label: 'About', href: '/about', icon: MapPin }
   ];
 
+  const isHomepage = pathname === '/';
+
   return (
     <>
+      <div className={`z-50 transition-all duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'} ${
+        isScrolled 
+        ? 'fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-150' 
+        : isHomepage 
+          ? 'absolute top-0 left-0 w-full bg-transparent' 
+          : 'sticky top-0 w-full bg-white/95 border-b border-slate-150 shadow-sm'
+    }`}>
       {/* Slim Announcement Information Bar */}
-      <div className="bg-[#1E63FF] text-white text-[10px] sm:text-xs py-1 px-4 font-semibold z-50 relative select-none border-b border-white/10">
-        <div className="max-w-7xl mx-auto flex justify-between items-center h-[24px] md:h-[28px] gap-4">
-          <div className="flex items-center gap-1 shrink-0">
-            <Phone size={10} />
-            <a href="tel:+918630027341" className="hover:underline text-[10px] sm:text-xs">+91 8630027341</a>
-          </div>
-          <div className="flex items-center gap-3 font-medium text-[10px] sm:text-xs py-0.5">
-            <span className="shrink-0">📍 Mayakund, near Triveni Ghat, Rishikesh</span>
-            <span className="hidden md:inline text-white/40 shrink-0">•</span>
-            <span className="hidden md:flex items-center gap-0.5 shrink-0">✔ Public Ledger</span>
+      {(!isHomepage || isScrolled) && (
+        <div className="bg-[#1E63FF] text-white text-[10px] sm:text-xs py-1 px-4 font-semibold select-none border-b border-white/10">
+          <div className="max-w-7xl mx-auto flex justify-between items-center h-[24px] md:h-[28px] gap-4">
+            <div className="flex items-center gap-1 shrink-0">
+              <Phone size={10} />
+              <a href="tel:+918630027341" className="hover:underline text-[10px] sm:text-xs">+91 8630027341</a>
+            </div>
+            <div className="flex items-center gap-3 font-medium text-[10px] sm:text-xs py-0.5">
+              <span className="shrink-0">📍 Mayakund, near Triveni Ghat, Rishikesh</span>
+              <span className="hidden md:inline text-white/40 shrink-0">•</span>
+              <span className="hidden md:flex items-center gap-0.5 shrink-0">✔ Public Ledger</span>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
-      <header className={`sticky top-0 z-50 transition-all duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'} ${
-        isScrolled 
-          ? 'bg-white/90 backdrop-blur-md shadow-[0_8px_30px_rgba(9,37,64,0.02)] border-b border-slate-150' 
-          : 'bg-transparent'
-      }`}>
-
+      <header className="w-full relative">
         {/* Navigation Wrapper */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-[58px] lg:h-[72px]">
             {/* Logo Left */}
             <div className="flex-shrink-0 flex items-center">
               <Link href="/">
-                <Logo size={isScrolled ? 26 : 30} light={pathname === '/' && !isScrolled} />
+                <Logo size={isScrolled ? 26 : 30} light={isHomepage && !isScrolled} />
               </Link>
             </div>
 
@@ -106,7 +112,7 @@ export const Header: React.FC = () => {
             <nav className="hidden lg:flex space-x-1.5">
               {navLinks.map((item) => {
                 const isActive = pathname === item.href;
-                const isDarkTheme = pathname === '/' && !isScrolled;
+                const isDarkTheme = isHomepage && !isScrolled;
                 return (
                   <Link
                     key={item.href}
@@ -129,7 +135,7 @@ export const Header: React.FC = () => {
               <Link
                 href="/search"
                 className={`p-2.5 rounded-xl transition-all ${
-                  pathname === '/' && !isScrolled 
+                  isHomepage && !isScrolled 
                     ? 'text-white/80 hover:text-white hover:bg-white/5' 
                     : 'text-slate-500 hover:text-[#0047AB] hover:bg-slate-50'
                 }`}
@@ -160,7 +166,7 @@ export const Header: React.FC = () => {
                 <button
                   onClick={() => setShowRoleModal(true)}
                   className={`px-3.5 py-2 text-xs font-semibold uppercase tracking-wider rounded-xl transition-colors ${
-                    pathname === '/' && !isScrolled
+                    isHomepage && !isScrolled
                       ? 'text-white hover:bg-white/5'
                       : 'text-[#0A2540] hover:bg-slate-50'
                   }`}
@@ -173,7 +179,7 @@ export const Header: React.FC = () => {
               <Link
                 href="/contact"
                 className={`px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-xl transition-all border ${
-                  pathname === '/' && !isScrolled
+                  isHomepage && !isScrolled
                     ? 'text-white border-white/20 hover:border-white hover:bg-white/5'
                     : 'text-[#0A2540] hover:text-[#0047AB] border border-[#0A2540]/30 hover:border-[#0047AB] hover:bg-slate-50'
                 }`}
@@ -203,7 +209,7 @@ export const Header: React.FC = () => {
               <button
                 onClick={() => setIsOpen(true)}
                 className={`p-2 rounded-xl transition-colors ${
-                  pathname === '/' && !isScrolled
+                  isHomepage && !isScrolled
                     ? 'text-white hover:bg-white/5'
                     : 'text-slate-655 hover:bg-slate-50'
                 }`}
@@ -222,7 +228,7 @@ export const Header: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.25 }}
-              className="fixed inset-0 w-screen h-screen bg-white/96 backdrop-blur-lg z-[9999] flex flex-col justify-between overflow-y-auto lg:hidden shadow-2xl"
+              className="fixed inset-0 w-screen h-screen bg-white/96 backdrop-blur-lg z-[9999] flex flex-col justify-between overflow-hidden lg:hidden shadow-2xl"
             >
               {/* Mobile Menu Header */}
               <div className="flex justify-between items-center p-6 border-b border-slate-100 bg-white/50 backdrop-blur-sm">
@@ -303,6 +309,7 @@ export const Header: React.FC = () => {
           )}
         </AnimatePresence>
       </header>
+    </div>
 
       {/* Role Switcher Modal */}
       <AnimatePresence>

@@ -189,6 +189,7 @@ export default function Home() {
   const [activeFAQ, setActiveFAQ] = useState<number | null>(null);
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [activeReelUrl, setActiveReelUrl] = useState<string | null>(null);
+  const [isMuted, setIsMuted] = useState(false);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -211,8 +212,8 @@ export default function Home() {
   return (
     <PublicLayout>
       <div className="bg-white font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
-                {/* ================= 1. EMOTIONAL HERO SECTION ================= */}
-        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-28 pb-16 md:pt-36 md:pb-24 -mt-[82px] lg:-mt-[100px]">
+        {/* ================= 1. EMOTIONAL HERO SECTION ================= */}
+        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-24 pb-16 md:pt-36 md:pb-24">
           {/* Background Video Backdrop */}
           <video
             autoPlay
@@ -240,11 +241,11 @@ export default function Home() {
               transition={{ duration: 0.6 }}
               className="lg:col-span-12 space-y-6 text-center"
             >
-              <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none">
+              <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none text-white !text-white">
                 Hope Starts With One
               </h1>
 
-              <p className="text-slate-350 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins">
+              <p className="text-slate-200 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins">
                 Feed. Educate. Care. Transparently.
               </p>
 
@@ -308,32 +309,13 @@ export default function Home() {
             </div>
           </div>
         </section>
-
-        {/* ================= LIVE TODAY IMPACT BAR ================= */}
-        <section className="bg-slate-50 border-b border-slate-150 py-3 font-inter select-none">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-wrap justify-between items-center gap-y-3 gap-x-6">
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-              </span>
-              <span className="text-[10px] font-black text-slate-900 uppercase tracking-widest">Live Today</span>
-            </div>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-1.5 text-xs font-bold text-slate-700">
-              <span className="flex items-center gap-1.5">🍛 42 Meals Served</span>
-              <span className="flex items-center gap-1.5">📚 5 School Kits Delivered</span>
-              <span className="flex items-center gap-1.5">🐶 18 Animals Fed</span>
-            </div>
-          </div>
-        </section>
-
         {/* ================= 2. WHY ONEHOPE TRUST STRIP ================= */}
         <section className="bg-white border-b border-slate-100 py-5 font-inter select-none">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-wrap justify-between items-center gap-y-4 gap-x-8">
-            <div className="flex items-center gap-2 text-xs font-bold text-[#0A2540] uppercase tracking-wider">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-y-4 gap-x-8">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#0A2540] uppercase tracking-wider shrink-0">
               <span className="text-[#1E63FF] font-poppins">Why OneHope?</span>
             </div>
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-semibold text-slate-600">
+            <div className="grid grid-cols-2 gap-x-6 gap-y-3 text-xs font-semibold text-slate-600 w-full max-w-xl">
               <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Direct Ground Welfare</span></div>
               <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Public Ledger</span></div>
               <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Weekly Reports</span></div>
@@ -345,19 +327,11 @@ export default function Home() {
         {/* ================= 3. LIVE IMPACT STATS ================= */}
         <section className="py-10 bg-[#F8FBFF] border-b border-[#E5EAF2] font-inter" id="impact-stats-row">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
-            <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={124800} suffix="+" label="Meals Served" icon={Heart} />
-              </div>
-              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={840} suffix="+" label="Children Educated" icon={Award} />
-              </div>
-              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={180} suffix="+" label="Families Supported" icon={Users} />
-              </div>
-              <div className="shrink-0 w-[240px] snap-center lg:w-auto">
-                <AnimatedCounter value={420} suffix="+" label="Animals Fed" icon={ShieldCheck} />
-              </div>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+              <AnimatedCounter value={124800} suffix="+" label="Meals Served" icon={Heart} />
+              <AnimatedCounter value={840} suffix="+" label="Children Educated" icon={Award} />
+              <AnimatedCounter value={180} suffix="+" label="Families Supported" icon={Users} />
+              <AnimatedCounter value={420} suffix="+" label="Animals Fed" icon={ShieldCheck} />
             </div>
           </div>
         </section>
@@ -462,7 +436,8 @@ export default function Home() {
               </h2>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto">
+            {/* Swipeable track on mobile, columns on desktop */}
+            <div className="flex sm:grid sm:grid-cols-3 gap-6 overflow-x-auto sm:overflow-visible pb-6 sm:pb-0 snap-x snap-mandatory no-scrollbar max-w-4xl mx-auto scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               {[
                 {
                   id: 'reel-1',
@@ -490,7 +465,7 @@ export default function Home() {
                   key={reel.id}
                   onClick={() => setActiveReelUrl(reel.videoUrl)}
                   whileHover={{ y: -4 }}
-                  className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 shadow-sm cursor-pointer relative group aspect-[9/16] h-[340px] mx-auto w-[200px] sm:w-[240px]"
+                  className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 shadow-sm cursor-pointer relative group aspect-[9/16] h-[340px] mx-auto w-[220px] sm:w-auto shrink-0 sm:shrink snap-center"
                 >
                   <Image 
                     src={reel.thumb} 
@@ -610,10 +585,10 @@ export default function Home() {
               </p>
             </div>
 
-            <div className="relative max-w-2xl mx-auto pl-8 sm:pl-0">
+            <div className="relative max-w-2xl mx-auto">
               
               {/* Central vertical line */}
-              <div className="absolute left-[15px] sm:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200 -translate-x-1/2" />
+              <div className="absolute left-[16px] sm:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200 -translate-x-1/2" />
 
               <div className="space-y-8 relative">
                 {timelineSteps.map((step, idx) => {
@@ -638,12 +613,12 @@ export default function Home() {
                       </div>
 
                       {/* Icon Marker */}
-                      <div className="absolute left-0 sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#1E63FF] text-white flex items-center justify-center shadow-md z-10 shrink-0 font-extrabold text-xs">
+                      <div className="absolute left-[16px] sm:left-1/2 -translate-x-1/2 w-8 h-8 rounded-full bg-[#1E63FF] text-white flex items-center justify-center shadow-md z-10 shrink-0 font-extrabold text-xs animate-pulse-slow">
                         {idx + 1}
                       </div>
 
                       {/* Right Block */}
-                      <div className={`w-full sm:w-[45%] text-left ${!isEven ? 'opacity-100' : 'opacity-100 sm:opacity-0 pointer-events-none'}`}>
+                      <div className={`w-full sm:w-[45%] text-left pl-10 sm:pl-0 ${!isEven ? 'opacity-100' : 'opacity-100 sm:opacity-0 pointer-events-none'}`}>
                         <div className="space-y-1 block">
                           <h4 className="font-bold text-[#0A2540] text-sm font-poppins">{step.title}</h4>
                           <p className="text-[#667085] text-xs font-semibold leading-relaxed">{step.desc}</p>
@@ -869,27 +844,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 12. FINAL CTA BANNER ================= */}
-        <section className="py-16 bg-[#0A2540] text-white text-center relative overflow-hidden font-inter border-t border-white/5">
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_60%)] pointer-events-none" />
-          <div className="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
-            <h2 className="text-2xl sm:text-4xl font-black font-poppins leading-tight">
-              Restore Hope to Rishikesh Families Today
-            </h2>
-            <p className="text-slate-350 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed font-semibold">
-              Every single rupee sponsors direct grains, books, or emergency operations with 100% video-proof transparency. No overhead leaks.
-            </p>
-            <div className="flex justify-center pt-2">
-              <Link 
-                href="/donate" 
-                className="px-8 py-3.5 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-blue-500/10 transition-all block font-semibold"
-              >
-                Sponsor a Family Now
-              </Link>
-            </div>
-          </div>
-        </section>
-
         {/* Sticky Mobile Donate Button Trigger (Height 56px, rounded 18px, native app shadow) */}
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-full max-w-[90%] md:hidden shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-[18px]">
           <motion.div
@@ -918,7 +872,9 @@ export default function Home() {
               onClick={() => setActiveReelUrl(null)}
             >
               <button 
-                onClick={() => setActiveReelUrl(null)}
+                onClick={() => {
+                  setActiveReelUrl(null);
+                }}
                 className="absolute top-4 right-4 text-white hover:text-red-400 p-2.5 bg-white/10 hover:bg-white/20 rounded-full backdrop-blur-md z-[1000] transition-colors"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -935,8 +891,27 @@ export default function Home() {
                   autoPlay
                   controls
                   playsInline
+                  muted={isMuted}
                   className="w-full h-full object-cover"
                 />
+                
+                {/* Voice Mute Button Overlay */}
+                <button
+                  onClick={() => setIsMuted(!isMuted)}
+                  className="absolute bottom-16 right-4 text-white p-3 bg-black/60 hover:bg-black/80 rounded-full backdrop-blur-sm z-50 transition-colors shadow-lg"
+                  title={isMuted ? "Unmute" : "Mute"}
+                >
+                  {isMuted ? (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2" />
+                    </svg>
+                  ) : (
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.536 8.464a5 5 0 010 7.072M18.364 5.636a9 9 0 010 12.728M12 18.75V5.25L7.75 9.5H4.5V14.5H7.75L12 18.75z" />
+                    </svg>
+                  )}
+                </button>
               </div>
             </motion.div>
           )}
