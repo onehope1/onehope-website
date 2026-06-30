@@ -115,11 +115,12 @@ export default function Home() {
   ];
 
   const timelineSteps = [
-    { title: 'Donate', desc: 'Sponsorship is processed via bank-grade keys.', icon: Heart },
-    { title: 'Verification', desc: 'Transaction is allocated on a public transparency ledger.', icon: Eye },
-    { title: 'Purchase', desc: 'Materials and grains bought from local farmers.', icon: ShoppingCart },
-    { title: 'Delivery', desc: 'Volunteer squads distribute items at target field points.', icon: Truck },
-    { title: 'Photo Proof', desc: 'Photos, videos, and distribution audit receipts uploaded.', icon: UploadCloud }
+    { title: 'Donate', desc: 'Your contribution is processed via bank-grade keys.', icon: Heart },
+    { title: 'Verified', desc: 'Sponsorship allocation is instantly logged on our public database ledger.', icon: Eye },
+    { title: 'Purchased', desc: 'Materials and grains are sourced directly from local Rishikesh suppliers.', icon: ShoppingCart },
+    { title: 'Delivered', desc: 'Volunteer squads distribute raw grains and books directly on the ground.', icon: Truck },
+    { title: 'Photos Uploaded', desc: 'Geo-tagged photos, video proof, and supplier receipt hashes are logged.', icon: UploadCloud },
+    { title: 'Impact Report Sent', desc: 'A verified distribution update report is sent directly to your portal profile.', icon: ShieldCheck }
   ];
 
   const recentDonationsMock = [
@@ -197,11 +198,10 @@ export default function Home() {
 
   return (
     <PublicLayout>
-      <div className="bg-[#F8FBFF] font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
+      <div className="bg-white font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
         
         {/* ================= 1. EMOTIONAL HERO SECTION ================= */}
         <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-6 pb-12 md:py-16">
-          
           {/* Background Video Backdrop */}
           <video
             autoPlay
@@ -244,7 +244,7 @@ export default function Home() {
               </h1>
 
               <p className="text-slate-300 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto lg:mx-0 font-medium">
-                Direct ground delivery in Rishikesh. No administrative cuts or overhead leaks. Check raw invoices, supplier receipts, and geo-tagged video proof for every sponsorship.
+                Direct ground delivery in Rishikesh. Trace every transaction down to raw supplier invoices and geo-tagged video updates.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3 w-full pt-1">
@@ -256,110 +256,28 @@ export default function Home() {
                     Donate Now
                   </Link>
                 </motion.div>
-                <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full max-w-[90%] sm:max-w-none sm:w-auto">
-                  <button
-                    onClick={() => {
-                      const statsElem = document.getElementById('impact-stats-row');
-                      if (statsElem) statsElem.scrollIntoView({ behavior: 'smooth' });
-                    }}
-                    className="w-full px-6 py-3 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-[18px] text-[13px] uppercase tracking-wider block text-center transition-all font-semibold h-12 flex items-center justify-center"
-                  >
-                    See Our Impact
-                  </button>
-                </motion.div>
-              </div>
-
-              {/* Trust Signals underneath CTA buttons */}
-              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-4 gap-y-2.5 pt-4 border-t border-white/10 text-[9px] font-bold text-slate-300 uppercase tracking-wider">
-                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Secure Payment (Razorpay)</span></div>
-                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Verified Platform</span></div>
-                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>100% Direct Ground Sourcing</span></div>
-                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Transparent Public Ledger</span></div>
-                <div className="flex items-center gap-1"><CheckCircle2 size={12} className="text-[#22C55E]" /> <span>Geo-tagged Video Proofs</span></div>
               </div>
             </motion.div>
-
-            {/* Right Block */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="lg:col-span-5 relative flex justify-center"
-            >
-              <div className="relative w-full h-[230px] rounded-[24px] overflow-hidden border border-white/10 shadow-[0_15px_40px_rgba(0,0,0,0.08)] bg-slate-800">
-                <Image 
-                  src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=600"
-                  alt="Rural distributions ground proof"
-                  fill
-                  priority
-                  className="object-cover opacity-80"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0A2540] to-transparent opacity-30" />
-              </div>
-
-              {/* Floating Glass Card */}
-              <motion.div
-                animate={{ y: [0, -6, 0] }}
-                transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                className="absolute -bottom-4 -left-4 bg-white/[0.04] backdrop-blur-[10px] border border-white/[0.08] p-4 rounded-xl shadow-2xl text-white space-y-1.5 max-w-[190px]"
-              >
-                <div className="flex gap-1 items-center text-[#22C55E] text-[9px] font-black uppercase tracking-wider">
-                  <CheckCircle2 size={10} />
-                  <span>Real-Time Audit</span>
-                </div>
-                <ul className="space-y-0.5 text-[9px] font-bold text-slate-200">
-                  <li className="flex items-center gap-1">✓ 12.8K+ Lives Helped</li>
-                  <li className="flex items-center gap-1">✓ ₹1.8 Cr Delivered</li>
-                  <li className="flex items-center gap-1">✓ 99% Verified Delivery</li>
-                  <li className="flex items-center gap-1">✓ Public Ledger Mapped</li>
-                </ul>
-              </motion.div>
-            </motion.div>
-
           </div>
         </section>
 
-        {/* ================= 2. LIVE DONATION TICKER MARQUEE ================= */}
-        <section className="bg-[#EEF3FA] py-2 border-t border-b border-[#E5EAF2] overflow-hidden relative select-none">
-          <style>{`
-            @keyframes ticker-scroll {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-            }
-            .animate-ticker-scroll {
-              display: flex;
-              width: max-content;
-              animation: ticker-scroll 35s linear infinite;
-            }
-            .animate-ticker-scroll:hover {
-              animation-play-state: paused;
-            }
-            .masked-marquee {
-              mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
-              -webkit-mask-image: linear-gradient(to right, transparent, white 10%, white 90%, transparent);
-            }
-          `}</style>
-          <div className="relative overflow-hidden w-full masked-marquee text-[11px] font-bold text-[#0A2540]/80">
-            <div className="animate-ticker-scroll gap-12">
-              {[...Array(3)].map((_, outerIdx) => (
-                <div key={outerIdx} className="flex gap-12 items-center shrink-0">
-                  {recentDonationsMock.map(d => (
-                    <div key={d.id} className="flex items-center gap-2">
-                      <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white">
-                        <Image src={d.avatar} alt={d.name} fill className="object-cover" />
-                      </div>
-                      <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
-                      <span className="text-[10px] text-slate-400 font-semibold">• {d.time}</span>
-                    </div>
-                  ))}
-                </div>
-              ))}
+        {/* ================= 2. WHY ONEHOPE TRUST STRIP ================= */}
+        <section className="bg-white border-b border-slate-100 py-5 font-inter select-none">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 flex flex-wrap justify-between items-center gap-y-4 gap-x-8">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#0A2540] uppercase tracking-wider">
+              <span className="text-[#1E63FF] font-poppins">Why OneHope?</span>
+            </div>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs font-semibold text-slate-600">
+              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>100% Verified Deliveries</span></div>
+              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Public Ledger Mapping</span></div>
+              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Weekly Impact Updates</span></div>
+              <div className="flex items-center gap-1.5"><CheckCircle2 size={14} className="text-[#2ECC71]" /> <span>Serving Rishikesh</span></div>
             </div>
           </div>
         </section>
 
-        {/* ================= 3. IMPACT STATS ================= */}
-        <section className="py-10 bg-white border-b border-[#E5EAF2] font-inter" id="impact-stats-row">
+        {/* ================= 3. LIVE IMPACT STATS ================= */}
+        <section className="py-10 bg-[#F8FBFF] border-b border-[#E5EAF2] font-inter" id="impact-stats-row">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
               <div className="shrink-0 w-[240px] snap-center lg:w-auto">
@@ -379,51 +297,49 @@ export default function Home() {
         </section>
 
         {/* ================= 4. FEATURED EMERGENCY CAMPAIGN (30% Larger) ================= */}
-        <section className="py-16 bg-white max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-6">
-          <div className="text-center max-w-xl mx-auto space-y-2">
-            <span className="inline-flex items-center gap-1 bg-[#1E63FF]/8 text-[#1E63FF] text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full">
-              <Flame size={10} className="fill-[#1E63FF]" />
-              <span>Critical Emergency</span>
-            </span>
-            <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight mb-2">
-              Urgent Welfare Appeals
-            </h2>
-            <p className="text-[#667085] text-xs sm:text-sm font-semibold">
-              Critical flash-points requiring immediate support. Every rupee spent is linked directly to a verified field proof.
-            </p>
-          </div>
+        {emergencyCampaign && (
+          <section className="py-16 bg-white max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-6">
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="inline-flex items-center gap-1 bg-[#1E63FF]/8 text-[#1E63FF] text-[9px] font-black uppercase tracking-widest px-2.5 py-1 rounded-full">
+                <Flame size={10} className="fill-[#1E63FF]" />
+                <span>Critical Emergency</span>
+              </span>
+              <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
+                Featured Urgent Initiative
+              </h2>
+            </div>
 
-          {emergencyCampaign && (
-            <motion.div
+            <motion.div 
               whileHover={{ y: -4 }}
-              className="bg-white rounded-[24px] overflow-hidden border border-[#E5EAF2] shadow-[0_15px_40px_rgba(0,0,0,0.08)] transition-all duration-500 grid grid-cols-1 lg:grid-cols-12 max-w-4.5xl mx-auto group cursor-pointer"
+              transition={{ duration: 0.3 }}
+              className="bg-white rounded-[28px] border border-[#E5EAF2] shadow-[0_15px_40px_rgba(0,0,0,0.06)] overflow-hidden grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 p-6 items-center hover:shadow-[0_20px_50px_rgba(9,37,64,0.05)] cursor-pointer group text-left"
             >
-              {/* Photo cover aspect ratio and restricted height */}
-              <div className="lg:col-span-7 relative h-[170px] lg:h-auto overflow-hidden min-h-[170px]">
+              {/* Cover Photo */}
+              <div className="lg:col-span-6 relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-50 min-h-[220px]">
                 <Image 
                   src={emergencyCampaign.image}
                   alt={emergencyCampaign.title}
                   fill
-                  className="object-cover group-hover:scale-103 transition-transform duration-700"
+                  className="object-cover group-hover:scale-102 transition-transform duration-700"
                 />
-                <div className="absolute top-4 left-4 bg-[#0A2540] text-[#22C55E] text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-lg border border-white/10">
-                  Urgent Priority
+                <div className="absolute top-4 left-4 bg-red-600 text-white px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider">
+                  Critical
                 </div>
               </div>
 
-              {/* Progress and Data details */}
-              <div className="lg:col-span-5 p-6 flex flex-col justify-between space-y-4">
+              {/* Campaign details */}
+              <div className="lg:col-span-6 space-y-4 flex flex-col justify-between h-full py-2">
                 <div className="space-y-2">
                   <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                    <span className="flex items-center gap-1 text-[#0A2540]/60"><MapPin size={10} /> {emergencyCampaign.location.split(',')[0]}</span>
-                    <span className="text-[#1E63FF]">80G Tax Exemption</span>
+                    <span className="flex items-center gap-0.5"><MapPin size={10} /> {emergencyCampaign.location}</span>
+                    <span className="text-[#1E63FF] flex items-center gap-0.5">✔ Active procurement</span>
                   </div>
-                  
-                  <h3 className="text-[18px] font-black text-[#0A2540] font-poppins leading-tight tracking-tight">
+
+                  <h3 className="text-xl sm:text-2xl font-black text-[#0A2540] font-poppins leading-tight leading-snug">
                     {emergencyCampaign.title}
                   </h3>
-                  
-                  <p className="text-[#667085] text-xs leading-relaxed font-semibold">
+
+                  <p className="text-[#667085] text-xs sm:text-sm leading-relaxed font-semibold">
                     {emergencyCampaign.summary}
                   </p>
                 </div>
@@ -445,15 +361,10 @@ export default function Home() {
                     />
                   </div>
 
-                  <div className="flex justify-between items-center text-[10px] text-[#667085] font-bold uppercase tracking-wider">
-                    <span>Goal: ₹{emergencyCampaign.goalAmount.toLocaleString()}</span>
-                    <span>140 People Donated</span>
-                  </div>
-
                   <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="pt-1">
                     <Link
                       href={{ pathname: '/donate', query: { campaignId: emergencyCampaign.id } }}
-                      className="w-full text-center py-3 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider block shadow-md shadow-blue-500/10 btn-ripple font-poppins h-11 flex items-center justify-center"
+                      className="w-full text-center py-3 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-[18px] text-[11px] uppercase tracking-wider block shadow-md shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center"
                     >
                       Donate Now
                     </Link>
@@ -461,257 +372,184 @@ export default function Home() {
                 </div>
               </div>
             </motion.div>
-          )}
+          </section>
+        )}
 
-        </section>
-
-        {/* ================= 5. CAUSES WE SUPPORT (Peeking mobile swipe) ================= */}
+        {/* ================= 5. 7 CAUSES (Horizontal scrolling cards) ================= */}
         <section className="py-16 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-6">
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div className="space-y-2 text-left">
+                <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
+                  Direct Ground Sponsoring
+                </span>
+                <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
+                  Our 7 Permanent Rishikesh Initiatives
+                </h2>
+              </div>
+              <Link
+                href="/campaigns"
+                className="text-xs font-bold text-[#1E63FF] hover:text-[#0047AB] flex items-center gap-1 group self-start sm:self-auto uppercase tracking-wider font-semibold"
+              >
+                <span>Explore All 7 Campaigns</span>
+                <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            </div>
+
+            {/* Swipeable overflow track */}
+            <div className="flex overflow-x-auto snap-x snap-mandatory gap-6 pb-6 no-scrollbar w-full px-2 sm:px-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {state.campaigns.map((camp, idx) => {
+                const percent = Math.min(100, Math.round((camp.raisedAmount / camp.goalAmount) * 100));
+                const isAlternate = idx % 2 === 0;
+                return (
+                  <motion.div
+                    key={camp.id}
+                    whileHover={{ y: -4 }}
+                    transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                    className={`w-[290px] shrink-0 snap-center rounded-[24px] overflow-hidden shadow-sm border flex flex-col justify-between h-[430px] cursor-pointer group transition-all duration-300 ${
+                      isAlternate 
+                        ? 'bg-white border-slate-200/60 hover:shadow-md' 
+                        : 'bg-white/80 border-[#E5EAF2] hover:border-blue-500/20 hover:shadow-md'
+                    }`}
+                  >
+                    <div>
+                      <div className="relative aspect-video w-full rounded-t-[23px] overflow-hidden bg-slate-50 h-[160px]">
+                        <Image 
+                          src={camp.image}
+                          alt={camp.title}
+                          fill
+                          className="object-cover group-hover:scale-102 transition-transform duration-500"
+                        />
+                        <div className="absolute top-3 left-3 bg-[#0A2540]/80 backdrop-blur-sm text-white px-2.5 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider">
+                          {camp.category}
+                        </div>
+                      </div>
+
+                      <div className="p-5 space-y-2 text-left">
+                        <div className="flex justify-between items-center text-[9px] text-slate-400 font-bold uppercase tracking-wider">
+                          <span className="flex items-center gap-0.5"><MapPin size={9} /> Rishikesh</span>
+                          <span className="text-[#22C55E]">✔ 100% Direct</span>
+                        </div>
+                        <h3 className="text-base font-bold text-[#0A2540] leading-snug font-poppins line-clamp-1 group-hover:text-[#1E63FF] transition-colors">
+                          {camp.title}
+                        </h3>
+                        <p className="text-[#667085] text-xs leading-relaxed line-clamp-2 font-medium">
+                          {camp.summary}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Progress and Buttons */}
+                    <div className="p-5 pt-0 space-y-4">
+                      <div className="space-y-1.5 pt-3 border-t border-slate-100/60 text-left">
+                        <div className="flex justify-between items-center text-[10px] font-bold text-slate-400">
+                          <span className="text-[#667085]">Raised: <strong className="text-[#0A2540]">₹{camp.raisedAmount.toLocaleString()}</strong></span>
+                          <span className="text-[#2ECC71] font-black">{percent}% Mapped</span>
+                        </div>
+                        <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-[#2ECC71]" style={{ width: `${percent}%` }} />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2">
+                        <Link 
+                          href={`/campaigns/${camp.id}`}
+                          className="text-center py-2.5 text-[10px] font-bold text-[#0A2540] border border-slate-200 hover:bg-slate-50 rounded-xl transition-colors uppercase tracking-wider font-semibold flex items-center justify-center"
+                        >
+                          Audit
+                        </Link>
+                        <Link 
+                          href={{ pathname: '/donate', query: { campaignId: camp.id } }}
+                          className="text-center py-2.5 text-[10px] font-bold text-white bg-[#0047AB] hover:bg-[#003C91] rounded-xl transition-colors shadow-sm uppercase tracking-wider flex items-center justify-center font-semibold"
+                        >
+                          Sponsor
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* ================= 6. HUMAN STORY SECTION ================= */}
+        <section className="py-16 bg-white text-slate-900 font-inter relative overflow-hidden">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             
-            <div className="text-center max-w-xl mx-auto space-y-2">
+            <div className="text-center max-w-xl mx-auto space-y-2 mb-12">
               <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Our Pillars
+                Real Impact Stories
               </span>
-              <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight mb-2">
-                Welfare Initiatives We Run
+              <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
+                Priya's Journey to School
               </h2>
               <p className="text-[#667085] text-xs sm:text-sm font-semibold">
-                100% direct ground operations providing food, clothing, education, and stray animal care in Rishikesh.
+                How direct community sponsorship changes lives in Rishikesh, child by child.
               </p>
             </div>
 
-            <div className="flex overflow-x-auto pb-4 gap-5 snap-x snap-mandatory lg:grid lg:grid-cols-3 lg:overflow-visible lg:pb-0 scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {causesList.map((cause, idx) => (
-                <div
-                  key={idx}
-                  className="w-[82vw] lg:w-auto shrink-0 snap-center p-[1px] rounded-[24px] overflow-hidden group cursor-pointer transition-all duration-300 relative shadow-sm border border-slate-200/50 bg-[#F8FAFC]/90 hover:bg-white hover:shadow-md hover:-translate-y-1"
-                >
-                  <div className="p-6 flex flex-col justify-between h-full space-y-6">
-                    <div className="space-y-4">
-                      {/* Large premium icon container */}
-                      <div className="w-12 h-12 rounded-2xl bg-blue-50/80 flex items-center justify-center border border-blue-100/50 text-[#1E63FF] transition-colors group-hover:bg-blue-100/50">
-                        <cause.icon size={22} />
-                      </div>
-                      <div className="space-y-2 text-left">
-                        <h3 className="text-lg font-bold text-[#0A2540] font-poppins">{cause.title}</h3>
-                        <p className="text-[#667085] text-xs leading-relaxed font-semibold">{cause.desc}</p>
-                      </div>
-                    </div>
-
-                    <div className="space-y-4 pt-6 border-t border-slate-100">
-                      {/* Progress bar */}
-                      <div className="space-y-1 text-left">
-                        <div className="flex justify-between text-[9px] font-bold text-slate-400">
-                          <span>Ground verified</span>
-                          <span className="text-[#2ECC71]">{cause.percent}% Mapped</span>
-                        </div>
-                        <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden">
-                          <div className="h-full bg-[#2ECC71] rounded-full" style={{ width: `${cause.percent}%` }} />
-                        </div>
-                      </div>
-                      <div className="flex gap-2 w-full pt-1">
-                        <Link href="/donate" className="flex-grow text-center py-2.5 bg-[#0047AB] hover:bg-[#003C91] text-white rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors shadow-sm block h-10 flex items-center justify-center">Sponsor</Link>
-                        <Link href="/about" className="px-4 py-2.5 border border-slate-200 hover:bg-slate-50 text-slate-700 rounded-xl text-[10px] font-bold uppercase tracking-wider transition-colors block font-semibold h-10 flex items-center justify-center">Audit</Link>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-          </div>
-        </section>
-
-        {/* ================= 6. FEATURED CAMPAIGNS (Peeking mobile swipe) ================= */}
-        <section className="py-16 max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-6">
-          
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div className="space-y-2">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                100% Sourced on Ground
-              </span>
-              <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
-                Active Sponsoring Campaigns
-              </h2>
-            </div>
-            <Link
-              href="/campaigns"
-              className="text-xs font-bold text-[#1E63FF] hover:text-[#0047AB] flex items-center gap-1 group self-start sm:self-auto uppercase tracking-wider font-semibold"
-            >
-              <span>Explore All Campaigns</span>
-              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
-
-          {/* Swipeable track on mobile / Grid on desktop */}
-          <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 pb-4 md:pb-0 no-scrollbar w-full px-2 sm:px-0">
-            {publicCampaigns.map((camp) => {
-              const percent = Math.min(100, Math.round((camp.raisedAmount / camp.goalAmount) * 100));
-              return (
-                <motion.div
-                  key={camp.id}
-                  whileHover={{ y: -4 }}
-                  transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-                  className="w-[82vw] md:w-auto shrink-0 snap-center bg-white rounded-[24px] overflow-hidden shadow-[0_15px_40px_rgba(0,0,0,0.08)] border border-[#E5EAF2] hover:shadow-[0_20px_50px_rgba(9,37,64,0.05)] flex flex-col justify-between h-full cursor-pointer group"
-                >
-                  <div className="p-4 space-y-4">
-                    {/* Cover photo aspect-video and restricted height */}
-                    <div className="relative aspect-video w-full rounded-2xl overflow-hidden bg-slate-50 h-[170px] sm:h-auto">
-                      <Image 
-                        src={camp.image}
-                        alt={camp.title}
-                        fill
-                        className="object-cover group-hover:scale-102 transition-transform duration-500"
-                      />
-                      <div className="absolute top-3 left-3 bg-[#0A2540]/80 backdrop-blur-sm text-white px-2 py-0.5 rounded text-[8px] font-bold uppercase tracking-wider">
-                        {camp.category}
-                      </div>
-                    </div>
-
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-center text-[10px] text-slate-400 font-bold uppercase tracking-wider">
-                        <span className="flex items-center gap-0.5"><MapPin size={10} /> {camp.location.split(',')[0]}</span>
-                        <span className="text-[#22C55E] flex items-center gap-0.5">✔ Verified Cause</span>
-                      </div>
-                      
-                      <h3 className="text-[18px] font-bold text-[#0A2540] leading-snug font-poppins line-clamp-1">
-                        {camp.title}
-                      </h3>
-                      
-                      <p className="text-[#667085] text-xs leading-relaxed line-clamp-2 font-medium">
-                        {camp.summary}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Avatars, Counter, Progress bar */}
-                  <div className="p-4 pt-0 space-y-4 mt-auto">
-                    <div className="space-y-2 pt-3 border-t border-slate-100">
-                      <div className="flex justify-between items-center text-[10px] font-bold text-slate-400">
-                        <div className="flex -space-x-1.5 overflow-hidden">
-                          {[
-                            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100',
-                            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100'
-                          ].map((avatarUrl, aIdx) => (
-                            <div key={aIdx} className="relative w-5 h-5 rounded-full overflow-hidden border-2 border-white bg-slate-100">
-                              <Image src={avatarUrl} alt="Donor Avatar" fill className="object-cover" />
-                            </div>
-                          ))}
-                          <span className="self-center pl-1 text-[9px] text-[#0A2540]/60 font-black">+{camp.volunteersCount} Donors</span>
-                        </div>
-                        <span className="text-[#22C55E] font-black">{percent}% Mapped</span>
-                      </div>
-
-                      <div className="w-full h-1 bg-slate-100 rounded-full overflow-hidden relative">
-                        <div className="h-full bg-[#1E63FF] rounded-full" style={{ width: `${percent}%` }} />
-                      </div>
-
-                      <div className="flex justify-between text-[10px] font-bold text-slate-400 pt-0.5">
-                        <span>Raised: <strong className="text-[#0A2540]">₹{camp.raisedAmount.toLocaleString()}</strong></span>
-                        <span>Goal: ₹{camp.goalAmount.toLocaleString()}</span>
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-3 pt-1">
-                      <Link 
-                        href={`/campaigns/${camp.id}`}
-                        className="text-center py-2 text-xs font-bold text-[#0A2540] border border-[#0A2540]/15 hover:border-[#0A2540] rounded-xl hover:bg-slate-50 transition-colors font-semibold"
-                      >
-                        Details
-                      </Link>
-                      <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.98 }}>
-                        <Link 
-                          href={{ pathname: '/donate', query: { campaignId: camp.id } }}
-                          className="w-full text-center py-2 text-xs font-bold text-white bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] rounded-xl transition-colors shadow-sm block text-center uppercase tracking-wider h-9 flex items-center justify-center font-semibold"
-                        >
-                          Donate
-                        </Link>
-                      </motion.div>
-                    </div>
-                  </div>
-                </motion.div>
-              );
-            })}
-          </div>
-
-        </section>
-
-        {/* ================= 7. HUMAN STORIES (Netflix Horizontal swipe layout) ================= */}
-        <section className="py-16 bg-[#0A2540] text-white font-inter relative overflow-hidden">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
-          
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 mb-12 relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
-            <div className="space-y-2">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Verified Ground Stories
-              </span>
-              <h2 className="text-[28px] font-black text-white font-poppins tracking-tight">
-                Stories of Direct Change
-              </h2>
-            </div>
-            <Link
-              href="/stories"
-              className="text-xs font-bold text-white hover:text-slate-350 flex items-center gap-1 group self-start md:self-auto uppercase tracking-wider font-semibold"
-            >
-              <span>View Interactive Reels</span>
-              <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
-            </Link>
-          </div>
-
-          {/* Compact horizontal swipe layout (9:16 aspect ratio peeking) */}
-          <div className="relative overflow-hidden w-full masked-marquee z-10">
-            <div className="flex overflow-x-auto snap-x snap-mandatory gap-5 px-6 sm:px-8 lg:px-10 pb-4 no-scrollbar">
-              {featuredStories.map((story) => (
-                <div
-                  key={story.id}
-                  className="shrink-0 w-[82vw] md:w-[260px] snap-center relative rounded-[24px] overflow-hidden aspect-[9/16] shadow-2xl border border-white/5 flex flex-col justify-end p-5 group cursor-pointer bg-slate-950 max-h-[460px] md:max-h-none"
-                >
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-[#F8FAFC] border border-slate-100 rounded-[28px] p-6 sm:p-8 lg:p-10 shadow-sm">
+              
+              {/* Left Column: Image with Before/After tags */}
+              <div className="lg:col-span-5 relative">
+                <div className="relative aspect-[4/3] sm:aspect-[16/10] lg:aspect-[4/5] w-full rounded-[20px] overflow-hidden bg-slate-100 shadow-md">
                   <Image 
-                    src={story.media[0].url}
-                    alt={story.title}
+                    src="https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=600"
+                    alt="Priya studying happily"
                     fill
-                    sizes="260px"
-                    className="object-cover opacity-80 group-hover:scale-105 group-hover:opacity-65 transition-all duration-700 rounded-[24px]"
+                    className="object-cover"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/25 to-transparent z-10" />
-
-                  <div className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center border border-white/10 text-white">
-                    <Play size={10} className="fill-white translate-x-0.5" />
+                </div>
+                
+                {/* Before vs After absolute overlay */}
+                <div className="absolute -bottom-4 -right-2 sm:right-4 bg-white border border-slate-100 p-4 rounded-2xl shadow-xl space-y-2 max-w-[200px] text-left">
+                  <div className="space-y-0.5">
+                    <span className="text-[9px] font-bold text-red-500 uppercase tracking-widest block">Before</span>
+                    <p className="text-[10px] font-semibold text-slate-650 leading-tight">No books, studied under solar lantern at Ganga ghats.</p>
                   </div>
-
-                  <div className="relative z-20 space-y-3 text-white">
-                    <div className="flex items-center gap-2">
-                      <div className="relative w-8 h-8 rounded-full overflow-hidden border border-white/20 bg-slate-800">
-                        <Image src={story.authorAvatar} alt={story.author} fill className="object-cover" />
-                      </div>
-                      <div>
-                        <span className="text-[10px] font-bold block leading-tight">{story.author}</span>
-                        <span className="text-[8px] text-slate-400 flex items-center gap-0.5 font-semibold"><MapPin size={8} /> {story.location}</span>
-                      </div>
-                    </div>
-
-                    <h3 className="font-poppins font-bold text-xs sm:text-sm leading-snug group-hover:text-[#1E63FF] transition-colors line-clamp-1">
-                      {story.title}
-                    </h3>
-                    
-                    <p className="text-slate-350 text-[10px] sm:text-xs line-clamp-2 leading-relaxed font-semibold">
-                      &ldquo;{story.description}&rdquo;
-                    </p>
-
-                    <div className="pt-2 border-t border-white/10 flex justify-between items-center text-[9px] text-slate-400 font-bold">
-                      <span>Likes: {story.likes}</span>
-                      <span>Read Story</span>
-                    </div>
+                  <div className="border-t border-slate-100 pt-1.5 space-y-0.5">
+                    <span className="text-[9px] font-bold text-[#2ECC71] uppercase tracking-widest block">After Sponsorship</span>
+                    <p className="text-[10px] font-bold text-[#0A2540] leading-tight">Enrolled in school, got books & bags, topped English class.</p>
                   </div>
                 </div>
-              ))}
+              </div>
+
+              {/* Right Column: Quotes & Story */}
+              <div className="lg:col-span-7 space-y-6 text-left lg:pl-4">
+                <span className="text-[10px] font-bold text-[#1E63FF] uppercase tracking-widest block">Featured Story</span>
+                
+                <blockquote className="text-xl sm:text-2xl font-poppins font-black text-[#0A2540] leading-tight italic">
+                  &ldquo;My mother works at Ganga Ghat. Without OneHope sponsors, my studies would have stopped at sunset. Today, I have real books of my own.&rdquo;
+                </blockquote>
+                
+                <div className="space-y-1">
+                  <span className="block text-sm font-bold text-[#0A2540]">Priya Kumari</span>
+                  <span className="block text-[10px] text-slate-400 font-bold uppercase tracking-wider">Student, Ganga Ghat Slum Base, Rishikesh</span>
+                </div>
+
+                <p className="text-xs sm:text-sm text-slate-600 leading-relaxed font-semibold">
+                  Priya is one of the 120 children attending our Ganga Ghat mobile classroom nodes. Direct grain sponsorship for her family ensured she did not have to skip school to beg at the temples.
+                </p>
+
+                <div className="pt-2">
+                  <Link 
+                    href="/stories"
+                    className="inline-flex items-center gap-1 text-xs font-bold text-[#1E63FF] hover:text-[#0047AB] uppercase tracking-wider font-semibold"
+                  >
+                    <span>Read More Beneficiary Stories</span>
+                    <ArrowRight size={14} />
+                  </Link>
+                </div>
+              </div>
+
             </div>
+
           </div>
         </section>
 
-        {/* ================= 8. DONATION PROCESS TIMELINE ================= */}
-        <section className="py-16 bg-white font-inter overflow-hidden">
+        {/* ================= 7. DONATION PROCESS TIMELINE ================= */}
+        <section className="py-16 bg-[#F8FAFC] font-inter overflow-hidden border-t border-b border-[#E5EAF2]">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-12">
             
             <div className="text-center max-w-xl mx-auto space-y-2">
@@ -719,7 +557,7 @@ export default function Home() {
                 100% Traceable Loop
               </span>
               <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight mb-2">
-                Audited Sponsoring Cycle
+                How Sponsoring Works
               </h2>
               <p className="text-[#667085] text-xs sm:text-sm font-semibold">
                 A circular flow mapping your transaction directly to raw ground invoices, transport logs, and verified beneficiary photos.
@@ -729,7 +567,7 @@ export default function Home() {
             <div className="relative max-w-2xl mx-auto pl-8 sm:pl-0">
               
               {/* Central vertical line */}
-              <div className="absolute left-[15px] sm:left-1/2 top-0 bottom-0 w-[2px] bg-slate-150 -translate-x-1/2" />
+              <div className="absolute left-[15px] sm:left-1/2 top-0 bottom-0 w-[2px] bg-slate-200 -translate-x-1/2" />
 
               <div className="space-y-8 relative">
                 {timelineSteps.map((step, idx) => {
@@ -740,11 +578,11 @@ export default function Home() {
                       initial={{ opacity: 0, y: 15 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: idx * 0.08 }}
-                      className="flex flex-col sm:flex-row items-start sm:items-center relative"
+                      transition={{ duration: 0.5, delay: idx * 0.1 }}
+                      className="relative flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-6"
                     >
-                      {/* Left Block (Desktop only) */}
-                      <div className={`w-full pr-8 text-right hidden sm:block ${isEven ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                      {/* Left Block */}
+                      <div className={`w-full sm:w-[45%] text-left sm:text-right hidden sm:block ${isEven ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                         {isEven && (
                           <div className="space-y-1">
                             <h4 className="font-bold text-[#0A2540] text-sm font-poppins">{step.title}</h4>
@@ -759,33 +597,22 @@ export default function Home() {
                       </div>
 
                       {/* Right Block */}
-                      <div className={`w-full pl-8 text-left ${!isEven ? 'opacity-100' : 'opacity-100 sm:opacity-0 pointer-events-none'}`}>
-                        {(!isEven || true) && (
-                          <div className="space-y-1 sm:hidden block">
-                            <h4 className="font-bold text-[#0A2540] text-sm font-poppins">{step.title}</h4>
-                            <p className="text-[#667085] text-xs font-semibold leading-relaxed">{step.desc}</p>
-                          </div>
-                        )}
-                        {!isEven && (
-                          <div className="space-y-1 hidden sm:block">
-                            <h4 className="font-bold text-[#0A2540] text-sm font-poppins">{step.title}</h4>
-                            <p className="text-[#667085] text-xs font-semibold leading-relaxed">{step.desc}</p>
-                          </div>
-                        )}
+                      <div className={`w-full sm:w-[45%] text-left ${!isEven ? 'opacity-100' : 'opacity-100 sm:opacity-0 pointer-events-none'}`}>
+                        <div className="space-y-1 block">
+                          <h4 className="font-bold text-[#0A2540] text-sm font-poppins">{step.title}</h4>
+                          <p className="text-[#667085] text-xs font-semibold leading-relaxed">{step.desc}</p>
+                        </div>
                       </div>
-
                     </motion.div>
                   );
                 })}
               </div>
-
             </div>
-
           </div>
         </section>
 
-        {/* ================= 9. TRANSPARENCY (Verification Section) ================= */}
-        <section className="py-16 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter">
+        {/* ================= 8. TRANSPARENCY / AUDIT (Enriched) ================= */}
+        <section className="py-16 bg-white font-inter">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-12">
             
             <div className="text-center max-w-xl mx-auto space-y-2">
@@ -793,35 +620,72 @@ export default function Home() {
                 Complete Transparency
               </span>
               <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight mb-2">
-                Our Double-Audit System
+                How We Ensure Transparency
               </h2>
               <p className="text-[#667085] text-xs sm:text-sm font-semibold">
-                Combining public transparency ledgers, instant receipt records, local supply chains, and weekly video disclosures.
+                Where your donation goes. Verified using public transparent ledgers, instant receipt records, and direct local supplier checkouts.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
-              {trustCards.map((card, idx) => (
-                <div key={idx} className="relative p-6 bg-[#F8FAFC]/65 border border-slate-200/50 rounded-[20px] flex flex-col justify-between space-y-4 h-[160px] hover:bg-white hover:border-blue-500/20 transition-all duration-300 group overflow-hidden select-none">
-                  {/* Floating geometric index behind text */}
-                  <span className="absolute top-2 right-4 text-[42px] font-black text-slate-100 group-hover:text-blue-50 transition-colors pointer-events-none select-none">0{idx + 1}</span>
-                  
-                  <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200/60 text-[#1E63FF] shrink-0 shadow-sm relative z-10">
-                    <card.icon size={16} />
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6">
+              
+              {/* Left Column: Redesigned dashboard cards */}
+              <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {trustCards.map((card, idx) => (
+                  <div key={idx} className="relative p-6 bg-[#F8FAFC]/65 border border-slate-200/50 rounded-[20px] flex flex-col justify-between space-y-4 h-[160px] hover:bg-white hover:border-blue-500/20 transition-all duration-300 group overflow-hidden select-none">
+                    {/* Floating geometric index behind text */}
+                    <span className="absolute top-2 right-4 text-[42px] font-black text-slate-100 group-hover:text-blue-55 transition-colors pointer-events-none select-none">0{idx + 1}</span>
+                    
+                    <div className="w-9 h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200/60 text-[#1E63FF] shrink-0 shadow-sm relative z-10">
+                      <card.icon size={16} />
+                    </div>
+                    <div className="space-y-1 text-left relative z-10">
+                      <h4 className="font-bold text-[#0A2540] text-xs sm:text-sm font-poppins leading-tight">{card.title}</h4>
+                      <p className="text-[#667085] text-[11px] leading-relaxed font-semibold">{card.desc}</p>
+                    </div>
                   </div>
-                  <div className="space-y-1 text-left relative z-10">
-                    <h4 className="font-bold text-[#0A2540] text-xs sm:text-sm font-poppins leading-tight">{card.title}</h4>
-                    <p className="text-[#667085] text-[11px] leading-relaxed font-semibold">{card.desc}</p>
+                ))}
+              </div>
+
+              {/* Right Column: Public Ledger Preview Mockup */}
+              <div className="lg:col-span-5 bg-slate-900 rounded-3xl p-5 border border-slate-800 shadow-2xl text-white space-y-4 text-left relative overflow-hidden select-none">
+                <div className="flex justify-between items-center border-b border-white/10 pb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Public Ledger Live</span>
+                  </div>
+                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Audit #9842</span>
+                </div>
+                <div className="space-y-3">
+                  <div className="p-3 bg-white/5 rounded-xl border border-white/5 space-y-1.5">
+                    <div className="flex justify-between text-[10px] font-bold text-slate-400">
+                      <span>TX_HASH: 0x48f...b29</span>
+                      <span className="text-emerald-400">₹8,500</span>
+                    </div>
+                    <p className="text-[11px] font-bold text-white">Daily Kitchen Grain Purchase</p>
+                    <div className="flex justify-between text-[9px] text-slate-400 font-bold">
+                      <span>Mayakund Slum Base</span>
+                      <span className="text-blue-400">View Supplier Receipt ↗</span>
+                    </div>
+                  </div>
+                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 h-[110px]">
+                    <Image 
+                      src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=400"
+                      alt="Ledger distribution ground proof"
+                      fill
+                      className="object-cover opacity-90"
+                    />
                   </div>
                 </div>
-              ))}
+              </div>
+
             </div>
 
           </div>
         </section>
 
-        {/* ================= 10. TESTIMONIALS SLIDER ================= */}
-        <section className="py-16 bg-white font-inter overflow-hidden">
+        {/* ================= 9. TESTIMONIALS SLIDER ================= */}
+        <section className="py-16 bg-[#F8FBFF] font-inter overflow-hidden border-t border-b border-[#E5EAF2]">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-12">
             
             <div className="text-center max-w-xl mx-auto space-y-2">
@@ -829,7 +693,7 @@ export default function Home() {
                 Community Voice
               </span>
               <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
-                Supporter & Organizer Endorsements
+                Supporter Endorsements
               </h2>
             </div>
 
@@ -842,7 +706,7 @@ export default function Home() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -15 }}
                   transition={{ duration: 0.4 }}
-                  className="bg-[#F8FBFF] p-6.5 sm:p-8 rounded-[24px] border border-[#E5EAF2] shadow-[0_15px_40px_rgba(0,0,0,0.08)] space-y-4 text-center"
+                  className="bg-white p-6.5 sm:p-8 rounded-[24px] border border-[#E5EAF2] shadow-sm space-y-4 text-center"
                 >
                   <div className="flex justify-center gap-0.5 text-[#22C55E]">
                     {[...Array(5)].map((_, i) => (
@@ -875,11 +739,11 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 11. PARTNER LOGOS (Infinite Moving Ticker) ================= */}
-        <section className="py-12 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter overflow-hidden">
+        {/* ================= 10. PARTNER LOGOS (Infinite Moving Ticker) ================= */}
+        <section className="py-12 bg-white border-t border-b border-[#E5EAF2] font-inter overflow-hidden">
           <div className="max-w-7xl mx-auto space-y-6">
             <h3 className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest px-6">
-              Governed & Audited Under Active Alliances
+              Governed Under Active Alliances
             </h3>
             
             {/* Infinite Horizontal Marquee Container */}
@@ -910,7 +774,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 12. FAQ ACCORDION ================= */}
+        {/* ================= 11. FAQ ACCORDION ================= */}
         <section className="py-16 max-w-3xl mx-auto px-6 sm:px-8 lg:px-10 font-inter space-y-10">
           <div className="text-center space-y-2">
             <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
@@ -947,7 +811,7 @@ export default function Home() {
                         exit={{ height: 0, opacity: 0 }}
                         transition={{ duration: 0.25 }}
                       >
-                        <div className="px-5 pb-5 text-xs sm:text-sm text-[#667085] leading-relaxed border-t border-slate-100 pt-3.5 font-semibold">
+                        <div className="px-5 pb-5 text-xs sm:text-sm text-[#667085] leading-relaxed border-t border-slate-100 pt-3.5 font-semibold text-left">
                           {faq.a}
                         </div>
                       </motion.div>
@@ -959,7 +823,26 @@ export default function Home() {
           </div>
         </section>
 
-
+        {/* ================= 12. FINAL CTA BANNER ================= */}
+        <section className="py-16 bg-[#0A2540] text-white text-center relative overflow-hidden font-inter border-t border-white/5">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_0%,transparent_60%)] pointer-events-none" />
+          <div className="max-w-4xl mx-auto px-6 relative z-10 space-y-6">
+            <h2 className="text-2xl sm:text-4xl font-black font-poppins leading-tight">
+              Restore Hope to Rishikesh Families Today
+            </h2>
+            <p className="text-slate-350 text-xs sm:text-sm max-w-xl mx-auto leading-relaxed font-semibold">
+              Every single rupee sponsors direct grains, books, or emergency operations with 100% video-proof transparency. No overhead leaks.
+            </p>
+            <div className="flex justify-center pt-2">
+              <Link 
+                href="/donate" 
+                className="px-8 py-3.5 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-xl text-xs uppercase tracking-wider shadow-lg shadow-blue-500/10 transition-all block font-semibold"
+              >
+                Sponsor a Family Now
+              </Link>
+            </div>
+          </div>
+        </section>
 
         {/* Sticky Mobile Donate Button Trigger (Height 56px, rounded 18px, native app shadow) */}
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 w-full max-w-[90%] md:hidden shadow-[0_15px_40px_rgba(0,0,0,0.08)] rounded-[18px]">

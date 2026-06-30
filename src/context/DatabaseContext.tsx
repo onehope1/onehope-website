@@ -58,10 +58,12 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       const stored = localStorage.getItem('onehope_db');
       if (stored) {
         const parsed = JSON.parse(stored);
-        // Self-healing migration check for new campaigns structure
-        const needsUpgrade = !parsed.campaigns || parsed.campaigns.length !== 7 || !parsed.campaigns[0].pricePerUnit;
+        // Self-healing migration check for new campaigns & testimonials structure
+        const needsUpgrade = !parsed.campaigns || parsed.campaigns.length !== 7 || !parsed.campaigns[0].pricePerUnit || !parsed.testimonials || parsed.testimonials.length !== 3;
         if (needsUpgrade) {
           parsed.campaigns = initialDatabaseState.campaigns;
+          parsed.testimonials = initialDatabaseState.testimonials;
+          parsed.faqs = initialDatabaseState.faqs;
           localStorage.setItem('onehope_db', JSON.stringify(parsed));
         }
         setState(parsed);

@@ -526,26 +526,34 @@ export const initialDatabaseState: DatabaseState = {
   testimonials: [
     {
       id: 'test-1',
-      name: 'Meera Devi',
-      role: 'Mother of Sonu (Ganga School)',
+      name: 'Meera K.',
+      role: 'Sponsor of Sonu, Rishikesh Base',
       avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=150',
-      quote: 'Sonu had no school uniform and would refuse to attend classes. Today, with his new winter sweater and digital learnings, he dreams of going to college.',
+      quote: 'Direct sponsoring is real. Sonu got his winter school uniform, and I received the delivery photo hash via email within 24 hours of payment.',
       rating: 5
     },
     {
       id: 'test-2',
-      name: 'Vikram Sethi',
-      role: 'Sponsor, Dehradun',
+      name: 'Vikram S.',
+      role: 'Sponsor, Dehradun (Ganga Ghat Kitchen)',
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=150',
-      quote: 'The level of transparency here is unmatched in India. I got a WhatsApp message with the exact GPS point and photograph of the food my monthly donation sponsored.',
+      quote: 'The level of transparency here is unmatched. I can audit the direct vendor invoice matching my monthly grain sponsorship on the public database ledger.',
+      rating: 5
+    },
+    {
+      id: 'test-3',
+      name: 'Preeti R.',
+      role: 'Sponsor, Delhi (Family Ration Kits)',
+      avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=150',
+      quote: 'Knowing that 100% of my donation is going directly to buy wheat and rice from local suppliers without middleman leakage is why I trust OneHope.',
       rating: 5
     }
   ],
   faqs: [
     {
       id: 'faq-1',
-      question: 'Is my donation tax-exempt in India?',
-      answer: 'Yes, all donations to OneHope are eligible for tax exemption under Section 80G of the Income Tax Act. A certificate is instantly generated after a successful donation.',
+      question: 'Do I get a receipt for my donation?',
+      answer: 'Yes! Every contribution instantly generates a digital confirmation receipt showing the breakdown of materials or services sponsored on the ground in Rishikesh.',
       category: 'Donations'
     },
     {
@@ -565,8 +573,8 @@ export const initialDatabaseState: DatabaseState = {
     {
       id: 'tick-1',
       userId: 'usr-2',
-      subject: 'Inquiry regarding 80G Certificate issue',
-      description: 'I donated ₹8000 on June 25th, but my dashboard says certificate generation pending. Kindly assist.',
+      subject: 'Inquiry regarding transaction confirmation receipt',
+      description: 'I donated ₹8000 on June 25th, but my dashboard says receipt generation pending. Kindly assist.',
       status: 'Open',
       date: '2026-06-28',
       replies: []
