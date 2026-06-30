@@ -11,6 +11,13 @@ import {
   ArrowUpDown, X, Layers, Flame, BookOpen, Shield, 
   Trees, Clock, CheckCircle2, ChevronRight, HelpCircle
 } from 'lucide-react';
+const liveTickerDonations = [
+  { id: 1, name: 'Ayesha K.', amount: 2500, time: '8m ago', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=80' },
+  { id: 2, name: 'Vikram A.', amount: 1500, time: '12m ago', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=80' },
+  { id: 3, name: 'Rohan M.', amount: 5000, time: '24m ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=80' },
+  { id: 4, name: 'Neha S.', amount: 1000, time: '35m ago', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=80' },
+  { id: 5, name: 'Priya D.', amount: 3000, time: '48m ago', avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=80' }
+];
 
 export default function CampaignsCatalog() {
   const { state } = useDatabase();
@@ -99,11 +106,37 @@ export default function CampaignsCatalog() {
       <div className="bg-[#F8FBFF] font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
         
         {/* ================= 1. COMPACT HERO SECTION ================= */}
-        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-12 md:py-16 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] min-h-[60vh]">
+        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-10 md:py-14 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] min-h-[50vh]">
+          {/* Grid backdrop */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
 
-          <div className="max-w-4xl mx-auto px-6 text-center space-y-6 pt-28 lg:pt-32 relative z-10">
+          {/* Meteors Effect (Like About Page) */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {[...Array(6)].map((_, i) => (
+              <motion.span
+                key={i}
+                className="absolute top-1/2 left-1/2 w-[2px] h-[50px] bg-gradient-to-b from-[#0047AB] to-[#2ECC71] rotate-[215deg] opacity-0"
+                animate={{
+                  x: [-300, 300],
+                  y: [-300, 300],
+                  opacity: [0, 1, 0]
+                }}
+                transition={{
+                  duration: Math.random() * 5 + 4,
+                  repeat: Infinity,
+                  delay: Math.random() * 6,
+                  ease: 'linear'
+                }}
+                style={{
+                  top: `${Math.random() * 60}%`,
+                  left: `${Math.random() * 80}%`,
+                }}
+              />
+            ))}
+          </div>
+
+          <div className="max-w-4xl mx-auto px-6 text-center space-y-5 pt-28 lg:pt-32 relative z-10">
             <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3 py-1 rounded-full text-[#1E63FF] text-[10px] font-bold uppercase tracking-wider">
               <Sparkles size={12} className="text-[#1E63FF]" />
               <span>100% Traceable Sponsoring</span>
@@ -135,22 +168,31 @@ export default function CampaignsCatalog() {
                 Watch Impact
               </motion.a>
             </div>
+          </div>
+        </section>
 
-            {/* Badges without NGO/Trust mentions */}
-            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 pt-4 text-[10px] font-bold text-slate-350 uppercase tracking-widest">
-              <div className="flex items-center gap-1">
-                <CheckCircle2 size={12} className="text-[#1E63FF]" />
-                <span>100% Transparent</span>
+        {/* ================= LIVE DONATIONS TICKER BAR ================= */}
+        <section className="bg-slate-50 border-b border-slate-150 py-3 font-inter select-none overflow-hidden relative">
+          <div className="flex whitespace-nowrap animate-marquee gap-8">
+            {liveTickerDonations.map((d, index) => (
+              <div key={index} className="inline-flex items-center gap-2 text-xs text-slate-650 font-semibold shrink-0">
+                <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white shrink-0">
+                  <Image src={d.avatar} alt={d.name} fill className="object-cover" />
+                </div>
+                <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
+                <span className="text-[10px] text-slate-400 font-bold">• {d.time}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <CheckCircle2 size={12} className="text-[#1E63FF]" />
-                <span>Verified Ground Work</span>
+            ))}
+            {/* Repeat list for seamless infinite loop */}
+            {liveTickerDonations.map((d, index) => (
+              <div key={`dup-${index}`} className="inline-flex items-center gap-2 text-xs text-slate-650 font-semibold shrink-0">
+                <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white shrink-0">
+                  <Image src={d.avatar} alt={d.name} fill className="object-cover" />
+                </div>
+                <span>{d.name} donated <strong className="text-[#1E63FF]">₹{d.amount}</strong></span>
+                <span className="text-[10px] text-slate-400 font-bold">• {d.time}</span>
               </div>
-              <div className="flex items-center gap-1">
-                <CheckCircle2 size={12} className="text-[#1E63FF]" />
-                <span>Public Impact Updates</span>
-              </div>
-            </div>
+            ))}
           </div>
         </section>
 
