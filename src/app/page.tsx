@@ -687,7 +687,7 @@ export default function Home() {
         </section>
 
         {/* ================= 9. TESTIMONIALS SLIDER (TripGod style, attached seamlessly to Footer) ================= */}
-        <section className="pt-14 pb-24 sm:pb-16 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
+        <section className="pt-8 pb-16 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
           <style>{`
             @keyframes reviews-scroll {
               0% { transform: translateX(0); }
@@ -706,17 +706,17 @@ export default function Home() {
           
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.002)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.002)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-25 pointer-events-none" />
           
-          <div className="max-w-7xl mx-auto space-y-10 relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-6 relative z-10 text-center">
             
-            {/* TripGod style heading section with orange line */}
-            <div className="flex flex-col items-center space-y-3 px-6">
-              <span className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest text-[#1E63FF] font-poppins">
-                TESTIMONIALS
+            {/* TripGod style heading section with brand-blue line */}
+            <div className="flex flex-col items-center space-y-2 px-6">
+              <span className="inline-block px-4 py-1 rounded-full border border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest text-[#1E63FF] font-poppins">
+                VOICES OF HOPE
               </span>
-              <h2 className="text-3xl sm:text-4xl font-black text-white font-poppins uppercase tracking-tight max-w-xl leading-tight">
+              <h2 className="!text-white text-xl sm:text-2xl font-black font-poppins uppercase tracking-tight max-w-xl leading-tight">
                 Why Hearts Trust OneHope
               </h2>
-              <div className="w-14 h-1 bg-[#FF6B00] rounded-full mt-1.5" />
+              <div className="w-12 h-1 bg-[#1E63FF] rounded-full mt-1" />
             </div>
 
             {/* Infinite Horizontal Reviews Marquee Container */}
@@ -801,7 +801,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {/* Category Badge Outline (TripGod style in brand blue, high contrast) */}
                       <div>
-                        <span className="inline-block border border-[#1E63FF]/30 text-[#1E63FF] bg-[#1E63FF]/5 font-poppins font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider group-hover:border-[#1E63FF]/60 group-hover:bg-[#1E63FF]/15 transition-all">
+                        <span className="inline-block border border-blue-500/30 text-blue-300 bg-blue-500/10 font-poppins font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider group-hover:border-blue-400/50 group-hover:bg-blue-500/20 transition-all">
                           {testimonial.badge}
                         </span>
                       </div>
@@ -906,7 +906,7 @@ export default function Home() {
                     <div className="space-y-4">
                       {/* Category Badge Outline (TripGod style in brand blue, high contrast) */}
                       <div>
-                        <span className="inline-block border border-[#1E63FF]/30 text-[#1E63FF] bg-[#1E63FF]/5 font-poppins font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider group-hover:border-[#1E63FF]/60 group-hover:bg-[#1E63FF]/15 transition-all">
+                        <span className="inline-block border border-blue-500/30 text-blue-300 bg-blue-500/10 font-poppins font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider group-hover:border-blue-400/50 group-hover:bg-blue-500/20 transition-all">
                           {testimonial.badge}
                         </span>
                       </div>
