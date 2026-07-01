@@ -12,6 +12,75 @@ export default function StoriesReel() {
   const { state, likeStory, bookmarkStory, addStoryComment } = useDatabase();
   const [activeStoryIdx, setActiveStoryIdx] = useState(0);
   const [showCommentsId, setShowCommentsId] = useState<string | null>(null);
+
+  const renderMedia = (story: any) => {
+    const url = story.media?.[0]?.url || '';
+    const type = story.media?.[0]?.type || 'image';
+
+    const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
+    const isInstagram = url.includes('instagram.com');
+    const isVimeo = url.includes('vimeo.com');
+    const isDirectVideo = url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg');
+
+    if (type === 'video' || isYoutube || isInstagram || isVimeo || isDirectVideo) {
+      if (isYoutube) {
+        let videoId = '';
+        const match = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
+        if (match) videoId = match[1];
+        const embedUrl = videoId 
+          ? `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&playlist=${videoId}&controls=0&modestbranding=1&rel=0`
+          : url;
+        return (
+          <iframe
+            src={embedUrl}
+            className="absolute inset-0 w-full h-full object-cover z-0"
+            allow="autoplay; encrypted-media; picture-in-picture"
+            allowFullScreen
+            style={{ border: 'none' }}
+          />
+        );
+      }
+      
+      if (isInstagram) {
+        let cleanUrl = url.split('?')[0];
+        if (!cleanUrl.endsWith('/')) cleanUrl += '/';
+        const embedUrl = `${cleanUrl}embed`;
+        return (
+          <iframe
+            src={embedUrl}
+            className="absolute inset-0 w-full h-full object-cover z-0"
+            allowFullScreen
+            scrolling="no"
+            style={{ border: 'none' }}
+          />
+        );
+      }
+
+      return (
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute inset-0 w-full h-full object-cover z-0 opacity-85"
+          key={url}
+        >
+          <source src={url} type="video/mp4" />
+        </video>
+      );
+    }
+
+    return (
+      <Image
+        src={url || 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=400'}
+        alt={story.title}
+        fill
+        sizes="(max-w-md) 100vw"
+        className="object-cover opacity-80"
+        priority
+      />
+    );
+  };
   const [commentText, setCommentText] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
 
@@ -59,14 +128,7 @@ export default function StoriesReel() {
                 style={{ display: activeStoryIdx === index ? 'flex' : 'none' }}
               >
                 {/* Visual Media Background */}
-                <Image
-                  src={story.media[0].url}
-                  alt={story.title}
-                  fill
-                  sizes="(max-w-md) 100vw"
-                  className="object-cover opacity-80"
-                  priority
-                />
+                {renderMedia(story)}
                 
                 {/* Darkness gradient overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent z-10" />

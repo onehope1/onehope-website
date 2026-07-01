@@ -44,6 +44,9 @@ const StatCounter: React.FC<{ value: number; prefix?: string; suffix?: string }>
 
 export default function TransparencyDashboard() {
   const { state } = useDatabase();
+  const transparencyTitle = state.cms.hero.transparencyTitle || 'Absolute Financial Transparency.';
+  const transparencySubtitle = state.cms.hero.transparencySubtitle || 'Real-time ground procurement ledger, raw vendor invoices, transport coordinates.';
+  const transparencyBg = state.cms.hero.transparencyBg || '';
   const [downloading, setDownloading] = useState<string | null>(null);
 
   // Extract totals from state
@@ -132,7 +135,15 @@ export default function TransparencyDashboard() {
     <PublicLayout>
       {/* Premium Hero Banner with Meteors and Ultra-Light Gradient Contrast Text */}
       <section className="bg-[#0A2540] py-20 md:py-32 relative overflow-hidden font-inter border-b border-[#0A2540]">
-        
+        {transparencyBg && (
+          transparencyBg.includes('.mp4') || transparencyBg.includes('vimeo') || transparencyBg.includes('video') ? (
+            <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0 opacity-20" key={transparencyBg}>
+              <source src={transparencyBg} type="video/mp4" />
+            </video>
+          ) : (
+            <img src={transparencyBg} alt="Background" className="absolute inset-0 w-full h-full object-cover z-0 opacity-20" key={transparencyBg} />
+          )
+        )}
         {/* Grid background with glowing radial mask */}
         <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_50%,#000_70%,transparent_100%)] opacity-20" />
         
@@ -174,14 +185,11 @@ export default function TransparencyDashboard() {
           </span>
           
           <h1 className="text-3xl sm:text-5xl md:text-6.5xl font-black font-poppins tracking-tight leading-tight select-none">
-            <span className="text-white block">Absolute Financial</span>
-            <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-              Transparency.
-            </span>
+            <span className="text-white block">{transparencyTitle}</span>
           </h1>
           
-          <p className="text-[#E2E8F0] max-w-2.5xl mx-auto text-sm sm:text-base leading-relaxed font-semibold">
-            Every single rupee donated to OneHope leaves a digital audit trail. We publish our itemized statements, procurement receipts, and ledger logs for public scrutiny.
+          <p className="text-slate-200 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins max-w-xl mx-auto leading-relaxed">
+            {transparencySubtitle}
           </p>
         </motion.div>
       </section>

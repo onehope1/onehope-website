@@ -409,17 +409,27 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   };
 
   const updateCMS = (section: 'hero' | 'counters' | 'transparency', data: any) => {
-    setState(prev => ({
-      ...prev,
-      cms: {
+    setState(prev => {
+      const mergedSection = { ...prev.cms[section], ...data };
+      const nextCms = {
         ...prev.cms,
-        [section]: data
-      }
-    }));
+        [section]: mergedSection
+      };
 
-    if (isSupabaseReal) {
-      supabase.from('cms_configs').update({ [section]: data }).eq('id', 'default').then();
-    }
+      if (isSupabaseReal) {
+        supabase.from('cms_configs').update({ [section]: mergedSection }).eq('id', 'default').then(({ error }: any) => {
+          if (error) {
+            console.error(`Supabase CMS update error for ${section}:`, error);
+            alert(`Database Error: Could not save CMS section '${section}'. Check console.`);
+          }
+        });
+      }
+
+      return {
+        ...prev,
+        cms: nextCms
+      };
+    });
 
     addAuditLog('CMS Edit', `Updated homepage section: ${section}`);
   };
@@ -517,7 +527,9 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           ismonthly: newDon.isMonthly,
           status: newDon.status,
           receiptnumber: newDon.receiptNumber
-        }).then();
+        }).then(({ error }: any) => {
+          if (error) console.error("Supabase error adding donation ledger:", error);
+        });
 
         // Increment campaign variables
         if (donation.campaignId) {
@@ -526,13 +538,17 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
             supabase.from('campaigns').update({
               raisedamount: camp.raisedAmount,
               recentdonations: camp.recentDonations
-            }).eq('id', donation.campaignId).then();
+            }).eq('id', donation.campaignId).then(({ error }: any) => {
+              if (error) console.error("Supabase error updating campaign raised amount:", error);
+            });
           }
         }
 
         // Update home page statistics
         if (mealsIncrement > 0) {
-          supabase.from('cms_configs').update({ counters: updatedCounters }).eq('id', 'default').then();
+          supabase.from('cms_configs').update({ counters: updatedCounters }).eq('id', 'default').then(({ error }: any) => {
+            if (error) console.error("Supabase error updating homepage counters:", error);
+          });
         }
       }
 

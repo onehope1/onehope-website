@@ -14,6 +14,9 @@ import {
 
 export default function ContactPage() {
   const { state, addSupportTicket, addNewsletterSubscriber } = useDatabase();
+  const contactTitle = state.cms.hero.contactTitle || 'Need Help?';
+  const contactSubtitle = state.cms.hero.contactSubtitle || 'Whether you have questions about donations, volunteering, partnerships, or transparency, our team is ready to assist.';
+  const contactBg = state.cms.hero.contactBg || '';
   const [subject, setSubject] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('Donation Support');
@@ -101,6 +104,15 @@ export default function ContactPage() {
         
         {/* ================= 1. HERO SECTION ================= */}
         <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-16 md:py-20 border-b border-[#E5EAF2]">
+          {contactBg && (
+            contactBg.includes('.mp4') || contactBg.includes('vimeo') || contactBg.includes('video') ? (
+              <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0 opacity-20" key={contactBg}>
+                <source src={contactBg} type="video/mp4" />
+              </video>
+            ) : (
+              <img src={contactBg} alt="Background" className="absolute inset-0 w-full h-full object-cover z-0 opacity-20" key={contactBg} />
+            )
+          )}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
 
@@ -111,14 +123,11 @@ export default function ContactPage() {
             </span>
 
             <h1 className="text-[34px] md:text-5xl font-black font-poppins tracking-tight leading-tight text-white" style={{ color: '#FFFFFF' }}>
-              Need Help?
-              <span className="bg-gradient-to-r from-[#1E63FF] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                We are Here For You.
-              </span>
+              {contactTitle}
             </h1>
 
             <p className="text-slate-350 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-medium">
-              Whether you have questions about donations, volunteering, partnerships, or transparency, our team is ready to assist.
+              {contactSubtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">

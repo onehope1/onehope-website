@@ -91,6 +91,7 @@ const AnimatedCounter: React.FC<{ value: number; suffix?: string; label: string;
 
 export default function Home() {
   const { state } = useDatabase();
+  const [isReelsMuted, setIsReelsMuted] = useState(true);
 
   const homeHeroTitle = state.cms.hero.title || 'Hope Starts With One.';
   const homeHeroSubtitle = state.cms.hero.subtitle || 'Welcome to OneHope, an international-level humanitarian platform dedicated to helping children, families, and communities with absolute transparency, integrity, and compassion.';
@@ -127,14 +128,39 @@ export default function Home() {
     { title: 'Delivered', desc: 'Volunteer squads distribute raw grains and books directly on the ground.', icon: Truck },
     { title: 'Photos Uploaded', desc: 'Geo-tagged photos, video proof, and supplier receipt hashes are logged.', icon: UploadCloud },
     { title: 'Impact Report Sent', desc: 'A verified distribution update report is sent directly to your portal profile.', icon: ShieldCheck }
-  ];
-
-  const recentDonationsMock = [
-    { id: '1', name: 'Rahul S.', amount: 500, time: '2 minutes ago', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100' },
-    { id: '2', name: 'Ayesha K.', amount: 2500, time: '8 minutes ago', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100' },
-    { id: '3', name: 'Vikram A.', amount: 1000, time: '15 minutes ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=100&w=100' },
-    { id: '4', name: 'Neha D.', amount: 5000, time: '23 minutes ago', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=100&w=100' }
-  ];
+  ];  const recentDonationsList = state.donations.length > 0 
+    ? [...state.donations]
+        .filter(d => d.status === 'Success')
+        .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+        .slice(0, 10)
+        .map((d, index) => {
+          let timeText = 'recently';
+          try {
+            const diffMs = new Date().getTime() - new Date(d.date).getTime();
+            const diffMins = Math.max(1, Math.floor(diffMs / 60000));
+            timeText = `${diffMins} minutes ago`;
+            if (diffMins >= 60) {
+              const diffHrs = Math.floor(diffMins / 60);
+              timeText = `${diffHrs} hours ago`;
+              if (diffHrs >= 24) {
+                timeText = `${Math.floor(diffHrs / 24)} days ago`;
+              }
+            }
+          } catch (e) {}
+          return {
+            id: d.id || String(index),
+            name: d.isAnonymous ? 'Anonymous' : d.donorName,
+            amount: d.amount,
+            time: timeText,
+            avatar: `https://api.dicebear.com/7.x/initials/svg?seed=${encodeURIComponent(d.donorName || 'A')}`
+          };
+        })
+    : [
+        { id: '1', name: 'Rahul S.', amount: 500, time: '2 minutes ago', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100' },
+        { id: '2', name: 'Ayesha K.', amount: 2500, time: '8 minutes ago', avatar: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=100' },
+        { id: '3', name: 'Vikram A.', amount: 1000, time: '15 minutes ago', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=100&w=100' },
+        { id: '4', name: 'Neha D.', amount: 5000, time: '23 minutes ago', avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=100&w=100' }
+      ];
 
   const partnersList = [
     { 
@@ -308,7 +334,7 @@ export default function Home() {
             <div className="animate-ticker-scroll gap-12">
               {[...Array(3)].map((_, outerIdx) => (
                 <div key={outerIdx} className="flex gap-12 items-center shrink-0">
-                  {recentDonationsMock.map(d => (
+                  {recentDonationsList.map(d => (
                     <div key={d.id} className="flex items-center gap-2">
                       <div className="relative w-5 h-5 rounded-full overflow-hidden border border-white">
                         <Image src={d.avatar} alt={d.name} fill className="object-cover" />
@@ -341,10 +367,10 @@ export default function Home() {
         <section className="py-10 bg-[#F8FBFF] border-b border-[#E5EAF2] font-inter" id="impact-stats-row">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-              <AnimatedCounter value={124800} suffix="+" label="Meals Served" icon={Heart} />
-              <AnimatedCounter value={840} suffix="+" label="Children Educated" icon={Award} />
-              <AnimatedCounter value={180} suffix="+" label="Families Supported" icon={Users} />
-              <AnimatedCounter value={420} suffix="+" label="Animals Fed" icon={ShieldCheck} />
+              <AnimatedCounter value={state.cms.counters.mealsServed} suffix="+" label="Meals Served" icon={Heart} />
+              <AnimatedCounter value={state.cms.counters.childrenEducated} suffix="+" label="Children Educated" icon={Award} />
+              <AnimatedCounter value={state.cms.counters.medicalSupplies} suffix="+" label="Medical Supplies" icon={Users} />
+              <AnimatedCounter value={state.cms.counters.disasterResponded} suffix="+" label="Disasters Met" icon={ShieldCheck} />
             </div>
           </div>
         </section>
@@ -437,6 +463,72 @@ export default function Home() {
           </section>
         )}
 
+        {/* ================= SLIDEABLE ONGOING CAMPAIGNS CAROUSEL ================= */}
+        <section className="py-16 bg-[#F8FBFF] border-b border-[#E5EAF2] font-inter">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
+              <div className="space-y-1">
+                <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
+                  Active Support Areas
+                </span>
+                <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
+                  Ongoing Relief Campaigns
+                </h2>
+              </div>
+              <Link
+                href="/campaigns"
+                className="text-xs font-bold text-[#1E63FF] hover:underline uppercase tracking-wider flex items-center gap-1 font-semibold"
+              >
+                <span>Browse All Campaigns</span>
+                <span>→</span>
+              </Link>
+            </div>
+
+            {/* Slideable container */}
+            <div className="flex gap-6 overflow-x-auto pb-6 snap-x snap-mandatory scroll-smooth no-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+              {state.campaigns.filter(c => c.status === 'Active').map((camp) => {
+                const percent = Math.min(100, Math.round(((camp.raisedAmount || 0) / camp.goalAmount) * 100));
+                return (
+                  <motion.div
+                    key={camp.id}
+                    whileHover={{ y: -4 }}
+                    className="bg-white rounded-[24px] border border-[#E5EAF2] shadow-[0_8px_30px_rgb(0,0,0,0.02)] overflow-hidden flex flex-col min-w-[280px] w-[280px] sm:w-[320px] sm:min-w-[320px] snap-center shrink-0 text-left hover:shadow-[0_12px_40px_rgba(9,37,64,0.04)] transition-all duration-300"
+                  >
+                    <div className="relative aspect-video w-full">
+                      <Image src={camp.image} alt={camp.title} fill className="object-cover" />
+                      <div className="absolute top-4 left-4 bg-[#1E63FF] text-white px-2.5 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider">
+                        {camp.category}
+                      </div>
+                    </div>
+                    <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-2">
+                        <h3 className="font-bold text-[#0A2540] text-sm font-poppins line-clamp-2 leading-tight h-10">{camp.title}</h3>
+                        <p className="text-[#667085] text-xs line-clamp-2 leading-relaxed h-8 font-medium">{camp.summary}</p>
+                      </div>
+
+                      <div className="space-y-2 pt-2 border-t border-slate-100">
+                        <div className="flex justify-between items-center text-[10px] font-bold">
+                          <span className="text-[#667085]">Goal: ₹{camp.goalAmount.toLocaleString()}</span>
+                          <span className="text-[#22C55E]">{percent}% Complete</span>
+                        </div>
+                        <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                          <div className="h-full bg-gradient-to-r from-[#1E63FF] to-[#22C55E]" style={{ width: `${percent}%` }} />
+                        </div>
+                        <Link
+                          href={{ pathname: '/donate', query: { campaignId: camp.id } }}
+                          className="w-full text-center py-2.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-bold rounded-xl text-[10px] uppercase tracking-wider block mt-2 font-poppins"
+                        >
+                          Sponsor Relief
+                        </Link>
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
         {/* ================= 5. GROUND REALITY VIDEO REELS ================= */}
         <section className="py-16 bg-[#F8FBFF] border-t border-b border-[#E5EAF2] font-inter" id="our-work-reels">
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-8">
@@ -451,58 +543,93 @@ export default function Home() {
 
             {/* Swipeable track on mobile, columns on desktop */}
             <div className="flex sm:grid sm:grid-cols-3 gap-6 overflow-x-auto sm:overflow-visible pb-6 sm:pb-0 snap-x snap-mandatory no-scrollbar max-w-4xl mx-auto scroll-smooth" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-              {[
-                {
-                  id: 'reel-1',
-                  title: 'Daily Kitchen Breakfast Distribution',
-                  desc: 'Freshly cooked nutrition served morning at Mayakund base slum nodes.',
-                  thumb: 'https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=350',
-                  videoUrl: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139'
-                },
-                {
-                  id: 'reel-2',
-                  title: 'Mobile Ghat-School Classrooms',
-                  desc: 'Welfare kits, school notebooks, and bags provided to Ganga kids.',
-                  thumb: 'https://images.unsplash.com/photo-1509099836639-18ba1795216d?auto=format&fit=crop&q=80&w=350',
-                  videoUrl: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139'
-                },
-                {
-                  id: 'reel-3',
-                  title: 'Animal Care & Feed Drive',
-                  desc: 'Nourishing feed served for street dogs across local ghat paths.',
-                  thumb: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=350',
-                  videoUrl: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139'
-                }
-              ].map((reel) => (
-                <motion.div
-                  key={reel.id}
-                  onClick={() => setActiveReelUrl(reel.videoUrl)}
-                  whileHover={{ y: -4 }}
-                  className="bg-white rounded-[24px] overflow-hidden border border-slate-200/60 shadow-sm cursor-pointer relative group aspect-[9/16] h-[340px] mx-auto w-[220px] sm:w-auto shrink-0 sm:shrink snap-center"
-                >
-                  <Image 
-                    src={reel.thumb} 
-                    alt={reel.title} 
-                    fill 
-                    className="object-cover group-hover:scale-102 transition-transform duration-500" 
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-                  
-                  {/* Play circle */}
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="w-11 h-11 bg-white/20 group-hover:bg-white/30 backdrop-blur-md rounded-full flex items-center justify-center border border-white/30 shadow-lg scale-100 group-hover:scale-110 transition-all duration-300">
-                      <svg className="w-4 h-4 text-white fill-white ml-0.5" viewBox="0 0 24 24">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </div>
-                  </div>
+              {(state.stories.filter(s => s.media?.[0]?.type === 'video').slice(0, 3).length > 0 
+                ? state.stories.filter(s => s.media?.[0]?.type === 'video').slice(0, 3)
+                : [
+                    {
+                      id: 'reel-1',
+                      title: 'Daily Kitchen Breakfast Distribution',
+                      desc: 'Freshly cooked nutrition served morning at Mayakund base slum nodes.',
+                      media: [{ url: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139', type: 'video' }]
+                    },
+                    {
+                      id: 'reel-2',
+                      title: 'Mobile Ghat-School Classrooms',
+                      desc: 'Welfare kits, school notebooks, and bags provided to Ganga kids.',
+                      media: [{ url: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139', type: 'video' }]
+                    },
+                    {
+                      id: 'reel-3',
+                      title: 'Animal Care & Feed Drive',
+                      desc: 'Nourishing feed served for street dogs across local ghat paths.',
+                      media: [{ url: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139', type: 'video' }]
+                    }
+                  ]
+              ).map((reel) => {
+                const url = reel.media[0]?.url || '';
+                const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
+                const isInstagram = url.includes('instagram.com');
+                
+                return (
+                  <motion.div
+                    key={reel.id}
+                    whileHover={{ y: -4 }}
+                    className="bg-slate-950 rounded-[24px] overflow-hidden border border-slate-800 shadow-sm relative group aspect-[9/16] h-[340px] mx-auto w-[220px] sm:w-auto shrink-0 sm:shrink snap-center text-left"
+                  >
+                    {/* Inline video/embed */}
+                    {isYoutube ? (
+                      <iframe
+                        src={`https://www.youtube.com/embed/${url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1]}?autoplay=1&mute=1&loop=1&playlist=${url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/)?.[1]}&controls=0&modestbranding=1&rel=0`}
+                        className="absolute inset-0 w-full h-full object-cover z-0"
+                        allow="autoplay; encrypted-media"
+                        style={{ border: 'none' }}
+                      />
+                    ) : isInstagram ? (
+                      <iframe
+                        src={`${url.split('?')[0].replace(/\/$/, '')}/embed`}
+                        className="absolute inset-0 w-full h-full object-cover z-0"
+                        scrolling="no"
+                        style={{ border: 'none' }}
+                      />
+                    ) : (
+                      <video
+                        src={url}
+                        autoPlay
+                        loop
+                        muted={isReelsMuted}
+                        playsInline
+                        className="absolute inset-0 w-full h-full object-cover z-0 opacity-80"
+                        key={url}
+                      />
+                    )}
+                    
+                    {/* Absolute mute/unmute control */}
+                    {!isYoutube && !isInstagram && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsReelsMuted(!isReelsMuted);
+                        }}
+                        className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-black/60 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-colors"
+                      >
+                        {isReelsMuted ? (
+                          <svg className="w-3.5 h-3.5 fill-white" viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z"/></svg>
+                        ) : (
+                          <svg className="w-3.5 h-3.5 fill-white" viewBox="0 0 24 24"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM12 4L9.91 6.09 12 8.18V4zm-9 4v8h4l5 5V3L7 8H3zm16.5 4c0 3.28-2.16 6.05-5.18 7.02l1.42 1.42C20.61 18.91 22.5 15.68 22.5 12c0-3.68-1.89-6.91-4.76-8.44l-1.42 1.42c3.02.97 5.18 3.74 5.18 7.02z"/></svg>
+                        )}
+                      </button>
+                    )}
 
-                  <div className="absolute bottom-4 left-4 right-4 text-left space-y-1.5 z-10">
-                    <h4 className="text-[11px] font-black text-white leading-tight font-poppins uppercase tracking-wider">{reel.title}</h4>
-                    <p className="text-[9px] text-slate-350 font-semibold leading-relaxed line-clamp-2">{reel.desc}</p>
-                  </div>
-                </motion.div>
-              ))}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent z-10" />
+                    
+                    <div className="absolute bottom-4 left-4 right-4 text-left space-y-1.5 z-10">
+                      <h4 className="text-[11px] font-black text-white leading-tight font-poppins uppercase tracking-wider">{reel.title}</h4>
+                      <p className="text-[9px] text-slate-350 font-semibold leading-relaxed line-clamp-2">{reel.description || reel.desc}</p>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </div>
             </div>
           </div>
         </section>
@@ -581,6 +708,42 @@ export default function Home() {
 
           </div>
         </section>
+
+        {/* ================= INF-SCROLL SUPPORTERS & FIELD PARTNERS MARQUEE ================= */}
+        {state.testimonials.length > 0 && (
+          <section className="py-12 bg-white border-t border-slate-100 overflow-hidden" id="supporters-marquee-section">
+            <div className="max-w-7xl mx-auto px-6 text-center mb-8">
+              <span className="text-[#1E63FF] text-[10px] font-extrabold uppercase tracking-widest block font-poppins">
+                Our Family
+              </span>
+              <h2 className="text-xl font-bold text-[#0A2540] font-poppins tracking-tight mt-0.5">
+                Sponsors & Field Partners
+              </h2>
+            </div>
+
+            <div className="marquee-container mask-gradient">
+              <div className="marquee-content animate-marquee py-2">
+                {[...state.testimonials, ...state.testimonials, ...state.testimonials].map((test, idx) => (
+                  <div key={`${test.id}-${idx}`} className="flex items-center gap-4 bg-[#F8FAFC] border border-slate-150 rounded-2xl p-4 min-w-[280px] shadow-[0_2px_12px_rgba(0,0,0,0.01)] shrink-0 select-none">
+                    <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#1E63FF]/20 bg-slate-100 shrink-0">
+                      <Image
+                        src={test.avatar || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=150'}
+                        alt={test.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="text-left space-y-0.5">
+                      <span className="font-bold text-xs text-[#0A2540] block">{test.name}</span>
+                      <span className="text-[9px] text-[#1E63FF] font-bold uppercase tracking-wider block">{test.role}</span>
+                      <p className="text-[10px] text-slate-500 italic max-w-[200px] line-clamp-1">"{test.quote}"</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
 
         {/* ================= 7. DONATION PROCESS TIMELINE ================= */}
         <section className="py-16 bg-[#F8FAFC] font-inter overflow-hidden border-t border-b border-[#E5EAF2]">

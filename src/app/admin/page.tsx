@@ -34,10 +34,11 @@ export default function AdminDashboard() {
     deleteFAQ,
     addTestimonial,
     updateTestimonial,
-    deleteTestimonial
+    deleteTestimonial,
+    addDonation
   } = useDatabase();
   
-  const [activeTab, setActiveTab] = useState<'Overview' | 'Campaigns' | 'Stories' | 'Blogs' | 'Volunteers' | 'CMS' | 'Settings' | 'Testimonials' | 'FAQs' | 'Logs'>('Overview');
+  const [activeTab, setActiveTab] = useState<'Overview' | 'Campaigns' | 'Stories' | 'Blogs' | 'Volunteers' | 'CMS' | 'Settings' | 'Testimonials' | 'FAQs' | 'Donations' | 'Logs'>('Overview');
 
   // Upload state
   const [uploadingField, setUploadingField] = useState<string | null>(null);
@@ -76,6 +77,17 @@ export default function AdminDashboard() {
   const [volunteerTitle, setVolunteerTitle] = useState(state.cms.hero.volunteerTitle || 'Become a Volunteer');
   const [volunteerSubtitle, setVolunteerSubtitle] = useState(state.cms.hero.volunteerSubtitle || 'Join our field squads in Rishikesh.');
   const [volunteerBg, setVolunteerBg] = useState(state.cms.hero.volunteerBg || '');
+
+  const [contactTitle, setContactTitle] = useState(state.cms.hero.contactTitle || 'Need Help?');
+  const [contactSubtitle, setContactSubtitle] = useState(state.cms.hero.contactSubtitle || 'Whether you have questions about donations, volunteering, partnerships, or transparency, our team is ready to assist.');
+  const [contactBg, setContactBg] = useState(state.cms.hero.contactBg || '');
+
+  // Manual Donation states
+  const [manName, setManName] = useState('');
+  const [manEmail, setManEmail] = useState('');
+  const [manAmount, setManAmount] = useState('');
+  const [manMethod, setManMethod] = useState<'UPI' | 'Card' | 'Netbanking' | 'Bank Transfer'>('Bank Transfer');
+  const [manCampId, setManCampId] = useState('');
 
   const [counterMeals, setCounterMeals] = useState(state.cms.counters.mealsServed);
   const [counterEdu, setCounterEdu] = useState(state.cms.counters.childrenEducated);
@@ -196,7 +208,10 @@ export default function AdminDashboard() {
       transparencyBg,
       volunteerTitle,
       volunteerSubtitle,
-      volunteerBg
+      volunteerBg,
+      contactTitle,
+      contactSubtitle,
+      contactBg
     });
     updateCMS('counters', {
       mealsServed: Number(counterMeals),
@@ -205,6 +220,52 @@ export default function AdminDashboard() {
       disasterResponded: Number(counterDis)
     });
     alert('All multi-page Hero config values saved successfully!');
+  };
+
+  const handleGalleryUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingField('campGallery');
+    try {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `gallery-${Date.now()}.${fileExt}`;
+      const { data, error } = await supabase.storage
+        .from('onehope-media')
+        .upload(fileName, file, { cacheControl: '3600', upsert: true });
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('onehope-media')
+        .getPublicUrl(fileName);
+
+      setCampGallery(prev => prev ? `${prev.trim().replace(/,$/, '')}, ${publicUrl}` : publicUrl);
+      alert('Gallery image uploaded and appended successfully!');
+    } catch (err: any) {
+      console.error(err);
+      alert(`Upload failed: ${err.message}`);
+    } finally {
+      setUploadingField(null);
+    }
+  };
+
+  const handleManualDonationSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!manName || !manAmount) return;
+    addDonation({
+      donorName: manName,
+      email: manEmail || 'info@onehope.in',
+      amount: Number(manAmount),
+      isAnonymous: false,
+      paymentMethod: manMethod,
+      campaignId: manCampId || undefined,
+      isMonthly: false
+    });
+    alert('Offline/Manual donation successfully logged in Ledger!');
+    setManName('');
+    setManEmail('');
+    setManAmount('');
+    setManCampId('');
   };
 
   const handleSaveSettings = (e: React.FormEvent) => {
@@ -523,7 +584,7 @@ export default function AdminDashboard() {
             
             {/* Sidebar Tabs Menu */}
             <div className="lg:col-span-3 bg-[#0c1e36] border border-white/5 rounded-3xl p-4 shadow-xl space-y-1">
-              {(['Overview', 'Campaigns', 'Stories', 'Blogs', 'Volunteers', 'CMS', 'Settings', 'Testimonials', 'FAQs', 'Logs'] as const).map((tab) => {
+              {(['Overview', 'Campaigns', 'Stories', 'Blogs', 'Volunteers', 'CMS', 'Settings', 'Testimonials', 'FAQs', 'Donations', 'Logs'] as const).map((tab) => {
                 const isActive = activeTab === tab;
                 return (
                   <button
@@ -750,14 +811,26 @@ export default function AdminDashboard() {
 
                     <div className="space-y-1">
                       <label className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: '#94A3B8' }}>Gallery Image URLs (Comma Separated)</label>
-                      <input
-                        type="text"
-                        placeholder="https://image1.jpg, https://image2.jpg"
-                        value={campGallery}
-                        onChange={(e) => setCampGallery(e.target.value)}
-                        className="w-full px-3.5 py-2.5 bg-white/[0.02] border border-white/10 placeholder-slate-500 rounded-xl text-xs focus:outline-none focus:border-[#1E63FF]"
-                        style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
-                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="https://image1.jpg, https://image2.jpg"
+                          value={campGallery}
+                          onChange={(e) => setCampGallery(e.target.value)}
+                          className="flex-grow px-3.5 py-2.5 bg-white/[0.02] border border-white/10 placeholder-slate-500 rounded-xl text-xs focus:outline-none focus:border-[#1E63FF]"
+                          style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                        />
+                        <label className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold cursor-pointer shrink-0 flex items-center justify-center gap-1.5 shadow-lg shadow-blue-500/10">
+                          <Upload size={14} />
+                          <span>{uploadingField === 'campGallery' ? 'Uploading...' : 'Upload & Add'}</span>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleGalleryUpload}
+                            className="hidden"
+                          />
+                        </label>
+                      </div>
                     </div>
 
                     <div className="space-y-1">
@@ -1347,14 +1420,26 @@ export default function AdminDashboard() {
                             className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
                             style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                           />
-                          <input
-                            type="text"
-                            placeholder="Background Image/Video URL"
-                            value={aboutBg}
-                            onChange={(e) => setAboutBg(e.target.value)}
-                            className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
-                            style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Background Image/Video URL"
+                              value={aboutBg}
+                              onChange={(e) => setAboutBg(e.target.value)}
+                              className="flex-grow px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                              style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                            />
+                            <label className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold cursor-pointer shrink-0 flex items-center justify-center gap-1 shadow-lg shadow-blue-500/10">
+                              <Upload size={12} />
+                              <span>{uploadingField === 'aboutBg' ? '...' : 'Upload'}</span>
+                              <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={(e) => handleUpload(e, setAboutBg, 'aboutBg')}
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
                         </div>
                         <input
                           type="text"
@@ -1378,14 +1463,26 @@ export default function AdminDashboard() {
                             className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
                             style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                           />
-                          <input
-                            type="text"
-                            placeholder="Background Image/Video URL"
-                            value={campaignsBg}
-                            onChange={(e) => setCampaignsBg(e.target.value)}
-                            className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
-                            style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Background Image/Video URL"
+                              value={campaignsBg}
+                              onChange={(e) => setCampaignsBg(e.target.value)}
+                              className="flex-grow px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                              style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                            />
+                            <label className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold cursor-pointer shrink-0 flex items-center justify-center gap-1 shadow-lg shadow-blue-500/10">
+                              <Upload size={12} />
+                              <span>{uploadingField === 'campaignsBg' ? '...' : 'Upload'}</span>
+                              <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={(e) => handleUpload(e, setCampaignsBg, 'campaignsBg')}
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
                         </div>
                         <input
                           type="text"
@@ -1409,14 +1506,26 @@ export default function AdminDashboard() {
                             className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
                             style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                           />
-                          <input
-                            type="text"
-                            placeholder="Background Image/Video URL"
-                            value={storiesBg}
-                            onChange={(e) => setStoriesBg(e.target.value)}
-                            className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
-                            style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Background Image/Video URL"
+                              value={storiesBg}
+                              onChange={(e) => setStoriesBg(e.target.value)}
+                              className="flex-grow px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                              style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                            />
+                            <label className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold cursor-pointer shrink-0 flex items-center justify-center gap-1 shadow-lg shadow-blue-500/10">
+                              <Upload size={12} />
+                              <span>{uploadingField === 'storiesBg' ? '...' : 'Upload'}</span>
+                              <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={(e) => handleUpload(e, setStoriesBg, 'storiesBg')}
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
                         </div>
                         <input
                           type="text"
@@ -1440,14 +1549,26 @@ export default function AdminDashboard() {
                             className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
                             style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                           />
-                          <input
-                            type="text"
-                            placeholder="Background Image/Video URL"
-                            value={transparencyBg}
-                            onChange={(e) => setTransparencyBg(e.target.value)}
-                            className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
-                            style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Background Image/Video URL"
+                              value={transparencyBg}
+                              onChange={(e) => setTransparencyBg(e.target.value)}
+                              className="flex-grow px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                              style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                            />
+                            <label className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold cursor-pointer shrink-0 flex items-center justify-center gap-1 shadow-lg shadow-blue-500/10">
+                              <Upload size={12} />
+                              <span>{uploadingField === 'transparencyBg' ? '...' : 'Upload'}</span>
+                              <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={(e) => handleUpload(e, setTransparencyBg, 'transparencyBg')}
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
                         </div>
                         <input
                           type="text"
@@ -1471,20 +1592,75 @@ export default function AdminDashboard() {
                             className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
                             style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                           />
-                          <input
-                            type="text"
-                            placeholder="Background Image/Video URL"
-                            value={volunteerBg}
-                            onChange={(e) => setVolunteerBg(e.target.value)}
-                            className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
-                            style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
-                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Background Image/Video URL"
+                              value={volunteerBg}
+                              onChange={(e) => setVolunteerBg(e.target.value)}
+                              className="flex-grow px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                              style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                            />
+                            <label className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold cursor-pointer shrink-0 flex items-center justify-center gap-1 shadow-lg shadow-blue-500/10">
+                              <Upload size={12} />
+                              <span>{uploadingField === 'volunteerBg' ? '...' : 'Upload'}</span>
+                              <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={(e) => handleUpload(e, setVolunteerBg, 'volunteerBg')}
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
                         </div>
                         <input
                           type="text"
                           placeholder="Hero Subtitle"
                           value={volunteerSubtitle}
                           onChange={(e) => setVolunteerSubtitle(e.target.value)}
+                          className="w-full px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                          style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                        />
+                      </div>
+
+                      {/* Support Page Hero */}
+                      <div className="p-4 border border-white/5 rounded-xl space-y-2.5">
+                        <span className="font-bold text-[10px] uppercase text-slate-350" style={{ color: '#CBD5E1' }}>Support Page</span>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          <input
+                            type="text"
+                            placeholder="Hero Title"
+                            value={contactTitle}
+                            onChange={(e) => setContactTitle(e.target.value)}
+                            className="px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                            style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                          />
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Background Image/Video URL"
+                              value={contactBg}
+                              onChange={(e) => setContactBg(e.target.value)}
+                              className="flex-grow px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
+                              style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                            />
+                            <label className="px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-[10px] font-bold cursor-pointer shrink-0 flex items-center justify-center gap-1 shadow-lg shadow-blue-500/10">
+                              <Upload size={12} />
+                              <span>{uploadingField === 'contactBg' ? '...' : 'Upload'}</span>
+                              <input
+                                type="file"
+                                accept="image/*,video/*"
+                                onChange={(e) => handleUpload(e, setContactBg, 'contactBg')}
+                                className="hidden"
+                              />
+                            </label>
+                          </div>
+                        </div>
+                        <input
+                          type="text"
+                          placeholder="Hero Subtitle"
+                          value={contactSubtitle}
+                          onChange={(e) => setContactSubtitle(e.target.value)}
                           className="w-full px-3 py-2 bg-white/[0.02] border border-white/10 rounded-xl"
                           style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
                         />
@@ -1973,6 +2149,115 @@ export default function AdminDashboard() {
                         <p className="text-slate-300 font-medium" style={{ color: '#CBD5E1' }}>{log.details}</p>
                       </div>
                     ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 11. MANUAL DONATIONS LEDGER */}
+              {activeTab === 'Donations' && (
+                <div className="space-y-8">
+                  <h3 className="font-bold text-white text-base font-poppins pb-2 border-b border-white/10" style={{ color: '#FFFFFF' }}>
+                    Donations Ledger (Online & Offline)
+                  </h3>
+
+                  {/* Manual donation adding form */}
+                  <form onSubmit={handleManualDonationSubmit} className="p-5 bg-slate-950/30 border border-white/5 rounded-2xl space-y-4">
+                    <h4 className="font-bold text-xs uppercase text-blue-400 tracking-wider flex items-center gap-1.5" style={{ color: '#60A5FA' }}>
+                      <Plus size={12} />
+                      <span>Log Manual / Offline Sponsor Donation</span>
+                    </h4>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: '#94A3B8' }}>Donor Name</label>
+                        <input
+                          type="text"
+                          placeholder="e.g. Vikram Sharma"
+                          value={manName}
+                          onChange={(e) => setManName(e.target.value)}
+                          className="w-full px-3.5 py-2.5 bg-white/[0.02] border border-white/10 placeholder-slate-500 rounded-xl focus:outline-none"
+                          style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: '#94A3B8' }}>Donor Email</label>
+                        <input
+                          type="email"
+                          placeholder="e.g. info@onehope.in"
+                          value={manEmail}
+                          onChange={(e) => setManEmail(e.target.value)}
+                          className="w-full px-3.5 py-2.5 bg-white/[0.02] border border-white/10 placeholder-slate-500 rounded-xl focus:outline-none"
+                          style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 text-xs">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: '#94A3B8' }}>Donation Amount (₹)</label>
+                        <input
+                          type="number"
+                          placeholder="e.g. 5000"
+                          value={manAmount}
+                          onChange={(e) => setManAmount(e.target.value)}
+                          className="w-full px-3.5 py-2.5 bg-white/[0.02] border border-white/10 placeholder-slate-500 rounded-xl focus:outline-none"
+                          style={{ color: '#FFFFFF', backgroundColor: 'rgba(255, 255, 255, 0.03)' }}
+                          required
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: '#94A3B8' }}>Payment Method</label>
+                        <select
+                          value={manMethod}
+                          onChange={(e) => setManMethod(e.target.value as any)}
+                          className="w-full px-3.5 py-2.5 border border-white/10 rounded-xl focus:outline-none"
+                          style={{ color: '#FFFFFF', backgroundColor: '#0c1e36' }}
+                        >
+                          <option value="UPI" style={{ backgroundColor: '#0c1e36' }}>UPI</option>
+                          <option value="Card" style={{ backgroundColor: '#0c1e36' }}>Card Payment</option>
+                          <option value="Netbanking" style={{ backgroundColor: '#0c1e36' }}>Netbanking</option>
+                          <option value="Bank Transfer" style={{ backgroundColor: '#0c1e36' }}>Bank Transfer (Cash/Offline)</option>
+                        </select>
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold uppercase tracking-widest block" style={{ color: '#94A3B8' }}>Campaign Target</label>
+                        <select
+                          value={manCampId}
+                          onChange={(e) => setManCampId(e.target.value)}
+                          className="w-full px-3.5 py-2.5 border border-white/10 rounded-xl focus:outline-none"
+                          style={{ color: '#FFFFFF', backgroundColor: '#0c1e36' }}
+                        >
+                          <option value="" style={{ backgroundColor: '#0c1e36' }}>General Fund / Unassigned</option>
+                          {state.campaigns.map(c => (
+                            <option key={c.id} value={c.id} style={{ backgroundColor: '#0c1e36' }}>{c.title}</option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <button
+                      type="submit"
+                      className="py-2.5 px-6 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-xl text-xs font-bold"
+                    >
+                      Add Donation to Ledger
+                    </button>
+                  </form>
+
+                  {/* Donations Ledger Table */}
+                  <div className="space-y-3">
+                    <h4 className="font-bold text-xs uppercase tracking-widest block" style={{ color: '#E2E8F0' }}>Recent Audited Donations List</h4>
+                    <div className="space-y-2 max-h-96 overflow-y-auto pr-1">
+                      {state.donations.map((d) => (
+                        <div key={d.id} className="p-4 bg-slate-950/40 border border-white/5 rounded-2xl flex justify-between items-center text-xs">
+                          <div>
+                            <span className="font-bold text-white block" style={{ color: '#FFFFFF' }}>{d.donorName}</span>
+                            <span className="text-[10px] text-slate-400 mt-0.5" style={{ color: '#94A3B8' }}>{d.email} • {d.paymentMethod} • Date: {d.date}</span>
+                          </div>
+                          <span className="text-emerald-450 font-bold" style={{ color: '#34D399' }}>+₹{d.amount.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               )}
