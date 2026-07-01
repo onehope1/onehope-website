@@ -211,7 +211,7 @@ export default function Home() {
 
   return (
     <PublicLayout>
-      <div className="bg-white font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
+      <div className="bg-white font-inter select-none overflow-hidden md:pb-0 text-[16px] text-[#1A202C]">
         {/* ================= 1. EMOTIONAL HERO SECTION ================= */}
         <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-24 pb-16 md:pt-36 md:pb-24">
           {/* Background Video Backdrop */}
@@ -687,7 +687,7 @@ export default function Home() {
         </section>
 
         {/* ================= 9. TESTIMONIALS SLIDER (TripGod style, attached seamlessly to Footer) ================= */}
-        <section className="py-20 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
+        <section className="pt-20 pb-28 sm:pb-20 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
           <style>{`
             @keyframes reviews-scroll {
               0% { transform: translateX(0); }
@@ -710,10 +710,10 @@ export default function Home() {
             
             <div className="space-y-3 px-6">
               <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[#1E63FF] text-[9px] font-black uppercase tracking-widest">
-                Testimonials
+                🤝 Real Supporter Voice
               </span>
               <h2 className="text-3xl sm:text-4xl font-black text-white font-poppins tracking-tight">
-                What Our Supporters Say
+                Why They Trust OneHope
               </h2>
             </div>
 
@@ -725,7 +725,7 @@ export default function Home() {
                     id: 'r1',
                     name: 'Rakesh Sharma',
                     role: 'Rishikesh, Uttarakhand',
-                    quote: 'ऋषिकेश के गरीब बच्चों को भोजन मिलते देख मन भर आया। वनहोप का यह प्रयास सच में सराहनीय है।',
+                    quote: 'Rishikesh ke garib baccho ko khana milte dekh dil bhar aaya. OneHope ka ye direct aid sach me kamaal hai.',
                     badge: '🍛 FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100'
                   },
@@ -741,7 +741,7 @@ export default function Home() {
                     id: 'r3',
                     name: 'Vikram Adhikari',
                     role: 'Dehradun, India',
-                    quote: 'जब मेरी आँखों के सामने एक घायल बेसहारा कुत्ते का इलाज हुआ, मुझे विश्वास हो गया कि वनहोप का काम १००% सच्चा है।',
+                    quote: 'Jab meri aankhon ke samne ek injured street dog ka treatment hua, tab mujhe 100% bharosa ho gaya ki OneHope ka kaam bilkul sachha hai.',
                     badge: '🐾 ANIMAL WELFARE',
                     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100'
                   },
@@ -757,7 +757,7 @@ export default function Home() {
                     id: 'r5',
                     name: 'Sanjay Pandey',
                     role: 'Lucknow, India',
-                    quote: 'मैंने ऋषिकेश गंगा घाट पर बच्चों को खिलखिलाते देखा जब उन्हें गरम भोजन मिला। यह काम दिल को छू लेने वाला है।',
+                    quote: 'Maine Rishikesh Ganga ghat par baccho ko khush hote dekha jab unhe fresh garam khana mila. Aise transparency aur kahin nahi dekhi.',
                     badge: '🍛 FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=100'
                   },
@@ -773,7 +773,7 @@ export default function Home() {
                     id: 'r7',
                     name: 'Kamlesh Kothari',
                     role: 'Rishikesh, Uttarakhand',
-                    quote: 'बुजुर्गों के चेहरे की वह मुस्कान देखकर रूह खुश हो गई। धन्यवाद वनहोप हमारी मदद को सीधा उन तक पहुँचाने के लिए।',
+                    quote: 'Buzurgo ke chehre ki wo pyari smile dekh kar dil khush ho gaya. Thank you OneHope hamari help seedha un tak pahunchane ke liye.',
                     badge: '🩺 ELDERLY CARE SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100'
                   }
@@ -798,7 +798,7 @@ export default function Home() {
 
                     <div className="space-y-4">
                       {/* Category Badge Outline (TripGod style) */}
-                      <span className="inline-block border border-white/10 text-slate-300 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
+                      <span className="inline-block border border-white/10 text-slate-350 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
                         {testimonial.badge}
                       </span>
 
@@ -827,7 +827,7 @@ export default function Home() {
                     id: 'dup-r1',
                     name: 'Rakesh Sharma',
                     role: 'Rishikesh, Uttarakhand',
-                    quote: 'ऋषिकेश के गरीब बच्चों को भोजन मिलते देख मन भर आया। वनहोप का यह प्रयास सच में सराहनीय है।',
+                    quote: 'Rishikesh ke garib baccho ko khana milte dekh dil bhar aaya. OneHope ka ye direct aid sach me kamaal hai.',
                     badge: '🍛 FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100'
                   },
@@ -843,7 +843,7 @@ export default function Home() {
                     id: 'dup-r3',
                     name: 'Vikram Adhikari',
                     role: 'Dehradun, India',
-                    quote: 'जब मेरी आँखों के सामने एक घायल बेसहारा कुत्ते का इलाज हुआ, मुझे विश्वास हो गया कि वनहोप का काम १००% सच्चा है।',
+                    quote: 'Jab meri aankhon ke samne ek injured street dog ka treatment hua, tab mujhe 100% bharosa ho gaya ki OneHope ka kaam bilkul sachha hai.',
                     badge: '🐾 ANIMAL WELFARE',
                     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100'
                   },
@@ -859,7 +859,7 @@ export default function Home() {
                     id: 'dup-r5',
                     name: 'Sanjay Pandey',
                     role: 'Lucknow, India',
-                    quote: 'मैंने ऋषिकेश गंगा घाट पर बच्चों को खिलखिलाते देखा जब उन्हें गरम भोजन मिला। यह काम दिल को छू लेने वाला है।',
+                    quote: 'Maine Rishikesh Ganga ghat par baccho ko khush hote dekha jab unhe fresh garam khana mila. Aise transparency aur kahin nahi dekhi.',
                     badge: '🍛 FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=100'
                   },
@@ -875,7 +875,7 @@ export default function Home() {
                     id: 'dup-r7',
                     name: 'Kamlesh Kothari',
                     role: 'Rishikesh, Uttarakhand',
-                    quote: 'बुजुर्गों के चेहरे की वह मुस्कान देखकर रूह खुश हो गई। धन्यवाद वनहोप हमारी मदद को सीधा उन तक पहुँचाने के लिए।',
+                    quote: 'Buzurgo ke chehre ki wo pyari smile dekh kar dil khush ho gaya. Thank you OneHope hamari help seedha un tak pahunchane ke liye.',
                     badge: '🩺 ELDERLY CARE SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100'
                   }
@@ -901,7 +901,7 @@ export default function Home() {
 
                     <div className="space-y-4">
                       {/* Category Badge Outline (TripGod style) */}
-                      <span className="inline-block border border-white/10 text-slate-300 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
+                      <span className="inline-block border border-white/10 text-slate-350 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
                         {testimonial.badge}
                       </span>
 
