@@ -64,9 +64,10 @@ export const Header: React.FC = () => {
     { label: 'Home', href: '/', icon: Layers },
     { label: 'Campaigns', href: '/campaigns', icon: Heart },
     { label: 'Stories', href: '/stories', icon: BookOpen },
+    { label: 'Volunteer', href: '/volunteer', icon: Users },
     { label: 'Transparency', href: '/transparency', icon: ShieldCheck },
-    { label: 'Support', href: '/contact', icon: Phone },
-    { label: 'About', href: '/about', icon: MapPin }
+    { label: 'About', href: '/about', icon: MapPin },
+    { label: 'Support', href: '/contact', icon: Phone }
   ];
 
   const isHomepage = pathname === '/';

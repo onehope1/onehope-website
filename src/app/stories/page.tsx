@@ -43,10 +43,10 @@ export default function StoriesReel() {
 
   return (
     <PublicLayout>
-      <div className="max-w-md mx-auto py-6 px-4 font-inter">
+      <div className="max-w-md mx-auto py-4 px-4 font-inter flex flex-col justify-center min-h-[82vh] sm:min-h-0">
         
         {/* Reels Frame */}
-        <div className="relative stories-container rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-950 aspect-[9/16] w-full">
+        <div className="relative stories-container rounded-3xl overflow-hidden shadow-2xl border border-slate-200 dark:border-slate-800 bg-slate-950 w-full aspect-[9/16] max-h-[72vh] md:max-h-[600px] mx-auto">
           {state.stories.map((story, index) => {
             const hasLiked = state.currentUser ? story.likedBy.includes(state.currentUser.id) : false;
             const hasBookmarked = state.currentUser ? state.currentUser.savedStories.includes(story.id) : false;
