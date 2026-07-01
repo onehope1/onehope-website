@@ -7,7 +7,7 @@ import { useDatabase } from '@/context/DatabaseContext';
 import { UserRole } from '@/types';
 import { Logo } from './Logo';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Heart, User, Key, LogOut, Phone, Shield, Search, BookOpen, Layers, Award, ShieldCheck, MapPin, Users } from 'lucide-react';
+import { Menu, X, Heart, User, Key, LogOut, Phone, Shield, Search, BookOpen, Layers, Award, ShieldCheck, MapPin, Users, Lock, CheckCircle2, ArrowRight, RefreshCw } from 'lucide-react';
 
 export const Header: React.FC = () => {
   const { state, login, logout } = useDatabase();
@@ -15,13 +15,102 @@ export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [showRoleModal, setShowRoleModal] = useState(false);
 
-  const handleQuickLogin = (role: UserRole) => {
-    let email = 'user@onehope.in';
-    if (role === 'Super Admin') email = 'vipu@onehope.in';
-    else if (role === 'Volunteer') email = 'aanya@gmail.com';
+  // Auth state variables
+  const [loginMode, setLoginMode] = useState<'otp' | 'admin'>('otp');
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [otpCode, setOtpCode] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [authLoading, setAuthLoading] = useState(false);
+  const [authError, setAuthError] = useState('');
+  const [authSuccess, setAuthSuccess] = useState(false);
+  const [resendCountdown, setResendCountdown] = useState(60);
+
+  const resetAuthStates = () => {
+    setLoginEmail('');
+    setLoginPassword('');
+    setOtpCode('');
+    setOtpSent(false);
+    setAuthLoading(false);
+    setAuthError('');
+    setAuthSuccess(false);
+    setResendCountdown(60);
+    setLoginMode('otp');
+  };
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (otpSent && resendCountdown > 0) {
+      timer = setTimeout(() => setResendCountdown(prev => prev - 1), 1000);
+    }
+    return () => clearTimeout(timer);
+  }, [otpSent, resendCountdown]);
+
+  const handleSendOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail) return;
+    setAuthLoading(true);
+    setAuthError('');
     
-    login(email, role);
-    setShowRoleModal(false);
+    // Simulate SMTP delivery network delay
+    setTimeout(() => {
+      setAuthLoading(false);
+      setOtpSent(true);
+      setResendCountdown(60);
+    }, 1000);
+  };
+
+  const handleVerifyOtp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!otpCode) return;
+    setAuthLoading(true);
+    setAuthError('');
+    
+    setTimeout(() => {
+      // Validate OTP. Any input is valid, or 123456 bypasses checks
+      if (otpCode === '123456' || otpCode.trim().length === 6) {
+        let role: UserRole = 'User';
+        if (loginEmail.toLowerCase() === 'aanya@gmail.com' || loginEmail.toLowerCase().includes('volunteer')) {
+          role = 'Volunteer';
+        }
+        
+        login(loginEmail, role);
+        setAuthLoading(false);
+        setAuthSuccess(true);
+        
+        setTimeout(() => {
+          setShowRoleModal(false);
+          resetAuthStates();
+        }, 1000);
+      } else {
+        setAuthLoading(false);
+        setAuthError('Invalid OTP code. Please try again.');
+      }
+    }, 1000);
+  };
+
+  const handleAdminLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!loginEmail || !loginPassword) return;
+    setAuthLoading(true);
+    setAuthError('');
+    
+    setTimeout(() => {
+      // Super admin check
+      if (loginEmail.toLowerCase() === 'vipu@onehope.in' && loginPassword === 'admin123') {
+        login(loginEmail, 'Super Admin');
+        setAuthLoading(false);
+        setAuthSuccess(true);
+        
+        setTimeout(() => {
+          setShowRoleModal(false);
+          resetAuthStates();
+        }, 1000);
+      } else {
+        setAuthLoading(false);
+        setAuthError('Invalid credentials. Hint: vipu@onehope.in / admin123');
+      }
+    }, 1000);
   };
 
   const [visible, setVisible] = useState(true);
@@ -299,66 +388,207 @@ export const Header: React.FC = () => {
       </header>
     </div>
 
-      {/* Role Switcher Modal */}
-      <AnimatePresence>
+    {/* Role Switcher & Authentication Modal */}
+    <AnimatePresence>
         {showRoleModal && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              onClick={() => setShowRoleModal(false)}
-              className="absolute inset-0 bg-slate-950/40 backdrop-blur-sm"
+              onClick={() => { setShowRoleModal(false); resetAuthStates(); }}
+              className="absolute inset-0 bg-slate-950/45 backdrop-blur-sm"
             />
             
             <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative bg-white rounded-3xl p-6 sm:p-8 max-w-md w-full shadow-2xl z-10 border border-slate-100"
+              className="relative bg-white/95 rounded-[32px] p-8 max-w-md w-full shadow-[0_20px_60px_rgba(0,0,0,0.15)] z-10 border border-slate-100/80 backdrop-blur-md"
             >
               <button 
-                onClick={() => setShowRoleModal(false)}
-                className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 transition-colors"
+                onClick={() => { setShowRoleModal(false); resetAuthStates(); }}
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 p-1 hover:bg-slate-100 rounded-full transition-all"
               >
-                <X size={18} />
+                <X size={16} />
               </button>
 
-              <div className="text-center mb-6">
-                <div className="w-11 h-11 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 text-blue-600">
-                  <Shield size={22} />
-                </div>
-                <h3 className="text-lg font-bold text-slate-900 font-poppins">
-                  Developer Identity Switcher
-                </h3>
-                <p className="text-slate-500 text-xs mt-1 leading-relaxed">
-                  Quickly switch between authorization roles to test different pages.
-                </p>
-              </div>
-
-              <div className="space-y-2">
-                {[
-                  { role: 'Super Admin', desc: 'CMS visuals editor & configurations', color: 'bg-emerald-50 text-emerald-600 border-emerald-100' },
-                  { role: 'Volunteer', desc: 'Log tasks, check-in, badges', color: 'bg-blue-50 text-blue-600 border-blue-100' },
-                  { role: 'User', desc: 'Standard user dashboard & receipts history', color: 'bg-slate-50 text-slate-600 border-slate-150' }
-                ].map((item) => (
+              {/* Pill Toggle Selector (Only visible if OTP not sent yet) */}
+              {!otpSent && (
+                <div className="flex bg-slate-100 p-1.5 rounded-2xl mb-6">
                   <button
-                    key={item.role}
-                    onClick={() => handleQuickLogin(item.role as UserRole)}
-                    className="w-full text-left p-4 border border-slate-100 hover:border-blue-500 rounded-2xl hover:bg-slate-50 transition-all flex justify-between items-center group"
+                    onClick={() => { setLoginMode('otp'); setAuthError(''); }}
+                    className={`flex-1 py-2 text-[11px] font-bold font-poppins rounded-xl transition-all ${loginMode === 'otp' ? 'bg-white text-[#1E63FF] shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
                   >
-                    <div>
-                      <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded ${item.color}`}>
-                        {item.role}
-                      </span>
-                      <p className="text-slate-500 text-[11px] mt-1 leading-normal">
-                        {item.desc}
-                      </p>
-                    </div>
-                    <span className="text-slate-300 group-hover:text-blue-500 font-bold">→</span>
+                    OTP Login (User/Volunteer)
                   </button>
-                ))}
-              </div>
+                  <button
+                    onClick={() => { setLoginMode('admin'); setAuthError(''); }}
+                    className={`flex-1 py-2 text-[11px] font-bold font-poppins rounded-xl transition-all ${loginMode === 'admin' ? 'bg-white text-[#1E63FF] shadow-sm' : 'text-slate-500 hover:text-slate-800'}`}
+                  >
+                    Admin Portal
+                  </button>
+                </div>
+              )}
+
+              {/* 1. OTP Authentication Stage */}
+              {loginMode === 'otp' && (
+                <div className="space-y-4">
+                  {!otpSent ? (
+                    <form onSubmit={handleSendOtp} className="space-y-4">
+                      <div className="text-center mb-5">
+                        <div className="w-11 h-11 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#1E63FF]">
+                          <Shield size={20} />
+                        </div>
+                        <h3 className="text-md font-black text-slate-900 font-poppins uppercase tracking-wider">
+                          Verify Email
+                        </h3>
+                        <p className="text-slate-550 text-xs mt-1 leading-relaxed">
+                          Enter your email to receive a 6-digit verification code.
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-1 text-left">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-poppins">Email Address</label>
+                        <div className="relative flex items-center">
+                          <span className="absolute left-4 text-slate-400"><User size={15} /></span>
+                          <input
+                            type="email"
+                            placeholder="e.g. aanya@gmail.com"
+                            value={loginEmail}
+                            onChange={(e) => setLoginEmail(e.target.value)}
+                            required
+                            className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] rounded-2xl text-xs text-slate-900 placeholder-slate-400 font-medium transition-all"
+                          />
+                        </div>
+                        <span className="text-[9px] text-slate-450 block pt-1 font-medium">Use <span className="font-bold text-blue-600">aanya@gmail.com</span> for Volunteer demo role</span>
+                      </div>
+
+                      {authError && <p className="text-red-500 font-bold text-[10px] text-left">{authError}</p>}
+
+                      <button
+                        type="submit"
+                        disabled={authLoading}
+                        className="w-full py-4 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] text-white font-bold rounded-2xl text-xs uppercase tracking-wider text-center shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-2"
+                      >
+                        {authLoading ? <RefreshCw size={14} className="animate-spin" /> : <span>Send OTP Code</span>}
+                      </button>
+                    </form>
+                  ) : (
+                    <form onSubmit={handleVerifyOtp} className="space-y-4">
+                      <div className="text-center mb-5">
+                        <div className="w-11 h-11 bg-blue-50 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#1E63FF]">
+                          <Key size={20} />
+                        </div>
+                        <h3 className="text-md font-black text-slate-900 font-poppins uppercase tracking-wider">
+                          Enter Code
+                        </h3>
+                        <p className="text-slate-550 text-xs mt-1 leading-relaxed">
+                          We sent a 6-digit code to <span className="font-bold text-slate-800">{loginEmail}</span>
+                        </p>
+                      </div>
+                      
+                      <div className="space-y-1 text-left">
+                        <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-poppins">One-Time Passcode</label>
+                        <div className="relative flex items-center">
+                          <span className="absolute left-4 text-slate-400"><Lock size={15} /></span>
+                          <input
+                            type="text"
+                            placeholder="e.g. 123456"
+                            value={otpCode}
+                            onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').substring(0, 6))}
+                            required
+                            className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] rounded-2xl text-xs text-slate-900 placeholder-slate-400 font-bold tracking-widest transition-all text-center"
+                          />
+                        </div>
+                        <span className="text-[9px] text-slate-450 block pt-1 font-medium">Bypass Hint: Enter code <span className="font-bold text-blue-600">123456</span> to login</span>
+                      </div>
+
+                      {authError && <p className="text-red-500 font-bold text-[10px] text-left">{authError}</p>}
+
+                      <button
+                        type="submit"
+                        disabled={authLoading || authSuccess}
+                        className="w-full py-4 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] text-white font-bold rounded-2xl text-xs uppercase tracking-wider text-center shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-2"
+                      >
+                        {authLoading ? <RefreshCw size={14} className="animate-spin" /> : authSuccess ? <CheckCircle2 size={14} className="text-emerald-500 animate-pulse" /> : <span>Verify OTP & Access</span>}
+                      </button>
+
+                      <div className="text-center pt-2">
+                        {resendCountdown > 0 ? (
+                          <span className="text-[10px] text-slate-400 font-semibold">Resend OTP in {resendCountdown}s</span>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => { setOtpSent(false); setOtpCode(''); setAuthError(''); }}
+                            className="text-[10px] text-[#1E63FF] font-bold hover:underline"
+                          >
+                            Resend OTP Code
+                          </button>
+                        )}
+                      </div>
+                    </form>
+                  )}
+                </div>
+              )}
+
+              {/* 2. Admin Authentication Stage */}
+              {loginMode === 'admin' && (
+                <form onSubmit={handleAdminLogin} className="space-y-4">
+                  <div className="text-center mb-5">
+                    <div className="w-11 h-11 bg-emerald-50 rounded-2xl flex items-center justify-center mx-auto mb-3 text-emerald-600">
+                      <ShieldCheck size={20} />
+                    </div>
+                    <h3 className="text-md font-black text-slate-900 font-poppins uppercase tracking-wider">
+                      Admin Portal
+                    </h3>
+                    <p className="text-slate-550 text-xs mt-1 leading-relaxed">
+                      Authorized credentials required to access the CMS visual configs.
+                    </p>
+                  </div>
+                  
+                  <div className="space-y-1 text-left">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-poppins">Admin Email</label>
+                    <div className="relative flex items-center">
+                      <span className="absolute left-4 text-slate-400"><User size={15} /></span>
+                      <input
+                        type="email"
+                        placeholder="vipu@onehope.in"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        required
+                        className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] rounded-2xl text-xs text-slate-900 placeholder-slate-400 font-medium transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1 text-left">
+                    <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-poppins">Security Password</label>
+                    <div className="relative flex items-center">
+                      <span className="absolute left-4 text-slate-400"><Lock size={15} /></span>
+                      <input
+                        type="password"
+                        placeholder="••••••••"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        required
+                        className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] rounded-2xl text-xs text-slate-900 placeholder-slate-400 font-medium transition-all"
+                      />
+                    </div>
+                    <span className="text-[9px] text-slate-450 block pt-1 font-medium">Bypass Hint: Use credentials <span className="font-bold text-blue-600">vipu@onehope.in / admin123</span></span>
+                  </div>
+
+                  {authError && <p className="text-red-500 font-bold text-[10px] text-left">{authError}</p>}
+
+                  <button
+                    type="submit"
+                    disabled={authLoading || authSuccess}
+                    className="w-full py-4 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] text-white font-bold rounded-2xl text-xs uppercase tracking-wider text-center shadow-lg shadow-blue-500/20 hover:shadow-blue-500/30 transition-all flex items-center justify-center gap-2"
+                  >
+                    {authLoading ? <RefreshCw size={14} className="animate-spin" /> : authSuccess ? <CheckCircle2 size={14} className="text-emerald-500" /> : <span>Authenticate Admin</span>}
+                  </button>
+                </form>
+              )}
             </motion.div>
           </div>
         )}
