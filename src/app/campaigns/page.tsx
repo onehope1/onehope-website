@@ -21,6 +21,9 @@ const liveTickerDonations = [
 
 export default function CampaignsCatalog() {
   const { state } = useDatabase();
+  const campaignsBg = state.cms.hero.campaignsBg || '';
+  const campaignsTitle = state.cms.hero.campaignsTitle || 'One Small Gift. One Big Impact.';
+  const campaignsSubtitle = state.cms.hero.campaignsSubtitle || 'Support verified campaigns for children, elderly people, animals and families in need across Rishikesh.';
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('All');
   const [sortBy, setSortBy] = useState('Most Urgent');
@@ -106,6 +109,15 @@ export default function CampaignsCatalog() {
       <div className="bg-[#F8FBFF] font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
         
         <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-24 pb-10 md:pt-28 md:pb-14 border-b border-[#0D3052] min-h-[50vh]">
+          {campaignsBg && (
+            campaignsBg.includes('.mp4') || campaignsBg.includes('vimeo') || campaignsBg.includes('video') ? (
+              <video autoPlay loop muted playsInline className="absolute inset-0 w-full h-full object-cover z-0 opacity-30 animate-fade-in" key={campaignsBg}>
+                <source src={campaignsBg} type="video/mp4" />
+              </video>
+            ) : (
+              <img src={campaignsBg} alt="Background Banner" className="absolute inset-0 w-full h-full object-cover z-0 opacity-30 animate-fade-in" key={campaignsBg} />
+            )
+          )}
           {/* Grid backdrop */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />
@@ -142,14 +154,11 @@ export default function CampaignsCatalog() {
             </span>
 
             <h1 className="text-3xl md:text-5xl font-black font-poppins tracking-tight leading-tight">
-              <span className="text-white block">One Small Gift.</span>
-              <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                One Big Impact.
-              </span>
+              <span className="text-white block">{campaignsTitle}</span>
             </h1>
 
             <p className="text-slate-200 text-xs sm:text-sm leading-relaxed max-w-xl mx-auto font-medium">
-              Support verified campaigns for children, elderly people, animals and families in need across Rishikesh.
+              {campaignsSubtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full pt-2">

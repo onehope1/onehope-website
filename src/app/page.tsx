@@ -92,6 +92,12 @@ const AnimatedCounter: React.FC<{ value: number; suffix?: string; label: string;
 export default function Home() {
   const { state } = useDatabase();
 
+  const homeHeroTitle = state.cms.hero.title || 'Hope Starts With One.';
+  const homeHeroSubtitle = state.cms.hero.subtitle || 'Welcome to OneHope, an international-level humanitarian platform dedicated to helping children, families, and communities with absolute transparency, integrity, and compassion.';
+  const homeHeroBg = state.cms.hero.backgroundImage || 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139&oauth2_token_id=57447761';
+  const ctaDonateText = state.cms.hero.ctaDonateText || 'Donate Now';
+  const ctaVolunteerText = state.cms.hero.ctaVolunteerText || 'Watch Our Impact';
+
   const publicCampaigns = state.campaigns.filter(c => c.status === 'Active').slice(0, 3);
   const emergencyCampaign = publicCampaigns[0] || state.campaigns[0];
   const featuredStories = state.stories.slice(0, 3); // Display strictly 3 stories
@@ -214,19 +220,26 @@ export default function Home() {
       <div className="bg-white font-inter select-none overflow-hidden md:pb-0 text-[16px] text-[#1A202C]">
         {/* ================= 1. EMOTIONAL HERO SECTION ================= */}
         <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-24 pb-16 md:pt-36 md:pb-24">
-          {/* Background Video Backdrop */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-75 animate-fade-in"
-          >
-            <source 
-              src="https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139&oauth2_token_id=57447761" 
-              type="video/mp4" 
+          {/* Background Video or Image Backdrop */}
+          {homeHeroBg.includes('.mp4') || homeHeroBg.includes('vimeo') || homeHeroBg.includes('video') ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover z-0 opacity-75 animate-fade-in"
+              key={homeHeroBg}
+            >
+              <source src={homeHeroBg} type="video/mp4" />
+            </video>
+          ) : (
+            <img
+              src={homeHeroBg}
+              alt="Home Background Banner"
+              className="absolute inset-0 w-full h-full object-cover z-0 opacity-75 animate-fade-in"
+              key={homeHeroBg}
             />
-          </video>
+          )}
           
           {/* Gradients */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A2540] via-[#0A2540]/80 to-transparent z-10" />
@@ -242,31 +255,28 @@ export default function Home() {
               className="lg:col-span-12 space-y-6 text-center"
             >
               <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none">
-                <span className="text-white block">Hope Starts</span>
-                <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                  With One.
-                </span>
+                <span className="text-white block">{homeHeroTitle}</span>
               </h1>
 
-              <p className="text-slate-200 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins">
-                Feed. Educate. Care. Transparently.
+              <p className="text-slate-200 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins max-w-xl mx-auto leading-relaxed">
+                {homeHeroSubtitle}
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full pt-2">
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full max-w-[90%] sm:max-w-none sm:w-auto">
                   <Link
                     href="/donate"
-                    className="w-full px-8 py-3.5 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center shadow-lg shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center"
+                    className="w-full px-8 py-3.5 bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center shadow-lg shadow-blue-500/10 btn-ripple font-poppins h-12 flex items-center justify-center font-bold"
                   >
-                    Donate Now
+                    {ctaDonateText}
                   </Link>
                 </motion.div>
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} className="w-full max-w-[90%] sm:max-w-none sm:w-auto">
                   <button
-                    onClick={() => setActiveReelUrl('https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139')}
+                    onClick={() => setActiveReelUrl(homeHeroBg)}
                     className="w-full px-8 py-3.5 border border-white/20 hover:border-white hover:bg-white/5 text-white font-bold rounded-xl text-xs uppercase tracking-wider block text-center transition-all font-semibold h-12 flex items-center justify-center"
                   >
-                    Watch Our Impact
+                    {ctaVolunteerText}
                   </button>
                 </motion.div>
               </div>

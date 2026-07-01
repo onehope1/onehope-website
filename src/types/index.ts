@@ -208,6 +208,7 @@ export interface HeroCMS {
   ctaDonateText: string;
   ctaVolunteerText: string;
   backgroundImage: string;
+  [key: string]: any;
 }
 
 export interface CounterCMS {

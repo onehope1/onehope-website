@@ -213,7 +213,8 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
           // Fetch CMS visual configs
           const { data: cmsData } = await supabase.from('cms_configs').select('*').single();
           // Fetch all entity arrays
-          const { data: campaigns } = await supabase.from('campaigns').select('*').order('sortOrder', { ascending: true });
+          const { data: campaigns, error: campErr } = await supabase.from('campaigns').select('*').order('sortorder', { ascending: true });
+          if (campErr) console.error("Error loading campaigns:", campErr);
           const { data: stories } = await supabase.from('stories').select('*').order('date', { ascending: false });
           const { data: blogs } = await supabase.from('blogs').select('*').order('date', { ascending: false });
           const { data: testimonials } = await supabase.from('testimonials').select('*');
@@ -594,8 +595,13 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         unitlabel: newCamp.unitLabel,
         provides: newCamp.provides,
         donationlevels: newCamp.donationLevels,
-        sortOrder: state.campaigns.length
-      }).then();
+        sortorder: state.campaigns.length
+      }).then(({ error }: any) => {
+        if (error) {
+          console.error("Supabase campaign insert error:", error);
+          alert("Database Error: Could not save campaign. Check console.");
+        }
+      });
     }
 
     addAuditLog('Campaign Created', `Created campaign: ${campaign.title}`);
@@ -630,7 +636,12 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         unitlabel: campaign.unitLabel,
         provides: campaign.provides,
         donationlevels: campaign.donationLevels
-      }).eq('id', campaign.id).then();
+      }).eq('id', campaign.id).then(({ error }: any) => {
+        if (error) {
+          console.error("Supabase campaign update error:", error);
+          alert("Database Error: Could not update campaign.");
+        }
+      });
     }
 
     addAuditLog('Campaign Updated', `Updated campaign: ${campaign.title}`);

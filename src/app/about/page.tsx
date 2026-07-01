@@ -71,6 +71,11 @@ const AnimatedCounter: React.FC<{ value: number; suffix?: string; label: string;
 };
 
 export default function AboutPage() {
+  const { state } = useDatabase();
+  const aboutTitle = state.cms.hero.aboutTitle || 'About OneHope.';
+  const aboutSubtitle = state.cms.hero.aboutSubtitle || 'Hope starts with one act of kindness. Together, we turn compassion into real impact.';
+  const aboutBg = state.cms.hero.aboutBg || 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139&oauth2_token_id=57447761';
+
   return (
     <PublicLayout>
       <div className="bg-white font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
@@ -78,18 +83,25 @@ export default function AboutPage() {
         {/* ================= 1. CINEMATIC HERO SECTION ================= */}
         <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-24 pb-20 md:pt-28 md:pb-28 min-h-[75vh]">
           {/* Background Video Backdrop */}
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="absolute inset-0 w-full h-full object-cover z-0 opacity-75 animate-fade-in"
-          >
-            <source 
-              src="https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139&oauth2_token_id=57447761" 
-              type="video/mp4" 
+          {aboutBg.includes('.mp4') || aboutBg.includes('vimeo') || aboutBg.includes('video') ? (
+            <video
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="absolute inset-0 w-full h-full object-cover z-0 opacity-75 animate-fade-in"
+              key={aboutBg}
+            >
+              <source src={aboutBg} type="video/mp4" />
+            </video>
+          ) : (
+            <img
+              src={aboutBg}
+              alt="About Background"
+              className="absolute inset-0 w-full h-full object-cover z-0 opacity-75 animate-fade-in"
+              key={aboutBg}
             />
-          </video>
+          )}
           
           {/* Gradients */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0A2540] via-[#0A2540]/80 to-transparent z-10" />
@@ -97,14 +109,11 @@ export default function AboutPage() {
 
           <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 relative z-20 text-center space-y-6">
             <h1 className="text-4xl sm:text-6xl font-black font-poppins leading-tight tracking-tight select-none">
-              <span className="text-white block">About</span>
-              <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                OneHope.
-              </span>
+              <span className="text-white block">{aboutTitle}</span>
             </h1>
 
             <p className="text-slate-200 text-xs sm:text-sm tracking-widest font-black uppercase font-poppins max-w-xl mx-auto leading-relaxed">
-              Hope starts with one act of kindness. Together, we turn compassion into real impact.
+              {aboutSubtitle}
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3.5 w-full pt-2">
