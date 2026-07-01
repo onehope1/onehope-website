@@ -687,7 +687,7 @@ export default function Home() {
         </section>
 
         {/* ================= 9. TESTIMONIALS SLIDER (TripGod style, attached seamlessly to Footer) ================= */}
-        <section className="pt-20 pb-28 sm:pb-20 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
+        <section className="pt-14 pb-24 sm:pb-16 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
           <style>{`
             @keyframes reviews-scroll {
               0% { transform: translateX(0); }
@@ -706,15 +706,17 @@ export default function Home() {
           
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.002)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.002)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-25 pointer-events-none" />
           
-          <div className="max-w-7xl mx-auto space-y-12 relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-10 relative z-10 text-center">
             
-            <div className="space-y-3 px-6">
-              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[#1E63FF] text-[9px] font-black uppercase tracking-widest">
-                🤝 Real Supporter Voice
+            {/* TripGod style heading section with orange line */}
+            <div className="flex flex-col items-center space-y-3 px-6">
+              <span className="inline-block px-4 py-1.5 rounded-full border border-white/10 bg-white/5 text-[9px] font-black uppercase tracking-widest text-[#1E63FF] font-poppins">
+                TESTIMONIALS
               </span>
-              <h2 className="text-3xl sm:text-4xl font-black text-white font-poppins tracking-tight">
-                Why They Trust OneHope
+              <h2 className="text-3xl sm:text-4xl font-black text-white font-poppins uppercase tracking-tight max-w-xl leading-tight">
+                Why Hearts Trust OneHope
               </h2>
+              <div className="w-14 h-1 bg-[#FF6B00] rounded-full mt-1.5" />
             </div>
 
             {/* Infinite Horizontal Reviews Marquee Container */}
@@ -726,7 +728,7 @@ export default function Home() {
                     name: 'Rakesh Sharma',
                     role: 'Rishikesh, Uttarakhand',
                     quote: 'Rishikesh ke garib baccho ko khana milte dekh dil bhar aaya. OneHope ka ye direct aid sach me kamaal hai.',
-                    badge: '🍛 FOOD AID SPONSOR',
+                    badge: 'FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -734,7 +736,7 @@ export default function Home() {
                     name: 'Aishwarya Kapoor',
                     role: 'Delhi, India',
                     quote: "Sponsoring Priya's study kit was the best decision. The video updates showing her holding her new books brought tears to my eyes.",
-                    badge: '📚 EDUCATION SPONSOR',
+                    badge: 'EDUCATION SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -742,7 +744,7 @@ export default function Home() {
                     name: 'Vikram Adhikari',
                     role: 'Dehradun, India',
                     quote: 'Jab meri aankhon ke samne ek injured street dog ka treatment hua, tab mujhe 100% bharosa ho gaya ki OneHope ka kaam bilkul sachha hai.',
-                    badge: '🐾 ANIMAL WELFARE',
+                    badge: 'ANIMAL WELFARE',
                     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -750,7 +752,7 @@ export default function Home() {
                     name: 'Meera Deshmukh',
                     role: 'Mumbai, India',
                     quote: 'Direct ground procurement is completely transparent. I received the exact GPS coordinates and grocery receipts for the family I sponsored.',
-                    badge: '📦 FAMILY AID SPONSOR',
+                    badge: 'FAMILY AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -758,7 +760,7 @@ export default function Home() {
                     name: 'Sanjay Pandey',
                     role: 'Lucknow, India',
                     quote: 'Maine Rishikesh Ganga ghat par baccho ko khush hote dekha jab unhe fresh garam khana mila. Aise transparency aur kahin nahi dekhi.',
-                    badge: '🍛 FOOD AID SPONSOR',
+                    badge: 'FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -766,7 +768,7 @@ export default function Home() {
                     name: 'Neha Dutt',
                     role: 'Bangalore, India',
                     quote: 'Seeing young girls get hygiene kits and school books without any administrative middleman cuts is so satisfying.',
-                    badge: '📚 EDUCATION SPONSOR',
+                    badge: 'EDUCATION SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -774,36 +776,38 @@ export default function Home() {
                     name: 'Kamlesh Kothari',
                     role: 'Rishikesh, Uttarakhand',
                     quote: 'Buzurgo ke chehre ki wo pyari smile dekh kar dil khush ho gaya. Thank you OneHope hamari help seedha un tak pahunchane ke liye.',
-                    badge: '🩺 ELDERLY CARE SPONSOR',
+                    badge: 'ELDERLY CARE SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100'
                   }
                 ].map((testimonial, idx) => (
                   <div 
                     key={testimonial.id}
-                    className="w-[280px] sm:w-[320px] shrink-0 bg-slate-900/40 border border-white/10 backdrop-blur-md p-6.5 rounded-[24px] shadow-sm flex flex-col justify-between space-y-6 text-left hover:border-white/20 transition-all group"
+                    className="w-[260px] sm:w-[290px] shrink-0 bg-slate-900/40 border border-white/10 backdrop-blur-md p-5 rounded-[20px] shadow-sm flex flex-col justify-between space-y-4 text-left hover:border-white/20 transition-all group"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {/* Star ratings */}
                       <div className="flex gap-0.5 text-amber-400">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={14} fill="currentColor" stroke="none" />
+                          <Star key={i} size={13} fill="currentColor" stroke="none" />
                         ))}
                       </div>
 
                       {/* Quote Text */}
-                      <p className="text-slate-100 text-xs sm:text-[13px] leading-relaxed font-semibold italic">
+                      <p className="text-slate-100 text-xs sm:text-[12.5px] leading-relaxed font-semibold italic">
                         &ldquo;{testimonial.quote}&rdquo;
                       </p>
                     </div>
 
                     <div className="space-y-4">
-                      {/* Category Badge Outline (TripGod style) */}
-                      <span className="inline-block border border-white/10 text-slate-350 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
-                        {testimonial.badge}
-                      </span>
+                      {/* Category Badge Outline (TripGod style in brand blue, high contrast) */}
+                      <div>
+                        <span className="inline-block border border-[#1E63FF]/30 text-[#1E63FF] bg-[#1E63FF]/5 font-poppins font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider group-hover:border-[#1E63FF]/60 group-hover:bg-[#1E63FF]/15 transition-all">
+                          {testimonial.badge}
+                        </span>
+                      </div>
 
                       {/* Author Info */}
-                      <div className="flex items-center gap-3 pt-1">
+                      <div className="flex items-center gap-3 pt-0.5">
                         <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/10 border border-white/10 shadow-sm shrink-0">
                           <Image 
                             src={testimonial.avatar} 
@@ -814,7 +818,7 @@ export default function Home() {
                         </div>
                         <div className="text-left font-bold">
                           <span className="text-white text-xs block leading-tight">{testimonial.name}</span>
-                          <span className="text-[9px] text-slate-450 uppercase tracking-wider">{testimonial.role}</span>
+                          <span className="text-[9px] text-slate-400 uppercase tracking-wider">{testimonial.role}</span>
                         </div>
                       </div>
                     </div>
@@ -828,7 +832,7 @@ export default function Home() {
                     name: 'Rakesh Sharma',
                     role: 'Rishikesh, Uttarakhand',
                     quote: 'Rishikesh ke garib baccho ko khana milte dekh dil bhar aaya. OneHope ka ye direct aid sach me kamaal hai.',
-                    badge: '🍛 FOOD AID SPONSOR',
+                    badge: 'FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -836,7 +840,7 @@ export default function Home() {
                     name: 'Aishwarya Kapoor',
                     role: 'Delhi, India',
                     quote: "Sponsoring Priya's study kit was the best decision. The video updates showing her holding her new books brought tears to my eyes.",
-                    badge: '📚 EDUCATION SPONSOR',
+                    badge: 'EDUCATION SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -844,7 +848,7 @@ export default function Home() {
                     name: 'Vikram Adhikari',
                     role: 'Dehradun, India',
                     quote: 'Jab meri aankhon ke samne ek injured street dog ka treatment hua, tab mujhe 100% bharosa ho gaya ki OneHope ka kaam bilkul sachha hai.',
-                    badge: '🐾 ANIMAL WELFARE',
+                    badge: 'ANIMAL WELFARE',
                     avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -852,7 +856,7 @@ export default function Home() {
                     name: 'Meera Deshmukh',
                     role: 'Mumbai, India',
                     quote: 'Direct ground procurement is completely transparent. I received the exact GPS coordinates and grocery receipts for the family I sponsored.',
-                    badge: '📦 FAMILY AID SPONSOR',
+                    badge: 'FAMILY AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -860,7 +864,7 @@ export default function Home() {
                     name: 'Sanjay Pandey',
                     role: 'Lucknow, India',
                     quote: 'Maine Rishikesh Ganga ghat par baccho ko khush hote dekha jab unhe fresh garam khana mila. Aise transparency aur kahin nahi dekhi.',
-                    badge: '🍛 FOOD AID SPONSOR',
+                    badge: 'FOOD AID SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -868,7 +872,7 @@ export default function Home() {
                     name: 'Neha Dutt',
                     role: 'Bangalore, India',
                     quote: 'Seeing young girls get hygiene kits and school books without any administrative middleman cuts is so satisfying.',
-                    badge: '📚 EDUCATION SPONSOR',
+                    badge: 'EDUCATION SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=100'
                   },
                   {
@@ -876,37 +880,39 @@ export default function Home() {
                     name: 'Kamlesh Kothari',
                     role: 'Rishikesh, Uttarakhand',
                     quote: 'Buzurgo ke chehre ki wo pyari smile dekh kar dil khush ho gaya. Thank you OneHope hamari help seedha un tak pahunchane ke liye.',
-                    badge: '🩺 ELDERLY CARE SPONSOR',
+                    badge: 'ELDERLY CARE SPONSOR',
                     avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100'
                   }
                 ].map((testimonial, idx) => (
                   <div 
                     key={testimonial.id}
-                    className="w-[280px] sm:w-[320px] shrink-0 bg-slate-900/40 border border-white/10 backdrop-blur-md p-6.5 rounded-[24px] shadow-sm flex flex-col justify-between space-y-6 text-left hover:border-white/20 transition-all group"
+                    className="w-[260px] sm:w-[290px] shrink-0 bg-slate-900/40 border border-white/10 backdrop-blur-md p-5 rounded-[20px] shadow-sm flex flex-col justify-between space-y-4 text-left hover:border-white/20 transition-all group"
                     aria-hidden="true"
                   >
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {/* Star ratings */}
                       <div className="flex gap-0.5 text-amber-400">
                         {[...Array(5)].map((_, i) => (
-                          <Star key={i} size={14} fill="currentColor" stroke="none" />
+                          <Star key={i} size={13} fill="currentColor" stroke="none" />
                         ))}
                       </div>
 
                       {/* Quote Text */}
-                      <p className="text-slate-100 text-xs sm:text-[13px] leading-relaxed font-semibold italic">
+                      <p className="text-slate-100 text-xs sm:text-[12.5px] leading-relaxed font-semibold italic">
                         &ldquo;{testimonial.quote}&rdquo;
                       </p>
                     </div>
 
                     <div className="space-y-4">
-                      {/* Category Badge Outline (TripGod style) */}
-                      <span className="inline-block border border-white/10 text-slate-350 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
-                        {testimonial.badge}
-                      </span>
+                      {/* Category Badge Outline (TripGod style in brand blue, high contrast) */}
+                      <div>
+                        <span className="inline-block border border-[#1E63FF]/30 text-[#1E63FF] bg-[#1E63FF]/5 font-poppins font-black text-[9px] px-2.5 py-1 rounded-lg uppercase tracking-wider group-hover:border-[#1E63FF]/60 group-hover:bg-[#1E63FF]/15 transition-all">
+                          {testimonial.badge}
+                        </span>
+                      </div>
 
                       {/* Author Info */}
-                      <div className="flex items-center gap-3 pt-1">
+                      <div className="flex items-center gap-3 pt-0.5">
                         <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/10 border border-white/10 shadow-sm shrink-0">
                           <Image 
                             src={testimonial.avatar} 
