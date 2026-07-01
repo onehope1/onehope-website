@@ -134,7 +134,7 @@ export default function Home() {
     { 
       name: 'Local Supplier Network',
       icon: (
-        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <rect x="1" y="3" width="15" height="13" />
           <polygon points="16 8 20 8 23 11 23 16 16 16 16 8" />
           <circle cx="5.5" cy="18.5" r="2.5" />
@@ -145,7 +145,7 @@ export default function Home() {
     { 
       name: 'Tata CSR Network',
       icon: (
-        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M3 12c0-5 4-9 9-9s9 4 9 9" />
           <path d="M12 3v18" />
           <path d="M7 16l5-5 5 5" />
@@ -155,7 +155,7 @@ export default function Home() {
     { 
       name: 'Razorpay Sandbox',
       icon: (
-        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M12 2L2 14h10l-2 8 12-12H12l2-8z" strokeLinejoin="bevel" />
         </svg>
       )
@@ -163,13 +163,13 @@ export default function Home() {
     { 
       name: 'KPMG Auditing',
       icon: (
-        <span className="font-poppins font-black tracking-widest text-[11px] text-slate-400 group-hover:text-blue-600 transition-colors">KPMG</span>
+        <span className="font-poppins font-black tracking-widest text-[11px] text-slate-300 group-hover:text-white transition-colors">KPMG</span>
       )
     },
     { 
       name: 'Rishikesh Welfare Network',
       icon: (
-        <svg className="w-5 h-5 text-slate-400 group-hover:text-blue-600 transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="w-5 h-5 text-slate-300 group-hover:text-white transition-colors fill-none stroke-current" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M4 22L12 8l8 14" />
           <path d="M8 22l4-7 4 7" />
           <path d="M2 18c2-2 4-2 6 0s4 2 6 0 4-2 6 0" />
@@ -194,7 +194,7 @@ export default function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setActiveTestimonial((prev) => (prev + 1) % activeTestimonials.length);
-    }, 7000);
+    }, 5000);
     return () => clearInterval(timer);
   }, [activeTestimonials.length]);
 
@@ -708,61 +708,6 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 9. TESTIMONIALS SLIDER ================= */}
-        <section className="py-16 bg-[#F8FBFF] font-inter overflow-hidden border-t border-b border-[#E5EAF2]">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-12">
-            
-            <div className="text-center max-w-xl mx-auto space-y-2">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Community Voice
-              </span>
-              <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight">
-                Supporter Endorsements
-              </h2>
-            </div>
-
-            {/* Testimonials Auto-scroll Card */}
-            <div className="max-w-2xl mx-auto relative px-8">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTestimonial}
-                  initial={{ opacity: 0, x: 15 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -15 }}
-                  transition={{ duration: 0.4 }}
-                  className="bg-white p-6.5 sm:p-8 rounded-[24px] border border-[#E5EAF2] shadow-sm space-y-4 text-center"
-                >
-                  <div className="flex justify-center gap-0.5 text-[#22C55E]">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={14} fill="currentColor" stroke="none" />
-                    ))}
-                  </div>
-
-                  <p className="text-[#1A202C] text-xs sm:text-sm leading-relaxed font-semibold italic">
-                    &ldquo;{activeTestimonials[activeTestimonial].quote}&rdquo;
-                  </p>
-
-                  <div className="flex items-center justify-center gap-3 pt-2">
-                    <div className="relative w-8 h-8 rounded-full overflow-hidden bg-slate-200 border border-slate-100 shadow-sm shrink-0">
-                      <Image 
-                        src={activeTestimonials[activeTestimonial].avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'} 
-                        alt={activeTestimonials[activeTestimonial].name} 
-                        fill 
-                        className="object-cover"
-                      />
-                    </div>
-                    <div className="text-left font-bold">
-                      <span className="text-[#0A2540] text-xs block leading-tight">{activeTestimonials[activeTestimonial].name}</span>
-                      <span className="text-[9px] text-[#667085] uppercase tracking-wider">{activeTestimonials[activeTestimonial].role}</span>
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-
-          </div>
-        </section>
-
         {/* ================= 10. PARTNER LOGOS (Infinite Moving Ticker) ================= */}
         <section className="py-14 bg-[#0A2540] border-t border-b border-[#0D3052] font-inter overflow-hidden relative select-none">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.005)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.005)_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-20 pointer-events-none" />
@@ -777,7 +722,7 @@ export default function Home() {
                 {partnersList.map((partner, idx) => (
                   <div 
                     key={idx} 
-                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-350 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
+                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-200 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
                   >
                     {partner.icon}
                     <span>{partner.name}</span>
@@ -788,7 +733,7 @@ export default function Home() {
                 {partnersList.map((partner, idx) => (
                   <div 
                     key={`dup-${idx}`} 
-                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-350 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
+                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-200 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
                   >
                     {partner.icon}
                     <span>{partner.name}</span>
@@ -845,6 +790,61 @@ export default function Home() {
                 </div>
               );
             })}
+          </div>
+        </section>
+
+        {/* ================= 9. TESTIMONIALS SLIDER (Attached seamlessly to Footer) ================= */}
+        <section className="py-16 bg-[#0A2540] font-inter overflow-hidden border-t border-white/10 select-none">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-10">
+            
+            <div className="text-center max-w-xl mx-auto space-y-2">
+              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
+                Community Voice
+              </span>
+              <h2 className="text-[28px] font-black text-white font-poppins tracking-tight">
+                Supporter Endorsements
+              </h2>
+            </div>
+
+            {/* Testimonials Auto-scroll Card */}
+            <div className="max-w-2xl mx-auto relative px-8">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeTestimonial}
+                  initial={{ opacity: 0, x: 15 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -15 }}
+                  transition={{ duration: 0.4 }}
+                  className="bg-white/[0.03] p-6.5 sm:p-8 rounded-[24px] border border-white/10 shadow-sm space-y-4 text-center"
+                >
+                  <div className="flex justify-center gap-0.5 text-amber-400">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} size={14} fill="currentColor" stroke="none" />
+                    ))}
+                  </div>
+
+                  <p className="text-slate-200 text-xs sm:text-sm leading-relaxed font-semibold italic">
+                    &ldquo;{activeTestimonials[activeTestimonial].quote}&rdquo;
+                  </p>
+
+                  <div className="flex items-center justify-center gap-3 pt-2">
+                    <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/10 border border-white/10 shadow-sm shrink-0">
+                      <Image 
+                        src={activeTestimonials[activeTestimonial].avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'} 
+                        alt={activeTestimonials[activeTestimonial].name} 
+                        fill 
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="text-left font-bold">
+                      <span className="text-white text-xs block leading-tight">{activeTestimonials[activeTestimonial].name}</span>
+                      <span className="text-[9px] text-slate-450 uppercase tracking-wider">{activeTestimonials[activeTestimonial].role}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
           </div>
         </section>
 

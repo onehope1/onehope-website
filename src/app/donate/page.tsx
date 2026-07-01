@@ -54,8 +54,40 @@ export default function DonatePage() {
   const [showRazorpay, setShowRazorpay] = useState(false);
   const [paymentStatus, setPaymentStatus] = useState<'idle' | 'processing' | 'success'>('idle');
 
-  // Sticky bar state
+  // Sticky bar states
   const [showStickyBar, setShowStickyBar] = useState(false);
+  const [isShrunk, setIsShrunk] = useState(false);
+  const [rotateIndex, setRotateIndex] = useState(0);
+
+  // Rotate dynamic urgency labels every 5 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRotateIndex(prev => (prev + 1) % 3);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Handle scroll to toggle sticky CTA bar and handle shrink collapse
+  useEffect(() => {
+    let lastScroll = window.scrollY;
+    const handleScroll = () => {
+      const currentScroll = window.scrollY;
+      if (currentScroll > 550) {
+        setShowStickyBar(true);
+      } else {
+        setShowStickyBar(false);
+      }
+
+      if (currentScroll > lastScroll && currentScroll > 600) {
+        setIsShrunk(false); // scrolling down -> expand info
+      } else if (currentScroll < lastScroll && currentScroll > 600) {
+        setIsShrunk(true); // scrolling up -> collapse
+      }
+      lastScroll = currentScroll;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   // Pre-fill user data if logged in
   useEffect(() => {
@@ -65,19 +97,6 @@ export default function DonatePage() {
       setPhone(state.currentUser.phone || '');
     }
   }, [state.currentUser]);
-
-  // Handle scroll to toggle sticky CTA bar
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > 550) {
-        setShowStickyBar(true);
-      } else {
-        setShowStickyBar(false);
-      }
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   // Listen to campaign parameter to pre-select and lock active form state
   useEffect(() => {
@@ -545,14 +564,26 @@ export default function DonatePage() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:max-w-md bg-slate-900/90 text-white backdrop-blur-md rounded-2xl border border-white/10 p-3.5 z-40 shadow-2xl flex items-center justify-between px-5 select-none"
+              className={`fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:max-w-md bg-slate-950/95 text-white backdrop-blur-xl rounded-[24px] border border-white/10 shadow-2xl z-40 flex items-center justify-between px-5 select-none transition-all duration-300 ${
+                isShrunk ? 'h-[50px] py-1.5' : 'h-[62px] py-2.5'
+              }`}
             >
-              <div className="text-left font-poppins">
-                <span className="text-[9px] text-slate-450 uppercase tracking-widest block font-bold">Sponsorship Active</span>
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
-                  <span className="text-[#3575FF] text-xs font-black">{getImpactText()}</span>
-                  <span className="text-slate-500 font-medium hidden sm:inline">•</span>
-                  <span className="text-[#2ECC71] text-xs font-black">INR {getFinalAmount().toLocaleString()}</span>
+              <div className="text-left font-poppins flex flex-col justify-center">
+                {!isShrunk && (
+                  <span className="text-[8px] sm:text-[9px] text-[#3575FF] uppercase tracking-widest block font-black animate-fade-in">
+                    {rotateIndex === 0 && '❤️ 12 sponsorships today'}
+                    {rotateIndex === 1 && '🍛 120 meals delivered'}
+                    {rotateIndex === 2 && '🛡️ 100% Secure & Audited'}
+                  </span>
+                )}
+                <div className="flex items-center gap-1.5">
+                  <span className={`font-black text-white ${isShrunk ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                    {getImpactText()}
+                  </span>
+                  <span className="text-slate-500 font-bold">•</span>
+                  <span className={`font-black text-white ${isShrunk ? 'text-xs' : 'text-xs sm:text-sm'}`}>
+                    ₹{getFinalAmount().toLocaleString()}
+                  </span>
                 </div>
               </div>
               <button
@@ -561,9 +592,11 @@ export default function DonatePage() {
                   const formElem = document.getElementById('donation-core-widget');
                   if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className="px-5 py-2.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-extrabold rounded-xl text-[10px] uppercase tracking-wider transition-all hover:scale-102 active:scale-98 shadow-md font-poppins"
+                className={`bg-gradient-to-r from-[#1E63FF] to-[#0047AB] hover:from-[#3575FF] hover:to-[#003C91] text-white font-extrabold rounded-xl uppercase tracking-wider flex items-center justify-center transition-all hover:translate-y-[-1px] active:translate-y-[1px] shadow-lg shadow-blue-500/20 border-t border-white/10 font-poppins ${
+                  isShrunk ? 'px-3 py-1.5 text-[9px]' : 'px-4.5 py-2.5 text-[10px]'
+                }`}
               >
-                Donate Now
+                Sponsor Now
               </button>
             </motion.div>
           )}
