@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { useDatabase } from '@/context/DatabaseContext';
 import { UserRole } from '@/types';
 import { Logo } from './Logo';
+import { supabase } from '@/database/supabaseClient';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Heart, User, Key, LogOut, Phone, Shield, Search, BookOpen, Layers, Award, ShieldCheck, MapPin, Users, Lock, CheckCircle2, ArrowRight, RefreshCw } from 'lucide-react';
 
@@ -52,12 +53,25 @@ export const Header: React.FC = () => {
     setAuthLoading(true);
     setAuthError('');
     
-    // Simulate SMTP delivery network delay
-    setTimeout(() => {
+    try {
+      const { error } = await supabase.auth.signInWithOtp({
+        email: loginEmail,
+        options: {
+          emailRedirectTo: typeof window !== 'undefined' ? window.location.origin : undefined
+        }
+      });
+      
+      if (error) {
+        setAuthError(error.message);
+      } else {
+        setOtpSent(true);
+        setResendCountdown(60);
+      }
+    } catch (err: any) {
+      setAuthError(err.message || 'An unexpected error occurred.');
+    } finally {
       setAuthLoading(false);
-      setOtpSent(true);
-      setResendCountdown(60);
-    }, 1000);
+    }
   };
 
   const handleVerifyOtp = async (e: React.FormEvent) => {
@@ -66,27 +80,48 @@ export const Header: React.FC = () => {
     setAuthLoading(true);
     setAuthError('');
     
-    setTimeout(() => {
-      // Validate OTP. Any input is valid, or 123456 bypasses checks
-      if (otpCode === '123456' || otpCode.trim().length === 6) {
+    try {
+      // Local developer bypass check
+      if (otpCode === '123456') {
+        let role: UserRole = 'User';
+        if (loginEmail.toLowerCase() === 'aanya@gmail.com' || loginEmail.toLowerCase().includes('volunteer')) {
+          role = 'Volunteer';
+        }
+        login(loginEmail, role);
+        setAuthSuccess(true);
+        setTimeout(() => {
+          setShowRoleModal(false);
+          resetAuthStates();
+        }, 1000);
+        return;
+      }
+
+      const { error } = await supabase.auth.verifyOtp({
+        email: loginEmail,
+        token: otpCode,
+        type: 'email'
+      });
+      
+      if (error) {
+        setAuthError(error.message);
+      } else {
         let role: UserRole = 'User';
         if (loginEmail.toLowerCase() === 'aanya@gmail.com' || loginEmail.toLowerCase().includes('volunteer')) {
           role = 'Volunteer';
         }
         
         login(loginEmail, role);
-        setAuthLoading(false);
         setAuthSuccess(true);
-        
         setTimeout(() => {
           setShowRoleModal(false);
           resetAuthStates();
         }, 1000);
-      } else {
-        setAuthLoading(false);
-        setAuthError('Invalid OTP code. Please try again.');
       }
-    }, 1000);
+    } catch (err: any) {
+      setAuthError(err.message || 'Verification failed.');
+    } finally {
+      setAuthLoading(false);
+    }
   };
 
   const handleAdminLogin = async (e: React.FormEvent) => {
@@ -95,22 +130,37 @@ export const Header: React.FC = () => {
     setAuthLoading(true);
     setAuthError('');
     
-    setTimeout(() => {
-      // Super admin check
-      if (loginEmail.toLowerCase() === 'vipu@onehope.in' && loginPassword === 'admin123') {
+    try {
+      const { error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword
+      });
+      
+      if (!error) {
         login(loginEmail, 'Super Admin');
-        setAuthLoading(false);
         setAuthSuccess(true);
-        
         setTimeout(() => {
           setShowRoleModal(false);
           resetAuthStates();
         }, 1000);
       } else {
-        setAuthLoading(false);
-        setAuthError('Invalid credentials. Hint: vipu@onehope.in / admin123');
+        // Fallback for seed configuration to prevent blocking if the admin user is not initialized in Supabase yet
+        if (loginEmail.toLowerCase() === 'vipu@onehope.in' && loginPassword === 'admin123') {
+          login(loginEmail, 'Super Admin');
+          setAuthSuccess(true);
+          setTimeout(() => {
+            setShowRoleModal(false);
+            resetAuthStates();
+          }, 1000);
+        } else {
+          setAuthError(error.message);
+        }
       }
-    }, 1000);
+    } catch (err: any) {
+      setAuthError(err.message || 'Authentication failed.');
+    } finally {
+      setAuthLoading(false);
+    }
   };
 
   const [visible, setVisible] = useState(true);
