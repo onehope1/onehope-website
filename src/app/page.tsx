@@ -635,114 +635,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 8. TRANSPARENCY / AUDIT (Enriched) ================= */}
-        <section className="py-16 bg-white font-inter">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-12">
-            
-            <div className="text-center max-w-xl mx-auto space-y-2">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Complete Transparency
-              </span>
-              <h2 className="text-[28px] font-black text-[#0A2540] font-poppins tracking-tight mb-2">
-                How We Ensure Transparency
-              </h2>
-              <p className="text-[#667085] text-xs sm:text-sm font-semibold">
-                Where your donation goes. Verified using public transparent ledgers, instant receipt records, and direct local supplier checkouts.
-              </p>
-            </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pt-6">
-              
-              {/* Left Column: Redesigned dashboard cards */}
-              <div className="lg:col-span-7 grid grid-cols-2 gap-3 sm:gap-4">
-                {trustCards.map((card, idx) => (
-                  <div key={idx} className="relative p-4 sm:p-6 bg-[#F8FAFC]/65 border border-slate-200/50 rounded-[20px] flex flex-col justify-between space-y-3 h-[135px] sm:h-[160px] hover:bg-white hover:border-blue-500/20 transition-all duration-300 group overflow-hidden select-none">
-                    {/* Floating geometric index behind text */}
-                    <span className="absolute top-2 right-4 text-3xl sm:text-[42px] font-black text-slate-100 group-hover:text-blue-55 transition-colors pointer-events-none select-none">0{idx + 1}</span>
-                    
-                    <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-white flex items-center justify-center border border-slate-200/60 text-[#1E63FF] shrink-0 shadow-sm relative z-10">
-                      <card.icon size={15} />
-                    </div>
-                    <div className="space-y-1 text-left relative z-10">
-                      <h4 className="font-bold text-[#0A2540] text-xs sm:text-sm font-poppins leading-tight">{card.title}</h4>
-                      <p className="text-[#667085] text-[10px] sm:text-[11px] leading-relaxed font-semibold">{card.desc}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Right Column: Public Ledger Preview Mockup */}
-              <div className="lg:col-span-5 bg-slate-900 rounded-3xl p-5 border border-slate-800 shadow-2xl text-white space-y-4 text-left relative overflow-hidden select-none">
-                <div className="flex justify-between items-center border-b border-white/10 pb-3">
-                  <div className="flex items-center gap-2">
-                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                    <span className="text-[10px] font-bold text-slate-300 uppercase tracking-widest">Public Ledger Live</span>
-                  </div>
-                  <span className="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Audit #9842</span>
-                </div>
-                <div className="space-y-3">
-                  <div className="p-3 bg-white/5 rounded-xl border border-white/5 space-y-1.5">
-                    <div className="flex justify-between text-[10px] font-bold text-slate-400">
-                      <span>TX_HASH: 0x48f...b29</span>
-                      <span className="text-emerald-400">₹8,500</span>
-                    </div>
-                    <p className="text-[11px] font-bold text-white">Daily Kitchen Grain Purchase</p>
-                    <div className="flex justify-between text-[9px] text-slate-400 font-bold">
-                      <span>Mayakund Slum Base</span>
-                      <span className="text-blue-400">View Supplier Receipt ↗</span>
-                    </div>
-                  </div>
-                  <div className="relative aspect-video w-full rounded-xl overflow-hidden border border-white/5 h-[110px] hidden sm:block">
-                    <Image 
-                      src="https://images.unsplash.com/photo-1542810634-71277d95dcbb?auto=format&fit=crop&q=80&w=400"
-                      alt="Ledger distribution ground proof"
-                      fill
-                      className="object-cover opacity-90"
-                    />
-                  </div>
-                </div>
-              </div>
-
-            </div>
-
-          </div>
-        </section>
-
-        {/* ================= 10. PARTNER LOGOS (Infinite Moving Ticker) ================= */}
-        <section className="py-14 bg-[#0A2540] border-t border-b border-[#0D3052] font-inter overflow-hidden relative select-none">
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.005)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.005)_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-20 pointer-events-none" />
-          <div className="max-w-7xl mx-auto space-y-6 relative z-10">
-            <h3 className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest px-6">
-              Governed Under Active Alliances
-            </h3>
-            
-            {/* Infinite Horizontal Marquee Container */}
-            <div className="marquee-container mask-gradient py-2">
-              <div className="marquee-content">
-                {partnersList.map((partner, idx) => (
-                  <div 
-                    key={idx} 
-                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-200 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
-                  >
-                    {partner.icon}
-                    <span>{partner.name}</span>
-                  </div>
-                ))}
-              </div>
-              <div className="marquee-content" aria-hidden="true">
-                {partnersList.map((partner, idx) => (
-                  <div 
-                    key={`dup-${idx}`} 
-                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-200 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
-                  >
-                    {partner.icon}
-                    <span>{partner.name}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
 
         {/* ================= 11. FAQ ACCORDION ================= */}
         <section className="py-16 max-w-3xl mx-auto px-6 sm:px-8 lg:px-10 font-inter space-y-10">
@@ -793,56 +686,73 @@ export default function Home() {
           </div>
         </section>
 
-        {/* ================= 9. TESTIMONIALS SLIDER (Attached seamlessly to Footer) ================= */}
-        <section className="py-16 bg-[#0A2540] font-inter overflow-hidden border-t border-white/10 select-none">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-10">
+        {/* ================= 9. TESTIMONIALS SLIDER (TripGod style, attached seamlessly to Footer) ================= */}
+        <section className="py-20 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.002)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.002)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-25 pointer-events-none" />
+          
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-12 relative z-10 text-center">
             
-            <div className="text-center max-w-xl mx-auto space-y-2">
-              <span className="text-[#1E63FF] text-xs font-bold uppercase tracking-widest block font-poppins">
-                Community Voice
+            <div className="space-y-3">
+              <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[#1E63FF] text-[9px] font-black uppercase tracking-widest">
+                Testimonials
               </span>
-              <h2 className="text-[28px] font-black text-white font-poppins tracking-tight">
-                Supporter Endorsements
+              <h2 className="text-3xl sm:text-4xl font-black text-white font-poppins tracking-tight">
+                What Our Supporters Say
               </h2>
             </div>
 
-            {/* Testimonials Auto-scroll Card */}
-            <div className="max-w-2xl mx-auto relative px-8">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTestimonial}
-                  initial={{ opacity: 0, x: 15 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -15 }}
-                  transition={{ duration: 0.4 }}
-                  className="bg-white/[0.03] p-6.5 sm:p-8 rounded-[24px] border border-white/10 shadow-sm space-y-4 text-center"
-                >
-                  <div className="flex justify-center gap-0.5 text-amber-400">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} size={14} fill="currentColor" stroke="none" />
-                    ))}
-                  </div>
+            {/* Side-by-Side Flex Scroll Grid */}
+            <div className="flex overflow-x-auto lg:grid lg:grid-cols-3 gap-6 snap-x snap-mandatory scrollbar-none pb-6 px-4 md:px-0 justify-start lg:justify-center">
+              {activeTestimonials.map((testimonial, idx) => {
+                const badge = idx === 0 
+                  ? '🍛 FOOD AID SPONSOR' 
+                  : idx === 1 
+                  ? '📚 EDUCATION SPONSOR' 
+                  : '🩺 MEDICAL AID SPONSOR';
+                return (
+                  <div 
+                    key={testimonial.id}
+                    className="w-[290px] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-slate-900/40 border border-white/10 backdrop-blur-md p-6.5 sm:p-8 rounded-[24px] shadow-sm flex flex-col justify-between space-y-6 text-left hover:border-white/20 transition-all group"
+                  >
+                    <div className="space-y-4">
+                      {/* Star ratings */}
+                      <div className="flex gap-0.5 text-amber-400">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} size={14} fill="currentColor" stroke="none" />
+                        ))}
+                      </div>
 
-                  <p className="text-slate-200 text-xs sm:text-sm leading-relaxed font-semibold italic">
-                    &ldquo;{activeTestimonials[activeTestimonial].quote}&rdquo;
-                  </p>
-
-                  <div className="flex items-center justify-center gap-3 pt-2">
-                    <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/10 border border-white/10 shadow-sm shrink-0">
-                      <Image 
-                        src={activeTestimonials[activeTestimonial].avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'} 
-                        alt={activeTestimonials[activeTestimonial].name} 
-                        fill 
-                        className="object-cover"
-                      />
+                      {/* Quote Text */}
+                      <p className="text-slate-100 text-xs sm:text-sm leading-relaxed font-semibold italic">
+                        &ldquo;{testimonial.quote}&rdquo;
+                      </p>
                     </div>
-                    <div className="text-left font-bold">
-                      <span className="text-white text-xs block leading-tight">{activeTestimonials[activeTestimonial].name}</span>
-                      <span className="text-[9px] text-slate-450 uppercase tracking-wider">{activeTestimonials[activeTestimonial].role}</span>
+
+                    <div className="space-y-4">
+                      {/* Category Badge Outline (TripGod style) */}
+                      <span className="inline-block border border-white/10 text-slate-300 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
+                        {badge}
+                      </span>
+
+                      {/* Author Info */}
+                      <div className="flex items-center gap-3 pt-1">
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/10 border border-white/10 shadow-sm shrink-0">
+                          <Image 
+                            src={testimonial.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'} 
+                            alt={testimonial.name} 
+                            fill 
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="text-left font-bold">
+                          <span className="text-white text-xs block leading-tight">{testimonial.name}</span>
+                          <span className="text-[9px] text-slate-450 uppercase tracking-wider">{testimonial.role}</span>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </motion.div>
-              </AnimatePresence>
+                );
+              })}
             </div>
 
           </div>
