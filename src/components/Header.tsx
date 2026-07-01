@@ -448,26 +448,25 @@ export const Header: React.FC = () => {
               exit={{ opacity: 0 }}
               onClick={() => { setShowRoleModal(false); resetAuthStates(); }}
               className="absolute inset-0 bg-slate-950/45 backdrop-blur-sm"
-            />
-                  <motion.div
+            />            <motion.div
               initial={{ scale: 0.95, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.95, opacity: 0 }}
-              className="relative bg-slate-950/90 border border-white/10 backdrop-blur-xl rounded-[28px] p-8 max-w-md w-full shadow-[0_25px_50px_-12px_rgba(0,0,0,0.5)] z-10 text-center"
+              className="relative bg-white/98 border border-slate-100 rounded-[28px] p-8 max-w-md w-full shadow-[0_20px_50px_rgba(0,0,0,0.08)] z-10 text-center backdrop-blur-md"
             >
               <button 
                 onClick={() => { setShowRoleModal(false); resetAuthStates(); }}
-                className="absolute top-4 right-4 text-slate-400 hover:text-white p-1.5 hover:bg-white/5 rounded-full transition-all"
+                className="absolute top-4 right-4 text-slate-400 hover:text-slate-900 p-1.5 hover:bg-slate-100 rounded-full transition-all"
               >
                 <X size={15} />
               </button>
 
               {/* Pill Toggle Selector (Only visible if OTP not sent yet) */}
               {!otpSent && (
-                <div className="flex bg-white/5 p-1 rounded-2xl mb-6 border border-white/5">
+                <div className="flex bg-slate-100 p-1 rounded-2xl mb-6 border border-slate-200/50">
                   <button
                     onClick={() => { setLoginMode('otp'); setAuthError(''); }}
-                    className={`flex-1 py-2 text-[11px] font-bold font-poppins rounded-xl transition-all ${loginMode === 'otp' ? 'bg-[#1E63FF] text-white shadow-md' : 'text-slate-400 hover:text-slate-200'}`}
+                    className={`flex-1 py-2 text-[11px] font-bold font-poppins rounded-xl transition-all ${loginMode === 'otp' ? 'bg-[#1E63FF] text-white shadow-md' : 'text-slate-500 hover:text-slate-800'}`}
                   >
                     OTP Login (User/Volunteer)
                   </button>
@@ -486,19 +485,19 @@ export const Header: React.FC = () => {
                   {!otpSent ? (
                     <form onSubmit={handleSendOtp} className="space-y-4">
                       <div className="text-center mb-5">
-                        <div className="w-12 h-12 bg-gradient-to-tr from-[#1E63FF]/10 to-[#1E63FF]/30 border border-[#1E63FF]/30 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#1E63FF] shadow-inner shadow-blue-500/10">
+                        <div className="w-12 h-12 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#1E63FF]">
                           <Shield size={20} />
                         </div>
-                        <h3 className="!text-white text-base font-black font-poppins uppercase tracking-wider">
+                        <h3 className="text-slate-900 text-base font-black font-poppins uppercase tracking-wider">
                           Verify Email
                         </h3>
-                        <p className="text-slate-400 text-xs mt-1.5 leading-relaxed font-semibold">
-                          Enter your email to receive a 6-digit verification code.
+                        <p className="text-slate-500 text-xs mt-1.5 leading-relaxed font-semibold">
+                          Enter your email to receive an 8-character verification code.
                         </p>
                       </div>
                       
                       <div className="space-y-1 text-left">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-poppins">Email Address</label>
+                        <label className="text-[10px] font-bold text-slate-450 uppercase tracking-widest font-poppins">Email Address</label>
                         <div className="relative flex items-center">
                           <span className="absolute left-4 text-slate-400"><User size={15} /></span>
                           <input
@@ -507,13 +506,13 @@ export const Header: React.FC = () => {
                             value={loginEmail}
                             onChange={(e) => setLoginEmail(e.target.value)}
                             required
-                            className="w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/10 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white/[0.06] rounded-2xl text-xs text-white placeholder-slate-500 font-medium transition-all"
+                            className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white rounded-2xl text-xs text-slate-900 placeholder-slate-400 font-medium transition-all"
                           />
                         </div>
-                        <span className="text-[9px] text-slate-500 block pt-1.5 font-semibold">Use <span className="font-bold text-blue-400">aanya@gmail.com</span> for Volunteer demo role</span>
+                        <span className="text-[9px] text-slate-400 block pt-1.5 font-semibold">Use <span className="font-bold text-blue-500">aanya@gmail.com</span> for Volunteer demo role</span>
                       </div>
 
-                      {authError && <p className="text-red-400 font-bold text-[10px] text-left">{authError}</p>}
+                      {authError && <p className="text-red-500 font-bold text-[10px] text-left">{authError}</p>}
 
                       <button
                         type="submit"
@@ -526,34 +525,33 @@ export const Header: React.FC = () => {
                   ) : (
                     <form onSubmit={handleVerifyOtp} className="space-y-4">
                       <div className="text-center mb-5">
-                        <div className="w-12 h-12 bg-gradient-to-tr from-[#1E63FF]/10 to-[#1E63FF]/30 border border-[#1E63FF]/30 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#1E63FF] shadow-inner shadow-blue-500/10">
+                        <div className="w-12 h-12 bg-blue-50 border border-blue-100 rounded-2xl flex items-center justify-center mx-auto mb-3 text-[#1E63FF]">
                           <Key size={20} />
                         </div>
-                        <h3 className="!text-white text-base font-black font-poppins uppercase tracking-wider">
+                        <h3 className="text-slate-900 text-base font-black font-poppins uppercase tracking-wider">
                           Enter Code
                         </h3>
-                        <p className="text-slate-400 text-xs mt-1.5 leading-relaxed font-semibold">
-                          We sent a 6-digit code to <span className="font-bold text-white">{loginEmail}</span>
+                        <p className="text-slate-500 text-xs mt-1.5 leading-relaxed font-semibold">
+                          We sent a verification code to <span className="font-bold text-slate-800">{loginEmail}</span>
                         </p>
                       </div>
                       
                       <div className="space-y-1 text-left">
-                        <label className="text-[10px] font-bold text-slate-500 uppercase tracking-widest font-poppins">One-Time Passcode</label>
+                        <label className="text-[10px] font-bold text-slate-455 uppercase tracking-widest font-poppins">One-Time Passcode</label>
                         <div className="relative flex items-center">
                           <span className="absolute left-4 text-slate-400"><Lock size={15} /></span>
                           <input
                             type="text"
-                            placeholder="e.g. 123456"
+                            placeholder="e.g. ab12cd34"
                             value={otpCode}
-                            onChange={(e) => setOtpCode(e.target.value.replace(/\D/g, '').substring(0, 6))}
+                            onChange={(e) => setOtpCode(e.target.value.substring(0, 8))}
                             required
-                            className="w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/10 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white/[0.06] rounded-2xl text-xs text-white placeholder-slate-500 font-bold tracking-widest transition-all text-center"
+                            className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white rounded-2xl text-xs text-slate-950 placeholder-slate-450 font-bold tracking-widest transition-all text-center"
                           />
                         </div>
-                        <span className="text-[9px] text-slate-550 block pt-1.5 font-medium">Bypass Hint: Enter code <span className="font-bold text-blue-400">123456</span> to login</span>
                       </div>
 
-                      {authError && <p className="text-red-400 font-bold text-[10px] text-left">{authError}</p>}
+                      {authError && <p className="text-red-500 font-bold text-[10px] text-left">{authError}</p>}
 
                       <button
                         type="submit"
@@ -565,7 +563,7 @@ export const Header: React.FC = () => {
 
                       <div className="text-center pt-2">
                         {resendCountdown > 0 ? (
-                          <span className="text-[10px] text-slate-500 font-semibold">Resend OTP in {resendCountdown}s</span>
+                          <span className="text-[10px] text-slate-450 font-semibold">Resend OTP in {resendCountdown}s</span>
                         ) : (
                           <button
                             type="button"
@@ -585,13 +583,13 @@ export const Header: React.FC = () => {
               {loginMode === 'admin' && (
                 <form onSubmit={handleAdminLogin} className="space-y-4">
                   <div className="text-center mb-5">
-                    <div className="w-12 h-12 bg-gradient-to-tr from-emerald-500/10 to-emerald-500/30 border border-emerald-500/30 rounded-2xl flex items-center justify-center mx-auto mb-3 text-emerald-500 shadow-inner shadow-emerald-500/10">
+                    <div className="w-12 h-12 bg-emerald-50 border border-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-3 text-emerald-600">
                       <ShieldCheck size={20} />
                     </div>
-                    <h3 className="!text-white text-base font-black font-poppins uppercase tracking-wider">
+                    <h3 className="text-slate-900 text-base font-black font-poppins uppercase tracking-wider">
                       Admin Portal
                     </h3>
-                    <p className="text-slate-400 text-xs mt-1.5 leading-relaxed font-semibold">
+                    <p className="text-slate-500 text-xs mt-1.5 leading-relaxed font-semibold">
                       Authorized credentials required to access the CMS visual configs.
                     </p>
                   </div>
@@ -606,7 +604,7 @@ export const Header: React.FC = () => {
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         required
-                        className="w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/10 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white/[0.06] rounded-2xl text-xs text-white placeholder-slate-500 font-medium transition-all"
+                        className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white rounded-2xl text-xs text-slate-950 placeholder-slate-500 font-medium transition-all"
                       />
                     </div>
                   </div>
@@ -621,13 +619,13 @@ export const Header: React.FC = () => {
                         value={loginPassword}
                         onChange={(e) => setLoginPassword(e.target.value)}
                         required
-                        className="w-full pl-11 pr-4 py-3.5 bg-white/[0.04] border border-white/10 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white/[0.06] rounded-2xl text-xs text-white placeholder-slate-500 font-medium transition-all"
+                        className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white rounded-2xl text-xs text-slate-950 placeholder-slate-500 font-medium transition-all"
                       />
                     </div>
                     <span className="text-[9px] text-slate-450 block pt-1.5 font-medium">Bypass Hint: Use credentials <span className="font-bold text-blue-400">vipu@onehope.in / admin123</span></span>
                   </div>
 
-                  {authError && <p className="text-red-400 font-bold text-[10px] text-left">{authError}</p>}
+                  {authError && <p className="text-red-500 font-bold text-[10px] text-left">{authError}</p>}
 
                   <button
                     type="submit"
