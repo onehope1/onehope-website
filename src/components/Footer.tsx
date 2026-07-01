@@ -172,14 +172,14 @@ export const Footer: React.FC = () => {
 
             {/* Impact Counter */}
             <div className="pt-4 border-t border-white/10 space-y-1 text-left">
-              <span className="text-[10px] text-slate-450 font-bold uppercase tracking-wider block">Live Impact</span>
+              <span className="text-[10px] !text-slate-300 font-bold uppercase tracking-wider block">Live Impact</span>
               <span className="text-[#2ECC71] text-xs font-poppins font-black block">12.8K+ Assisted • 99% Verified</span>
             </div>
           </div>
 
           {/* Quick Links Column */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-xs uppercase tracking-widest font-poppins">Explore</h4>
+            <h4 className="!text-white font-bold text-xs uppercase tracking-widest font-poppins">Explore</h4>
             <ul className="space-y-2.5 text-xs font-semibold">
               {[
                 { label: 'Home', href: '/' },
@@ -198,7 +198,7 @@ export const Footer: React.FC = () => {
             </ul>
 
             <div className="pt-4 border-t border-white/10 space-y-2 text-left">
-              <h5 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest font-poppins">Quick Donate</h5>
+              <h5 className="text-[10px] font-bold !text-slate-300 uppercase tracking-widest font-poppins">Quick Donate</h5>
               <div className="flex flex-col space-y-1.5 text-[11px] font-semibold text-[#E2E8F0]/80">
                 <Link href="/donate?amount=100&campaignId=camp-1" className="hover:text-[#2ECC71] transition-colors">Sponsor 1 Meal (₹100)</Link>
                 <Link href="/donate?amount=500&campaignId=camp-2" className="hover:text-[#2ECC71] transition-colors">Sponsor School kit (₹500)</Link>
@@ -209,7 +209,7 @@ export const Footer: React.FC = () => {
 
           {/* Contact Info Column */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-xs uppercase tracking-widest font-poppins">Rishikesh Base</h4>
+            <h4 className="!text-white font-bold text-xs uppercase tracking-widest font-poppins">Rishikesh Base</h4>
             <ul className="space-y-3.5 text-xs text-[#E2E8F0]/80 font-medium">
               <li className="flex gap-2.5">
                 <MapPin size={16} className="text-[#2ECC71] shrink-0 mt-0.5" />
@@ -231,7 +231,7 @@ export const Footer: React.FC = () => {
 
             {/* Ground Reels Grid */}
             <div className="pt-4 border-t border-white/10 space-y-2 text-left">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest font-poppins block">Ground Reels</span>
+              <span className="text-[10px] !text-slate-300 font-bold uppercase tracking-widest font-poppins block">Ground Reels</span>
               <div className="flex gap-2">
                 <a href="https://youtube.com/@onehopeindia" target="_blank" rel="noreferrer" className="relative w-11 h-11 rounded-lg overflow-hidden border border-white/10 block group">
                   <Image src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=120" alt="Reel thumbnail" fill className="object-cover group-hover:scale-105 transition-transform" />
@@ -247,8 +247,8 @@ export const Footer: React.FC = () => {
 
           {/* Newsletter Column */}
           <div className="space-y-4">
-            <h4 className="text-white font-bold text-xs uppercase tracking-widest font-poppins">Stay Updated</h4>
-            <p className="text-[#E2E8F0]/70 text-xs leading-relaxed font-semibold">
+            <h4 className="!text-white font-bold text-xs uppercase tracking-widest font-poppins">Stay Updated</h4>
+            <p className="text-[#E2E8F0]/90 text-xs leading-relaxed font-semibold">
               Receive brief verified impact milestones and audit balance sheet details directly in your inbox.
             </p>
             <form onSubmit={handleSubscribe} className="space-y-2">
