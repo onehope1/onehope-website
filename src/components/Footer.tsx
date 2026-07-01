@@ -30,7 +30,7 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="bg-[#0A2540] text-[#E2E8F0] pt-20 pb-12 border-t border-white/10 font-inter relative overflow-hidden">
+    <footer className="bg-[#061325] text-[#E2E8F0] pt-20 pb-12 border-t border-white/5 font-inter relative overflow-hidden">
       {/* Ambient Animated Particles / Night Sky Starfield */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
         {[...Array(20)].map((_, i) => (
@@ -126,6 +126,8 @@ export const Footer: React.FC = () => {
             <p className="text-[#E2E8F0]/70 text-xs leading-relaxed pr-4 font-semibold">
               Dedicated to restoring hope, dignity, and a better future for children and families. Verified on a public digital ledger.
             </p>
+            <div className="space-y-2">
+              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-widest font-poppins block">Connect Socially</span>
             
             {/* Social Links inside circular buttons */}
             <div className="flex items-center gap-3 pt-2">
@@ -133,7 +135,7 @@ export const Footer: React.FC = () => {
                 href={state.settings.socials.instagram}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[#1E63FF] hover:bg-white flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-transparent text-white hover:bg-gradient-to-tr hover:from-[#F58529] hover:via-[#DD2A7B] hover:to-[#8134AF] flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1 shadow-md"
                 aria-label="Instagram"
               >
                 <svg className="w-4.5 h-4.5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -146,7 +148,7 @@ export const Footer: React.FC = () => {
                 href={state.settings.socials.youtube}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[#1E63FF] hover:bg-white flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-transparent text-white hover:bg-[#FF0000] flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1 shadow-md"
                 aria-label="YouTube"
               >
                 <svg className="w-4.5 h-4.5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -158,13 +160,14 @@ export const Footer: React.FC = () => {
                 href={state.settings.socials.facebook}
                 target="_blank"
                 rel="noreferrer"
-                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-white/20 text-white hover:text-[#1E63FF] hover:bg-white flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1"
+                className="w-9 h-9 rounded-full bg-white/5 border border-white/10 hover:border-transparent text-white hover:bg-[#1877F2] flex items-center justify-center transform transition-all duration-300 hover:-translate-y-1 shadow-md"
                 aria-label="Facebook"
               >
                 <svg className="w-4.5 h-4.5 fill-none stroke-current" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
                 </svg>
               </a>
+            </div>
             </div>
 
             {/* Impact Counter */}

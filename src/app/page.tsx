@@ -688,11 +688,27 @@ export default function Home() {
 
         {/* ================= 9. TESTIMONIALS SLIDER (TripGod style, attached seamlessly to Footer) ================= */}
         <section className="py-20 bg-[#0A2540] border-t border-white/10 font-inter overflow-hidden select-none relative">
+          <style>{`
+            @keyframes reviews-scroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+            .animate-reviews-scroll {
+              display: flex;
+              width: max-content;
+              animation: reviews-scroll 35s linear infinite;
+              gap: 1.5rem;
+            }
+            .animate-reviews-scroll:hover {
+              animation-play-state: paused;
+            }
+          `}</style>
+          
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.002)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.002)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-25 pointer-events-none" />
           
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-10 space-y-12 relative z-10 text-center">
+          <div className="max-w-7xl mx-auto space-y-12 relative z-10 text-center">
             
-            <div className="space-y-3">
+            <div className="space-y-3 px-6">
               <span className="inline-flex items-center gap-1.5 bg-white/5 border border-white/10 px-3.5 py-1.5 rounded-full text-[#1E63FF] text-[9px] font-black uppercase tracking-widest">
                 Testimonials
               </span>
@@ -701,18 +717,70 @@ export default function Home() {
               </h2>
             </div>
 
-            {/* Side-by-Side Flex Scroll Grid */}
-            <div className="flex overflow-x-auto lg:grid lg:grid-cols-3 gap-6 snap-x snap-mandatory scrollbar-none pb-6 px-4 md:px-0 justify-start lg:justify-center">
-              {activeTestimonials.map((testimonial, idx) => {
-                const badge = idx === 0 
-                  ? '🍛 FOOD AID SPONSOR' 
-                  : idx === 1 
-                  ? '📚 EDUCATION SPONSOR' 
-                  : '🩺 MEDICAL AID SPONSOR';
-                return (
+            {/* Infinite Horizontal Reviews Marquee Container */}
+            <div className="relative overflow-hidden w-full mask-gradient py-2">
+              <div className="animate-reviews-scroll">
+                {[
+                  {
+                    id: 'r1',
+                    name: 'Rakesh Sharma',
+                    role: 'Rishikesh, Uttarakhand',
+                    quote: 'ऋषिकेश के गरीब बच्चों को भोजन मिलते देख मन भर आया। वनहोप का यह प्रयास सच में सराहनीय है।',
+                    badge: '🍛 FOOD AID SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'r2',
+                    name: 'Aishwarya Kapoor',
+                    role: 'Delhi, India',
+                    quote: "Sponsoring Priya's study kit was the best decision. The video updates showing her holding her new books brought tears to my eyes.",
+                    badge: '📚 EDUCATION SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'r3',
+                    name: 'Vikram Adhikari',
+                    role: 'Dehradun, India',
+                    quote: 'जब मेरी आँखों के सामने एक घायल बेसहारा कुत्ते का इलाज हुआ, मुझे विश्वास हो गया कि वनहोप का काम १००% सच्चा है।',
+                    badge: '🐾 ANIMAL WELFARE',
+                    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'r4',
+                    name: 'Meera Deshmukh',
+                    role: 'Mumbai, India',
+                    quote: 'Direct ground procurement is completely transparent. I received the exact GPS coordinates and grocery receipts for the family I sponsored.',
+                    badge: '📦 FAMILY AID SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'r5',
+                    name: 'Sanjay Pandey',
+                    role: 'Lucknow, India',
+                    quote: 'मैंने ऋषिकेश गंगा घाट पर बच्चों को खिलखिलाते देखा जब उन्हें गरम भोजन मिला। यह काम दिल को छू लेने वाला है।',
+                    badge: '🍛 FOOD AID SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'r6',
+                    name: 'Neha Dutt',
+                    role: 'Bangalore, India',
+                    quote: 'Seeing young girls get hygiene kits and school books without any administrative middleman cuts is so satisfying.',
+                    badge: '📚 EDUCATION SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'r7',
+                    name: 'Kamlesh Kothari',
+                    role: 'Rishikesh, Uttarakhand',
+                    quote: 'बुजुर्गों के चेहरे की वह मुस्कान देखकर रूह खुश हो गई। धन्यवाद वनहोप हमारी मदद को सीधा उन तक पहुँचाने के लिए।',
+                    badge: '🩺 ELDERLY CARE SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100'
+                  }
+                ].map((testimonial, idx) => (
                   <div 
                     key={testimonial.id}
-                    className="w-[290px] sm:w-[320px] lg:w-auto shrink-0 snap-center bg-slate-900/40 border border-white/10 backdrop-blur-md p-6.5 sm:p-8 rounded-[24px] shadow-sm flex flex-col justify-between space-y-6 text-left hover:border-white/20 transition-all group"
+                    className="w-[280px] sm:w-[320px] shrink-0 bg-slate-900/40 border border-white/10 backdrop-blur-md p-6.5 rounded-[24px] shadow-sm flex flex-col justify-between space-y-6 text-left hover:border-white/20 transition-all group"
                   >
                     <div className="space-y-4">
                       {/* Star ratings */}
@@ -723,7 +791,7 @@ export default function Home() {
                       </div>
 
                       {/* Quote Text */}
-                      <p className="text-slate-100 text-xs sm:text-sm leading-relaxed font-semibold italic">
+                      <p className="text-slate-100 text-xs sm:text-[13px] leading-relaxed font-semibold italic">
                         &ldquo;{testimonial.quote}&rdquo;
                       </p>
                     </div>
@@ -731,14 +799,14 @@ export default function Home() {
                     <div className="space-y-4">
                       {/* Category Badge Outline (TripGod style) */}
                       <span className="inline-block border border-white/10 text-slate-300 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
-                        {badge}
+                        {testimonial.badge}
                       </span>
 
                       {/* Author Info */}
                       <div className="flex items-center gap-3 pt-1">
                         <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/10 border border-white/10 shadow-sm shrink-0">
                           <Image 
-                            src={testimonial.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'} 
+                            src={testimonial.avatar} 
                             alt={testimonial.name} 
                             fill 
                             className="object-cover"
@@ -751,8 +819,111 @@ export default function Home() {
                       </div>
                     </div>
                   </div>
-                );
-              })}
+                ))}
+                
+                {/* Duplicate row for infinite looping effect */}
+                {[
+                  {
+                    id: 'dup-r1',
+                    name: 'Rakesh Sharma',
+                    role: 'Rishikesh, Uttarakhand',
+                    quote: 'ऋषिकेश के गरीब बच्चों को भोजन मिलते देख मन भर आया। वनहोप का यह प्रयास सच में सराहनीय है।',
+                    badge: '🍛 FOOD AID SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'dup-r2',
+                    name: 'Aishwarya Kapoor',
+                    role: 'Delhi, India',
+                    quote: "Sponsoring Priya's study kit was the best decision. The video updates showing her holding her new books brought tears to my eyes.",
+                    badge: '📚 EDUCATION SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'dup-r3',
+                    name: 'Vikram Adhikari',
+                    role: 'Dehradun, India',
+                    quote: 'जब मेरी आँखों के सामने एक घायल बेसहारा कुत्ते का इलाज हुआ, मुझे विश्वास हो गया कि वनहोप का काम १००% सच्चा है।',
+                    badge: '🐾 ANIMAL WELFARE',
+                    avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'dup-r4',
+                    name: 'Meera Deshmukh',
+                    role: 'Mumbai, India',
+                    quote: 'Direct ground procurement is completely transparent. I received the exact GPS coordinates and grocery receipts for the family I sponsored.',
+                    badge: '📦 FAMILY AID SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'dup-r5',
+                    name: 'Sanjay Pandey',
+                    role: 'Lucknow, India',
+                    quote: 'मैंने ऋषिकेश गंगा घाट पर बच्चों को खिलखिलाते देखा जब उन्हें गरम भोजन मिला। यह काम दिल को छू लेने वाला है।',
+                    badge: '🍛 FOOD AID SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'dup-r6',
+                    name: 'Neha Dutt',
+                    role: 'Bangalore, India',
+                    quote: 'Seeing young girls get hygiene kits and school books without any administrative middleman cuts is so satisfying.',
+                    badge: '📚 EDUCATION SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&q=80&w=100'
+                  },
+                  {
+                    id: 'dup-r7',
+                    name: 'Kamlesh Kothari',
+                    role: 'Rishikesh, Uttarakhand',
+                    quote: 'बुजुर्गों के चेहरे की वह मुस्कान देखकर रूह खुश हो गई। धन्यवाद वनहोप हमारी मदद को सीधा उन तक पहुँचाने के लिए।',
+                    badge: '🩺 ELDERLY CARE SPONSOR',
+                    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=100'
+                  }
+                ].map((testimonial, idx) => (
+                  <div 
+                    key={testimonial.id}
+                    className="w-[280px] sm:w-[320px] shrink-0 bg-slate-900/40 border border-white/10 backdrop-blur-md p-6.5 rounded-[24px] shadow-sm flex flex-col justify-between space-y-6 text-left hover:border-white/20 transition-all group"
+                    aria-hidden="true"
+                  >
+                    <div className="space-y-4">
+                      {/* Star ratings */}
+                      <div className="flex gap-0.5 text-amber-400">
+                        {[...Array(5)].map((_, i) => (
+                          <Star key={i} size={14} fill="currentColor" stroke="none" />
+                        ))}
+                      </div>
+
+                      {/* Quote Text */}
+                      <p className="text-slate-100 text-xs sm:text-[13px] leading-relaxed font-semibold italic">
+                        &ldquo;{testimonial.quote}&rdquo;
+                      </p>
+                    </div>
+
+                    <div className="space-y-4">
+                      {/* Category Badge Outline (TripGod style) */}
+                      <span className="inline-block border border-white/10 text-slate-300 font-poppins font-black text-[9px] px-3 py-1 rounded-full uppercase tracking-wider group-hover:border-[#1E63FF]/30 group-hover:text-[#1E63FF] transition-all">
+                        {testimonial.badge}
+                      </span>
+
+                      {/* Author Info */}
+                      <div className="flex items-center gap-3 pt-1">
+                        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-white/10 border border-white/10 shadow-sm shrink-0">
+                          <Image 
+                            src={testimonial.avatar} 
+                            alt={testimonial.name} 
+                            fill 
+                            className="object-cover"
+                          />
+                        </div>
+                        <div className="text-left font-bold">
+                          <span className="text-white text-xs block leading-tight">{testimonial.name}</span>
+                          <span className="text-[9px] text-slate-450 uppercase tracking-wider">{testimonial.role}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
