@@ -565,7 +565,7 @@ export default function Home() {
                       media: [{ url: 'https://player.vimeo.com/external/371433846.sd.mp4?s=236da2f3c0548a737f204853ebf9024f923b7e7c&profile_id=139', type: 'video' }]
                     }
                   ]
-              ).map((reel) => {
+              ).map((reel: any) => {
                 const url = reel.media[0]?.url || '';
                 const isYoutube = url.includes('youtube.com') || url.includes('youtu.be');
                 const isInstagram = url.includes('instagram.com');
