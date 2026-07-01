@@ -105,8 +105,7 @@ export default function CampaignsCatalog() {
     <PublicLayout>
       <div className="bg-[#F8FBFF] font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
         
-        {/* ================= 1. COMPACT HERO SECTION ================= */}
-        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white py-10 md:py-14 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] min-h-[50vh]">
+        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-24 pb-10 md:pt-28 md:pb-14 border-b border-[#0D3052] min-h-[50vh]">
           {/* Grid backdrop */}
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-20 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[110px] pointer-events-none" />

@@ -764,8 +764,9 @@ export default function Home() {
         </section>
 
         {/* ================= 10. PARTNER LOGOS (Infinite Moving Ticker) ================= */}
-        <section className="py-12 bg-white border-t border-b border-[#E5EAF2] font-inter overflow-hidden">
-          <div className="max-w-7xl mx-auto space-y-6">
+        <section className="py-14 bg-[#0A2540] border-t border-b border-[#0D3052] font-inter overflow-hidden relative select-none">
+          <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.005)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.005)_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-20 pointer-events-none" />
+          <div className="max-w-7xl mx-auto space-y-6 relative z-10">
             <h3 className="text-center text-[10px] font-bold text-slate-400 uppercase tracking-widest px-6">
               Governed Under Active Alliances
             </h3>
@@ -776,7 +777,7 @@ export default function Home() {
                 {partnersList.map((partner, idx) => (
                   <div 
                     key={idx} 
-                    className="px-6 py-3.5 border border-slate-100 rounded-2xl bg-[#F8FAFC] text-[#0A2540]/60 hover:text-blue-600 hover:border-blue-500/20 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
+                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-350 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
                   >
                     {partner.icon}
                     <span>{partner.name}</span>
@@ -787,7 +788,7 @@ export default function Home() {
                 {partnersList.map((partner, idx) => (
                   <div 
                     key={`dup-${idx}`} 
-                    className="px-6 py-3.5 border border-slate-100 rounded-2xl bg-[#F8FAFC] text-[#0A2540]/60 hover:text-blue-600 hover:border-blue-500/20 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
+                    className="px-6 py-3.5 border border-white/5 rounded-2xl bg-white/[0.03] text-slate-350 hover:text-white hover:bg-white/[0.07] hover:border-white/15 font-poppins font-bold text-[10px] uppercase tracking-wider transition-all duration-350 cursor-pointer shadow-sm hover:shadow-md hover:-translate-y-0.5 flex items-center gap-2.5 group whitespace-nowrap"
                   >
                     {partner.icon}
                     <span>{partner.name}</span>

@@ -74,7 +74,7 @@ export default function VolunteerPortal() {
       <div className="bg-white font-inter select-none overflow-hidden pb-16 md:pb-0 text-[16px] text-[#1A202C]">
         
         {/* ================= 1. CINEMATIC HERO SECTION ================= */}
-        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-32 pb-20 md:pt-40 md:pb-28 -mt-[82px] lg:-mt-[100px] min-h-[75vh]">
+        <section className="relative flex items-center justify-center overflow-hidden bg-[#0A2540] text-white pt-24 pb-20 md:pt-28 md:pb-28 min-h-[75vh]">
           {/* Background Video Backdrop */}
           <video
             autoPlay

@@ -77,9 +77,9 @@ export const Header: React.FC = () => {
       <div className={`z-50 transition-all duration-300 ${visible ? 'translate-y-0' : '-translate-y-full'} ${
         isHomepage
           ? isScrolled 
-            ? 'fixed top-0 left-0 w-full bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-150' 
+            ? 'fixed top-0 left-0 w-full bg-white/70 backdrop-blur-xl border-b border-slate-200/50 shadow-sm' 
             : 'absolute top-0 left-0 w-full bg-transparent'
-          : 'sticky top-0 w-full bg-white/95 border-b border-slate-150 shadow-sm'
+          : 'sticky top-0 w-full bg-white/70 backdrop-blur-xl border-b border-slate-200/50 shadow-sm'
       }`}>
       {/* Slim Announcement Information Bar */}
       {(!isHomepage || isScrolled) && (
@@ -132,19 +132,6 @@ export const Header: React.FC = () => {
 
             {/* Controls Right */}
             <div className="hidden lg:flex items-center gap-3">
-              {/* Search Icon */}
-              <Link
-                href="/search"
-                className={`p-2.5 rounded-xl transition-all ${
-                  isHomepage && !isScrolled 
-                    ? 'text-white/80 hover:text-white hover:bg-white/5' 
-                    : 'text-slate-500 hover:text-[#0047AB] hover:bg-slate-50'
-                }`}
-                title="Search Hub"
-              >
-                <Search size={18} />
-              </Link>
-
               {/* Login Button */}
               {state.currentUser ? (
                 <div className="flex items-center gap-2 bg-slate-50 p-1.5 rounded-xl border border-slate-100">

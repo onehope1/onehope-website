@@ -167,7 +167,7 @@ export default function DonatePage() {
       <div className="bg-[#F8FBFF] min-h-screen font-inter select-none overflow-hidden pb-12">
         
         {/* ================= 1. PREMIUM SPLIT-GRID HERO BANNER ================= */}
-        <section className="relative bg-[#0A2540] text-white py-16 md:py-24 -mt-[82px] lg:-mt-[100px] border-b border-[#0D3052] px-6">
+        <section className="relative bg-[#0A2540] text-white pt-24 pb-16 md:pt-28 md:pb-20 border-b border-[#0D3052] px-6">
           <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:3.5rem_3.5rem] opacity-25 pointer-events-none" />
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[250px] bg-[#1E63FF]/10 rounded-full blur-[120px] pointer-events-none" />
 
@@ -180,9 +180,9 @@ export default function DonatePage() {
               </span>
               
               <h1 className="text-3xl sm:text-5xl font-black font-poppins tracking-tight leading-[1.1]">
-                <span className="text-white block font-black">Transform Compassion</span>
+                <span className="text-white block font-black">Your Kindness Can</span>
                 <span className="bg-gradient-to-r from-[#1E63FF] via-[#00A86B] to-[#22C55E] bg-clip-text text-transparent block mt-1">
-                  Into Audited Impact.
+                  Save a Life Today.
                 </span>
               </h1>
               
@@ -532,14 +532,7 @@ export default function DonatePage() {
 
         {/* ================= MINIMAL FOOTER FOR CONVERSION ================= */}
         <footer className="max-w-4xl mx-auto px-4 pt-10 pb-8 border-t border-[#E5EAF2] mt-4 text-center select-none font-inter">
-          <div className="flex justify-center gap-6 text-xs font-semibold text-slate-450">
-            <a href="/privacy" className="hover:text-[#0A2540] transition-colors">Privacy Policy</a>
-            <span>•</span>
-            <a href="/terms" className="hover:text-[#0A2540] transition-colors">Terms of Service</a>
-            <span>•</span>
-            <a href="/contact" className="hover:text-[#0A2540] transition-colors">Contact Support</a>
-          </div>
-          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider pt-4 select-none">
+          <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider select-none">
             © {new Date().getFullYear()} OneHope Sponsoring. All Rights Reserved.
           </p>
         </footer>
@@ -552,14 +545,14 @@ export default function DonatePage() {
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 80, opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200/80 p-3.5 z-40 shadow-xl flex items-center justify-between px-6 sm:px-12 select-none"
+              className="fixed bottom-4 left-4 right-4 md:left-auto md:right-8 md:max-w-md bg-slate-900/90 text-white backdrop-blur-md rounded-2xl border border-white/10 p-3.5 z-40 shadow-2xl flex items-center justify-between px-5 select-none"
             >
               <div className="text-left font-poppins">
-                <span className="text-[9.5px] text-slate-450 uppercase tracking-widest block">Sponsorship Active</span>
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[#0047AB] text-xs font-black">{getImpactText()}</span>
-                  <span className="text-slate-400 font-medium">•</span>
-                  <span className="text-[#22C55E] text-xs font-black">INR {getFinalAmount().toLocaleString()}</span>
+                <span className="text-[9px] text-slate-450 uppercase tracking-widest block font-bold">Sponsorship Active</span>
+                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5">
+                  <span className="text-[#3575FF] text-xs font-black">{getImpactText()}</span>
+                  <span className="text-slate-500 font-medium hidden sm:inline">•</span>
+                  <span className="text-[#2ECC71] text-xs font-black">INR {getFinalAmount().toLocaleString()}</span>
                 </div>
               </div>
               <button
@@ -568,7 +561,7 @@ export default function DonatePage() {
                   const formElem = document.getElementById('donation-core-widget');
                   if (formElem) formElem.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }}
-                className="px-6 py-2.5 bg-[#0047AB] hover:bg-[#003C91] text-white font-extrabold rounded-lg text-[10px] uppercase tracking-wider transition-colors shadow-sm font-poppins"
+                className="px-5 py-2.5 bg-[#1E63FF] hover:bg-[#0047AB] text-white font-extrabold rounded-xl text-[10px] uppercase tracking-wider transition-all hover:scale-102 active:scale-98 shadow-md font-poppins"
               >
                 Donate Now
               </button>
