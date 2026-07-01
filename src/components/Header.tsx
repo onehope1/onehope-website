@@ -394,11 +394,20 @@ export const Header: React.FC = () => {
               <div className="border-t border-slate-100 p-6 bg-slate-50/90 backdrop-blur-md space-y-3 sticky bottom-0 z-10">
                 {state.currentUser ? (
                   <div className="p-4 bg-white rounded-2xl border border-slate-100 flex justify-between items-center text-sm shadow-sm">
-                    <div>
-                      <span className="font-bold block text-slate-900 leading-tight">{state.currentUser.name}</span>
-                      <span className="text-[10px] text-slate-400 font-semibold">{state.currentUser.role}</span>
-                    </div>
-                    <button onClick={logout} className="text-slate-400 hover:text-red-500 p-2">
+                    <Link
+                      href={state.currentUser.role.includes('Admin') ? '/admin' : '/dashboard'}
+                      onClick={() => setIsOpen(false)}
+                      className="flex-grow text-left group transition-all"
+                    >
+                      <span className="font-bold text-slate-950 leading-tight flex flex-wrap items-center gap-1.5">
+                        <span className="group-hover:text-[#0047AB] transition-colors">{state.currentUser.name}</span>
+                        <span className="text-[8px] bg-blue-50 text-[#0047AB] px-1.5 py-0.5 rounded font-extrabold uppercase tracking-wide group-hover:bg-[#1E63FF] group-hover:text-white transition-all">
+                          {state.currentUser.role.includes('Admin') ? 'Manage CMS →' : 'Dashboard →'}
+                        </span>
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-semibold block mt-0.5">{state.currentUser.role}</span>
+                    </Link>
+                    <button onClick={logout} className="text-slate-400 hover:text-red-500 p-2 shrink-0">
                       <LogOut size={16} />
                     </button>
                   </div>
