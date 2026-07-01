@@ -144,17 +144,7 @@ export const Header: React.FC = () => {
           resetAuthStates();
         }, 1000);
       } else {
-        // Fallback for seed configuration to prevent blocking if the admin user is not initialized in Supabase yet
-        if (loginEmail.toLowerCase() === 'vipu@onehope.in' && loginPassword === 'admin123') {
-          login(loginEmail, 'Super Admin');
-          setAuthSuccess(true);
-          setTimeout(() => {
-            setShowRoleModal(false);
-            resetAuthStates();
-          }, 1000);
-        } else {
-          setAuthError(error.message);
-        }
+        setAuthError(error.message);
       }
     } catch (err: any) {
       setAuthError(err.message || 'Authentication failed.');
@@ -609,7 +599,7 @@ export const Header: React.FC = () => {
                       <span className="absolute left-4 text-slate-400"><User size={15} /></span>
                       <input
                         type="email"
-                        placeholder="vipu@onehope.in"
+                        placeholder="admin@onehope.in"
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         required
@@ -631,7 +621,6 @@ export const Header: React.FC = () => {
                         className="w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-4 focus:ring-blue-500/10 focus:border-[#1E63FF] focus:bg-white rounded-2xl text-xs text-slate-950 placeholder-slate-500 font-medium transition-all"
                       />
                     </div>
-                    <span className="text-[9px] text-slate-450 block pt-1.5 font-medium">Bypass Hint: Use credentials <span className="font-bold text-blue-400">vipu@onehope.in / admin123</span></span>
                   </div>
 
                   {authError && <p className="text-red-500 font-bold text-[10px] text-left">{authError}</p>}
